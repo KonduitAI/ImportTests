@@ -104,9 +104,6 @@ class DifferentiableMathOps:
     def execute_erf(self):
         return tf.erf(self.a, name='erf' + str(self.node_num))
 
-    def execute_cross(self):
-        return tf.cross(self.a, self.b, name="cross" + str(self.node_num))
-
     def execute_diag(self):
         return tf.diag(self.a, name="diag" + str(self.node_num))
 
