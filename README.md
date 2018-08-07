@@ -9,7 +9,7 @@ git clone https://github.com/deeplearning4j/dl4j-test-resources
 cd dl4j-test-resources
 ```
 
-Next, put `DL4DL4J_TEST_RESOURCES` on your path, for instance by adding it to your `.zshrc` (or `.bashrc` etc.):
+Next, put `DL4J_TEST_RESOURCES` on your path, for instance by adding it to your `.zshrc` (or `.bashrc` etc.):
 
 ```bash
 echo "export DL4J_TEST_RESOURCES=$(pwd)" >> $HOME/.zshrc
