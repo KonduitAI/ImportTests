@@ -130,3 +130,11 @@ class DifferentiableMathOps:
 
     def execute_log_sigmoid(self):
         return tf.log_sigmoid(self.a, name="log_sigmoid" + str(self.node_num))
+
+    def execute_atan2(self):
+        return tf.atan2(self.a, self.b, name="atan2-" + str(self.node_num))
+
+    def execute_div(self):
+        return tf.div(self.a, self.b, name="div-" + str(self.node_num))
+
+
