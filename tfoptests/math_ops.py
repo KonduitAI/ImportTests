@@ -85,7 +85,10 @@ class DifferentiableMathOps:
         return tf.cumprod(self.a, name="cumprod" + str(self.node_num))
 
     def execute_cumsum(self):
-        return tf.cumsum(self.a, name="cumsum" + str(self.node_num))
+        return tf.cumsum(self.a, name="cumsum" + str(self.node_num), axis=self.extra['axis'], exclusive=self.extra['exclusive'], reverse=self.extra['reverse'] )
+
+    def execute_prod(self):
+        return tf.cumprod(self.a, name="cumsum" + str(self.node_num), axis=self.extra['axis'], exclusive=self.extra['exclusive'], reverse=self.extra['reverse'] )
 
     def execute_exp(self):
         return tf.exp(self.a, name='exp' + str(self.node_num))
@@ -173,3 +176,15 @@ class DifferentiableMathOps:
 
     def execute_sub(self):
         return tf.subtract(self.a, self.b, name="sub-" + str(self.node_num))
+
+    def execute_logicalnot(self):
+        return tf.logical_not(self.a, name="logicalnot-" + str(self.node_num))
+
+    def execute_logicalor(self):
+        return tf.logical_or(self.a, self.b, name="logicalor" + str(self.node_num))
+
+    def execute_logicalxor(self):
+        return tf.logical_xor(self.a, self.b, name="logicalxor" + str(self.node_num))
+
+    def execute_logicaland(self):
+        return tf.logical_and(self.a, self.b, name="logicaland" + str(self.node_num))

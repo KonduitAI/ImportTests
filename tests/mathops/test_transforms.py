@@ -67,9 +67,33 @@ def test_mathtransform():
         # ["mul", 2, [3,4], [3,4]],       #Broadcastable
         # ["mul", 2, [3,4], [1,4]],
         # ["mul", 2, [], [3,4]],
-        ["sub", 2, [3,4], [3,4]],       #Broadcastable
-        ["sub", 2, [3,4], [1,4]],
-        ["sub", 2, [], [3,4]],
+        # ["sub", 2, [3,4], [3,4]],       #Broadcastable
+        # ["sub", 2, [3,4], [1,4]],
+        # ["sub", 2, [], [3,4]],
+        # ["logicalnot", 1, [3,4], None]
+        # ["logicalnot", 1, [], None]
+        # ["logicalor", 2, [3,4], [3,4]],       #Broadcastable
+        # ["logicalor", 2, [3,4], [1,4]],
+        # ["logicalor", 2, [], [3,4]],
+        # ["logicalor", 2, [3,1,5], [1,2,1]],
+        # ["logicalxor", 2, [3,4], [3,4]],       #Broadcastable
+        # ["logicalxor", 2, [1,4], [3,4]],
+        # ["logicalxor", 2, [3,4], []],
+        # ["logicalxor", 2, [3,1,1], [1,2,2]],
+        # ["logicaland", 2, [3,4], [3,4]],       #Broadcastable
+        # ["logicaland", 2, [3,4], [1,4]],
+        # ["logicaland", 2, [], [3,4]],
+        # ["logicaland", 2, [3,1,5], [1,2,1]],
+        # ["cumsum", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":False, "testname":"cumsum_0ff"}],
+        # ["cumsum", 1, [3,4], None, {"axis":1, "exclusive":False, "reverse":False, "testname":"cumsum_1ff"}],
+        # ["cumsum", 1, [3,4], None, {"axis":-1, "exclusive":False, "reverse":False, "testname":"cumsum_-1ff"}],
+        # ["cumsum", 1, [3,4], None, {"axis":1, "exclusive":True, "reverse":False, "testname":"cumsum_1tf"}],
+        # ["cumsum", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":True, "testname":"cumsum_0ft"}],
+        # ["cumprod", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":False, "testname":"cumprod_0ff"}],
+        # ["cumprod", 1, [3,4], None, {"axis":1, "exclusive":False, "reverse":False, "testname":"cumprod_1ff"}],
+        # ["cumprod", 1, [3,4], None, {"axis":-2, "exclusive":False, "reverse":False, "testname":"cumprod_-1ff"}],
+        # ["cumprod", 1, [3,4], None, {"axis":1, "exclusive":True, "reverse":False, "testname":"cumprod_1tf"}],
+        # ["cumprod", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":True, "testname":"cumprod_0ft"}],
            ]
 
 
@@ -79,21 +103,40 @@ def test_mathtransform():
         tf.reset_default_graph()
         print("Running " + str(op))
         math_transform = MathTransform(seed=19,numInputs=op[1])
-        if(len(op[2]) == 0):
-            in_node_0 = tf.Variable(0.5, tf.float32)
-        else:
-            in_node_0 = tf.Variable(tf.random_normal(op[2]), tf.float32)
-        if(op[1] > 1):
-            if(len(op[3]) == 0):
-                in_node_1 = tf.Variable(0.5, tf.float32)
+        if(getDType(op[0], 0) == tf.bool):
+            if(len(op[2]) == 0):
+                in_node_0 = tf.Variable(True, tf.bool)
             else:
-                in_node_1 = tf.Variable(tf.random_normal(op[3]), tf.float32)
+                in_node_0 = tf.Variable(tf.random_normal(op[2]) >= 0, tf.bool)
         else:
-            in_node_1 = None
+            if(len(op[2]) == 0):
+                in_node_0 = tf.Variable(0.5, tf.float32)
+            else:
+                in_node_0 = tf.Variable(tf.random_normal(op[2]), tf.float32)
 
+        if(getDType(op[0], 1) == tf.bool):
+            if(op[1] > 1):
+                if(len(op[3]) == 0):
+                    in_node_1 = tf.Variable(True, tf.bool)
+                else:
+                    in_node_1 = tf.Variable(tf.random_normal(op[3])> 0, tf.bool)
+            else:
+                in_node_1 = None
+        else:
+            if(op[1] > 1):
+                if(len(op[3]) == 0):
+                    in_node_1 = tf.Variable(0.5, tf.float32)
+                else:
+                    in_node_1 = tf.Variable(tf.random_normal(op[3]), tf.float32)
+            else:
+                in_node_1 = None
+
+        basename = op[0]
         extra = None
         if(len(op) > 4):
             extra = op[4]
+            if(extra["testname"] is not None):
+                basename = extra["testname"]
         constr = DifferentiableMathOps(in_node_0, in_node_1, extra)
         answer = constr.execute(op[0])
         print(answer)
@@ -111,7 +154,7 @@ def test_mathtransform():
         print()
 
         # Run and persist
-        testName = "transforms/" + op[0] + "_" + ','.join(str(x) for x in op[2])
+        testName = "transforms/" + basename + "_" + ','.join(str(x) for x in op[2])
         if(op[1] > 1):
             testName = testName + "_" + ','.join(str(x) for x in op[3])
         tfp = TensorFlowPersistor(save_dir=testName)
@@ -119,6 +162,11 @@ def test_mathtransform():
             .set_output_tensors(predictions) \
             .set_test_data(math_transform.get_test_data()) \
             .build_save_frozen_graph()
+
+def getDType(opname, argnum):
+    if(opname.lower().startswith("logical")):
+        return tf.bool
+    return tf.float32
 
 if __name__ == '__main__':
     test_mathtransform()
