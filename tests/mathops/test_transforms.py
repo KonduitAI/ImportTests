@@ -34,19 +34,42 @@ def test_mathtransform():
         #All of these comparison ops support broadcasting...
         #["equal", 2, [3,4], [3,4]],
         #["equal", 2, [1,4], [3,4]],
-        ["greater", 2, [3,4], [3,4]],
-        ["greater", 2, [3,4], [4]],
-        ["greater", 2, [3,1], [1,4]],
-        ["greater", 2, [3,4], []],
-        ["greater_equal", 2, [3,4], [3,4]],
-        ["greater_equal", 2, [3,4], [4]],
-        ["greater_equal", 2, [3,4], []],
-        ["less", 2, [3,4], [3,4]],
-        ["less", 2, [3,4], [4]],
-        ["less", 2, [3,4], []],
-        ["less_equal", 2, [3,4], [3,4]],
-        ["less_equal", 2, [3,4], [4]],
-        ["less_equal", 2, [3,4], []],
+        #["greater", 2, [3,4], [3,4]],
+        #["greater", 2, [3,4], [4]],
+        #["greater", 2, [3,1], [1,4]],
+        #["greater", 2, [3,4], []],
+        # ["greater_equal", 2, [3,4], [3,4]],
+        # ["greater_equal", 2, [3,4], [4]],
+        # ["greater_equal", 2, [3,4], []],
+        # ["less", 2, [3,4], [3,4]],
+        # ["less", 2, [3,4], [4]],
+        # ["less", 2, [3,4], []],
+        # ["less_equal", 2, [3,4], [3,4]],
+        # ["less_equal", 2, [3,4], [4]],
+        # ["less_equal", 2, [3,4], []],
+        #["leaky_relu", 1, [3,4], None]
+        #["hard_sigmoid", 1, [3,4], None]
+        # ["relu", 1, [3,4], None]
+        #["selu", 1, [3,4], None]
+        # ["max", 2, [3,4], [3,4]],
+        # ["max", 2, [3,4], [4]],
+        # ["max", 2, [3,1], [1,4]],
+        # ["max", 2, [3,4], []],
+        # ["min", 2, [3,4], [3,4]],
+        # ["min", 2, [3,4], [4]],
+        # ["min", 2, [3,1], [1,4]],
+        # ["min", 2, [3,4], []],
+        # ["matmul", 2, [3,4], [4,5], {'transpose_a': False, 'transpose_b': False}],
+        # ["matmul", 2, [4,3], [4,5], {'transpose_a': True, 'transpose_b': False}],
+        # ["matmul", 2, [3,4], [5,4], {'transpose_a': False, 'transpose_b': True}],
+        # ["matmul", 2, [4,3], [5,4], {'transpose_a': True, 'transpose_b': True}],
+        # ["sign", 1, [3,4], None]
+        # ["mul", 2, [3,4], [3,4]],       #Broadcastable
+        # ["mul", 2, [3,4], [1,4]],
+        # ["mul", 2, [], [3,4]],
+        ["sub", 2, [3,4], [3,4]],       #Broadcastable
+        ["sub", 2, [3,4], [1,4]],
+        ["sub", 2, [], [3,4]],
            ]
 
 
@@ -67,7 +90,11 @@ def test_mathtransform():
                 in_node_1 = tf.Variable(tf.random_normal(op[3]), tf.float32)
         else:
             in_node_1 = None
-        constr = DifferentiableMathOps(in_node_0, in_node_1)
+
+        extra = None
+        if(len(op) > 4):
+            extra = op[4]
+        constr = DifferentiableMathOps(in_node_0, in_node_1, extra)
         answer = constr.execute(op[0])
         print(answer)
         constr.set_a(answer)

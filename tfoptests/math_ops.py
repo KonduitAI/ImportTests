@@ -2,10 +2,11 @@ import tensorflow as tf
 
 
 class DifferentiableMathOps:
-    def __init__(self, a, b):
+    def __init__(self, a, b, extra):
         self.a = a
         self.b = b
         self.node_num = 0
+        self.extra = extra
 
     def set_a(self, a):
         self.a = a
@@ -98,9 +99,6 @@ class DifferentiableMathOps:
     def execute_mod(self):
         return tf.mod(self.a, self.b, name='mode' + str(self.node_num))
 
-    def execute_mathmul(self):
-        return tf.matmul(self.a, self.b, name="matmul" + str(self.node_num))
-
     def execute_erf(self):
         return tf.erf(self.a, name='erf' + str(self.node_num))
 
@@ -151,3 +149,27 @@ class DifferentiableMathOps:
 
     def execute_less_equal(self):
         return tf.less_equal(self.a, self.b, name="less_equal-" + str(self.node_num))
+
+    def execute_leaky_relu(self):
+        return tf.nn.leaky_relu(self.a, alpha=0.1, name = "leaky_relu-" + str(self.node_num))
+
+    def execute_hard_sigmoid(self):
+        return tf.keras.backend.hard_sigmoid(self.a)
+
+    def execute_relu(self):
+        return tf.nn.relu(self.a, name = "relu-" + str(self.node_num))
+
+    def execute_selu(self):
+        return tf.nn.selu(self.a, name = "selu-" + str(self.node_num))
+
+    def execute_matmul(self):
+        return tf.matmul(self.a, self.b, transpose_a=self.extra['transpose_a'], transpose_b=self.extra['transpose_b'], name = "matmul-" + str(self.node_num))
+
+    def execute_sign(self):
+        return tf.sign(self.a, name = "sign-" + str(self.node_num))
+
+    def execute_mul(self):
+        return tf.multiply(self.a, self.b, name="mul-" + str(self.node_num))
+
+    def execute_sub(self):
+        return tf.subtract(self.a, self.b, name="sub-" + str(self.node_num))
