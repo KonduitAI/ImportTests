@@ -137,4 +137,17 @@ class DifferentiableMathOps:
     def execute_div(self):
         return tf.div(self.a, self.b, name="div-" + str(self.node_num))
 
+    def execute_equal(self):
+        return tf.equal(self.a, self.b, name="equal-" + str(self.node_num))
 
+    def execute_greater(self):
+        return tf.greater(self.a, self.b, name="greater-" + str(self.node_num))
+
+    def execute_greater_equal(self):
+        return tf.greater_equal(self.a, self.b, name="greater_equal-" + str(self.node_num))
+
+    def execute_less(self):
+        return tf.less(self.a, self.b, name="less-" + str(self.node_num))
+
+    def execute_less_equal(self):
+        return tf.less_equal(self.a, self.b, name="less_equal-" + str(self.node_num))

@@ -24,24 +24,47 @@ def test_mathtransform():
 
         #Order here: [name, numInputs, broadcastable]
         #Order here: [name, numInputs, shape1, shape2]
-        ["atan2", 2, [3,4], [3,4]],     #broadcastable
-        ["atan2", 2, [3,1,4], [1,2,4]],
-        ["div", 2, [3,4], [3,4]],       #Broadcastable
-        ["div", 2, [3,4], [1,4]],
-        ["div", 2, [3,1], [1,4]],
+        #["atan2", 2, [3,4], [3,4]],     #broadcastable
+        #["atan2", 2, [3,1,4], [1,2,4]],
+        #["div", 2, [3,4], [3,4]],       #Broadcastable
+        #["div", 2, [3,4], [1,4]],
+        #["div", 2, [3,1], [1,4]],
         #["div_scalar", 1, [3,4], None],    #Can't find this in TF docs... :/
-        ["log_sigmoid", 1, [3,4], None]
+        #["log_sigmoid", 1, [3,4], None],
+        #All of these comparison ops support broadcasting...
+        #["equal", 2, [3,4], [3,4]],
+        #["equal", 2, [1,4], [3,4]],
+        ["greater", 2, [3,4], [3,4]],
+        ["greater", 2, [3,4], [4]],
+        ["greater", 2, [3,1], [1,4]],
+        ["greater", 2, [3,4], []],
+        ["greater_equal", 2, [3,4], [3,4]],
+        ["greater_equal", 2, [3,4], [4]],
+        ["greater_equal", 2, [3,4], []],
+        ["less", 2, [3,4], [3,4]],
+        ["less", 2, [3,4], [4]],
+        ["less", 2, [3,4], []],
+        ["less_equal", 2, [3,4], [3,4]],
+        ["less_equal", 2, [3,4], [4]],
+        ["less_equal", 2, [3,4], []],
            ]
 
 
 
 
     for op in ops:
+        tf.reset_default_graph()
         print("Running " + str(op))
         math_transform = MathTransform(seed=19,numInputs=op[1])
-        in_node_0 = tf.Variable(tf.random_normal(op[2]))
+        if(len(op[2]) == 0):
+            in_node_0 = tf.Variable(0.5, tf.float32)
+        else:
+            in_node_0 = tf.Variable(tf.random_normal(op[2]), tf.float32)
         if(op[1] > 1):
-            in_node_1 = tf.Variable(tf.random_normal(op[3]))
+            if(len(op[3]) == 0):
+                in_node_1 = tf.Variable(0.5, tf.float32)
+            else:
+                in_node_1 = tf.Variable(tf.random_normal(op[3]), tf.float32)
         else:
             in_node_1 = None
         constr = DifferentiableMathOps(in_node_0, in_node_1)
@@ -51,7 +74,11 @@ def test_mathtransform():
 
         placeholders = []
 
-        outNode = tf.add(answer, 1.0)
+        if(answer.dtype == tf.bool):
+            outNode = answer
+        else:
+            outNode = tf.add(answer, 1.0)
+
         predictions = [outNode]
 
         print()
