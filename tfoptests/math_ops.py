@@ -19,7 +19,7 @@ class DifferentiableMathOps:
         try:
             method = getattr(self, method_name)
         except AttributeError:
-            print method_name, "not found"
+            print(method_name, "not found")
         else:
             return method()
 
@@ -127,3 +127,6 @@ class DifferentiableMathOps:
 
     def execute_mean(self):
         return tf.metrics.mean(self.a, self.b, name="mean" + str(self.node_num))
+
+    def execute_log_sigmoid(self):
+        return tf.log_sigmoid(self.a, name="log_sigmoid" + str(self.node_num))
