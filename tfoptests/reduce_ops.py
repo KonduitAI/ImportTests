@@ -27,4 +27,16 @@ class ReduceOps:
             return method()
 
     def execute_reduce_sum(self):
-        return tf.reduce_sum(self.vars[0], axis=self.axis, keepdims=extra.get("keepdims", False), reduction_indices=self.axis, name="reduce_sum" + str(self.node_num))
+        return [tf.reduce_sum(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_sum" + str(self.node_num))]
+
+    def execute_reduce_max(self):
+        return [tf.reduce_max(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_max" + str(self.node_num))]
+
+    def execute_reduce_min(self):
+        return [tf.reduce_min(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_min" + str(self.node_num))]
+
+    def execute_reduce_mean(self):
+        return [tf.reduce_mean(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_mean" + str(self.node_num))]
+
+    def execute_reduce_prod(self):
+        return [tf.reduce_prod(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_prod" + str(self.node_num))]
