@@ -159,22 +159,17 @@ class TensorFlowPersistor:
                     print(op_output.name)
                 with tf.Session(graph=graph) as sess:
                     try:
-                        if op_output.dtype.is_bool:
-                            if self.verbose:
-                                print("SKIPPING bool")
-                                print("-----------------------------------------------------")
-                        else:
-                            op_prediction = sess.run(op_output, feed_dict=placeholder_dict)
-                            tensor_output_name = ("/".join(op_output.name.split("/")[1:])).split(":")[0]
-                            tensor_output_num = op_output.name.split(":")[1]
-                            if tensor_output_name in self._list_output_node_names():
-                                prediction_dict[tensor_output_name] = op_prediction
-                            if self.verbose:
-                                print(op_prediction)
-                                print("-----------------------------------------------------")
-                            modified_tensor_output_name = "____".join(tensor_output_name.split("/"))
-                            save_to = ".".join([modified_tensor_output_name, tensor_output_num])
-                            self._save_intermediate(op_prediction, save_to)
+                        op_prediction = sess.run(op_output, feed_dict=placeholder_dict)
+                        tensor_output_name = ("/".join(op_output.name.split("/")[1:])).split(":")[0]
+                        tensor_output_num = op_output.name.split(":")[1]
+                        if tensor_output_name in self._list_output_node_names():
+                            prediction_dict[tensor_output_name] = op_prediction
+                        if self.verbose:
+                            print(op_prediction)
+                            print("-----------------------------------------------------")
+                        modified_tensor_output_name = "____".join(tensor_output_name.split("/"))
+                        save_to = ".".join([modified_tensor_output_name, tensor_output_num])
+                        self._save_intermediate(op_prediction, save_to)
                     except:
                         print("Unexpected error:", sys.exc_info()[0])
                         if self.verbose:
