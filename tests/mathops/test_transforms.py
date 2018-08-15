@@ -70,8 +70,8 @@ def test_mathtransform():
         # ["sub", 2, [3,4], [3,4]],       #Broadcastable
         # ["sub", 2, [3,4], [1,4]],
         # ["sub", 2, [], [3,4]],
-        # ["logicalnot", 1, [3,4], None]
-        # ["logicalnot", 1, [], None]
+        # ["logicalnot", 1, [3,4], None],
+        # ["logicalnot", 1, [], None],
         # ["logicalor", 2, [3,4], [3,4]],       #Broadcastable
         # ["logicalor", 2, [3,4], [1,4]],
         # ["logicalor", 2, [], [3,4]],
@@ -83,7 +83,7 @@ def test_mathtransform():
         # ["logicaland", 2, [3,4], [3,4]],       #Broadcastable
         # ["logicaland", 2, [3,4], [1,4]],
         # ["logicaland", 2, [], [3,4]],
-        # ["logicaland", 2, [3,1,5], [1,2,1]],
+        # ["logicaland", 2, [3,1,5], [1,2,1]]
         # ["cumsum", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":False, "testname":"cumsum_0ff"}],
         # ["cumsum", 1, [3,4], None, {"axis":1, "exclusive":False, "reverse":False, "testname":"cumsum_1ff"}],
         # ["cumsum", 1, [3,4], None, {"axis":-1, "exclusive":False, "reverse":False, "testname":"cumsum_-1ff"}],

@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 
 class ReduceOps:
@@ -66,8 +67,51 @@ class ReduceOps:
         return tf.nn.normalize_moments(counts=self.vars[0], mean_ss=self.vars[1], variance_ss=self.vars[2], shift=shift)
 
     def execute_scatter_add(self):
-        #r = tf.add(self.vars[0], 1.0)
-        #return [tf.scatter_add(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2], name="scatter_add-" + str(self.node_num))]
-        return [tf.scatter_add(ref=self.vars[0], indices=tf.zeros([], dtype=tf.int32), updates=tf.random_normal([3]), name="scatter_add-" + str(self.node_num))]
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_add(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_add-" + str(self.node_num))]
 
+    def execute_scatter_sub(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_sub(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_sub-" + str(self.node_num))]
+
+    def execute_scatter_mul(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_mul(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_mul-" + str(self.node_num))]
+
+    def execute_scatter_div(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_div(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_div-" + str(self.node_num))]
+
+    def execute_scatter_update(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_update(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_update-" + str(self.node_num))]
+
+    def execute_scatter_max(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_max(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_max-" + str(self.node_num))]
+
+    def execute_scatter_min(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.shapes[0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_min(ref=intermediate, indices=self.vars[1], updates=self.vars[2], name="scatter_min-" + str(self.node_num))]
 
