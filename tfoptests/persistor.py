@@ -33,6 +33,8 @@ class TensorFlowPersistor:
         self._placeholders = None
         self._output_tensors = None
         self._placeholder_name_value_dict = None
+        if not os.path.exists("{}/{}".format(self.base_dir, self.save_dir)):
+            os.makedirs("{}/{}".format(self.base_dir, self.save_dir))
 
     def set_placeholders(self, graph_placeholders):
         self._placeholders = graph_placeholders
