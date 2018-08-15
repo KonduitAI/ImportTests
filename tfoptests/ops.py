@@ -29,3 +29,39 @@ class OpCreator:
     def execute_segment_max(self):
         return [tf.segment_max(data=self.vars[0], segment_ids=self.vars[1])]
 
+    def execute_segment_min(self):
+        return [tf.segment_min(data=self.vars[0], segment_ids=self.vars[1])]
+
+    def execute_segment_mean(self):
+        return [tf.segment_mean(data=self.vars[0], segment_ids=self.vars[1])]
+
+    def execute_segment_prod(self):
+        return [tf.segment_prod(data=self.vars[0], segment_ids=self.vars[1])]
+
+    def execute_segment_sum(self):
+        return [tf.segment_sum(data=self.vars[0], segment_ids=self.vars[1])]
+
+    def execute_space_to_batch(self):
+        return [tf.space_to_batch(input=self.vars[0], paddings=self.vars[1], block_size=2)]
+
+    def execute_space_to_depth(self):
+        return [tf.space_to_depth(input=self.vars[0], block_size=2, data_format=self.op["data_format"])]
+
+    def execute_batch_to_space(self):
+        return [tf.batch_to_space(input=self.vars[0], crops=self.vars[1], block_size=2)]
+
+    def execute_depth_to_space(self):
+        return [tf.depth_to_space(input=self.vars[0], block_size=2, data_format=self.op["data_format"])]
+
+    def execute_size(self):
+        return [tf.size(input=self.vars[0])]
+
+    def execute_shape(self):
+        return [tf.shape(input=self.vars[0])]
+
+    def execute_shapen(self):
+        return tf.shape_n(input=self.vars)
+
+    def execute_matrix_inverse(self):
+        return [tf.matrix_inverse(input=self.vars[0])]
+

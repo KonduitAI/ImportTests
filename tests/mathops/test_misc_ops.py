@@ -36,7 +36,11 @@ class OpTest(TestGraph):
 
             n = "in_" + str(i)
 
-            out.append(initializer.newVar(init[i], s, d, n))
+            varInit = "uniform"
+            if(init is not None and init[i] is not None):
+                varInit = init[i]
+
+            out.append(initializer.newVar(varInit, s, d, n))
 
         return out
 
@@ -46,7 +50,38 @@ class OpTest(TestGraph):
 def test_mathtransform():
     ops = [
         #Format:
-        {"opName": "segment_max", "outName": "segment/segment_max_rank1", "varShapes":[[10], [10]], "varTypes":["float32", "int32"], "varInit":["range", "segment5"]}
+        # {"opName": "segment_max", "outName": "segment/segment_max_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment5"]},
+        # {"opName": "segment_mean", "outName": "segment/segment_mean_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment5"]},
+        # {"opName": "segment_min", "outName": "segment/segment_min_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment5"]},
+        # {"opName": "segment_prod", "outName": "segment/segment_prod_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment5"]},
+        # {"opName": "segment_sum", "outName": "segment/segment_sum_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment5"]},
+        # {"opName": "segment_max", "outName": "segment/segment_max_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_mean", "outName": "segment/segment_mean_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_min", "outName": "segment/segment_min_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_prod", "outName": "segment/segment_prod_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_sum", "outName": "segment/segment_sum_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_max", "outName": "segment/segment_max_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_mean", "outName": "segment/segment_mean_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_min", "outName": "segment/segment_min_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_prod", "outName": "segment/segment_prod_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "segment_sum", "outName": "segment/segment_sum_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "segment3"]},
+        # {"opName": "space_to_batch", "outName": "space_to_batch/rank4nhwc", "varShapes":[[2,4,4,4], [2,2]], "varTypes":["float32", "int32"], "varInit":["range", "zero"]},
+        # {"opName": "space_to_batch", "outName": "space_to_batch/rank4nhwc_pad", "varShapes":[[2,2,2,4], [2,2]], "varTypes":["float32", "int32"], "varInit":["range", "one"]},
+        # {"opName": "space_to_depth", "outName": "space_to_depth/rank4nhwc", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NHWC"},
+        # {"opName": "space_to_depth", "outName": "space_to_depth/rank4nchw", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NCHW"},
+        # {"opName": "batch_to_space", "outName": "batch_to_space/rank4nhwc", "varShapes":[[8,2,2,4], [2,2]], "varTypes":["float32", "int32"], "varInit":["range", "zero"]},
+        # {"opName": "batch_to_space", "outName": "batch_to_space/rank4nhwc_crop", "varShapes":[[8,2,2,4], [2,2]], "varTypes":["float32", "int32"], "varInit":["range", "one"]},
+        # {"opName": "depth_to_space", "outName": "depth_to_space/rank4nhwc", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NHWC"},
+        #{"opName": "depth_to_space", "outName": "depth_to_space/rank4nchw", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NCHW"},  #Only NHWC format supported on CPU!?
+        # {"opName": "size", "outName": "size_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
+        # {"opName": "size", "outName": "size_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]},
+        # {"opName": "shape", "outName": "shape_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
+        # {"opName": "shape", "outName": "shape_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]}
+        # {"opName": "shapen", "outName": "shapen_3x2", "varShapes":[[3,4], [1,2], [2,4]], "varTypes":["float32", "float32", "float32"]},
+        # {"opName": "shapen", "outName": "shapen_3x3", "varShapes":[[2,3,4], [1,2,3], [2,1,2]], "varTypes":["float32", "float32", "float32"]}
+        # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank4", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]}
            ]
 
     # max, mean, min, prod, sum
