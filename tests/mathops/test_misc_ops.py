@@ -93,15 +93,64 @@ def test_mathtransform():
         # {"opName": "batch_to_space", "outName": "batch_to_space/rank4nhwc_crop", "varShapes":[[8,2,2,4], [2,2]], "varTypes":["float32", "int32"], "varInit":["range", "one"]},
         # {"opName": "depth_to_space", "outName": "depth_to_space/rank4nhwc", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NHWC"},
         #{"opName": "depth_to_space", "outName": "depth_to_space/rank4nchw", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NCHW"},  #Only NHWC format supported on CPU!?
-        {"opName": "size", "outName": "size_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
-        {"opName": "size", "outName": "size_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]},
-        {"opName": "shape", "outName": "shape_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
-        {"opName": "shape", "outName": "shape_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]}
+        # {"opName": "size", "outName": "size_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
+        # {"opName": "size", "outName": "size_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]},
+        # {"opName": "shape", "outName": "shape_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
+        # {"opName": "shape", "outName": "shape_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]}
         # {"opName": "shapen", "outName": "shapen_3x2", "varShapes":[[3,4], [1,2], [2,4]], "varTypes":["float32", "float32", "float32"]},
         # {"opName": "shapen", "outName": "shapen_3x3", "varShapes":[[2,3,4], [1,2,3], [2,1,2]], "varTypes":["float32", "float32", "float32"]}
         # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
         # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
         # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank4", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]}
+        # {"opName": "pad", "outName": "pad/rank1Pzero_const0", "varShapes":[[5],[1,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","zero","zero"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank1Pzero_const10", "varShapes":[[5],[1,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","zero","ten"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank1Pone_const0", "varShapes":[[5],[1,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","one","zero"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank1Pone_const10", "varShapes":[[5],[1,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","one","ten"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank1Pone_reflect", "varShapes":[[5],[1,2]], "varTypes":["float32", "int32"], "varInit":["uniform","one"], "mode":"REFLECT"},
+        # {"opName": "pad", "outName": "pad/rank1Pone_symmetric", "varShapes":[[5],[1,2]], "varTypes":["float32", "int32"], "varInit":["uniform","one"], "mode":"SYMMETRIC"}
+        # {"opName": "pad", "outName": "pad/rank2Pzero_const0", "varShapes":[[3,4],[2,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","zero","zero"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank2Pzero_const10", "varShapes":[[3,4],[2,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","zero","ten"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank2Pone_const0", "varShapes":[[3,4],[2,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","one","zero"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank2Pone_const10", "varShapes":[[3,4],[2,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","one","ten"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank2Pone_reflect", "varShapes":[[3,4],[2,2]], "varTypes":["float32", "int32"], "varInit":["uniform","one"], "mode":"REFLECT"},
+        # {"opName": "pad", "outName": "pad/rank2Pone_symmetric", "varShapes":[[3,4],[2,2]], "varTypes":["float32", "int32"], "varInit":["uniform","one"], "mode":"SYMMETRIC"},
+        # {"opName": "pad", "outName": "pad/rank3Pzero_const0", "varShapes":[[2,3,4],[3,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","zero","zero"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank3Pzero_const10", "varShapes":[[2,3,4],[3,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","zero","ten"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank3Pone_const0", "varShapes":[[2,3,4],[3,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","one","zero"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank3Pone_const10", "varShapes":[[2,3,4],[3,2],[]], "varTypes":["float32", "int32", "float32"], "varInit":["uniform","one","ten"], "mode":"CONSTANT"},
+        # {"opName": "pad", "outName": "pad/rank3Pone_reflect", "varShapes":[[2,3,4],[3,2]], "varTypes":["float32", "int32"], "varInit":["uniform","one"], "mode":"REFLECT"},
+        # {"opName": "pad", "outName": "pad/rank3Pone_symmetric", "varShapes":[[2,3,4],[3,2]], "varTypes":["float32", "int32"], "varInit":["uniform","one"], "mode":"SYMMETRIC"},
+        # {"opName": "unique", "outName": "unique10-5", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform_int5"]},
+        # {"opName": "unique_with_counts", "outName": "uniqueWithCounts10-5", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform_int5"]},
+        # {"opName": "topk", "outName": "topk/rank1_k1", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "k":1, "sorted":False},
+        # {"opName": "topk", "outName": "topk/rank1_k1_sorted", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "k":1, "sorted": True},
+        # {"opName": "topk", "outName": "topk/rank1_k5", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "k":5, "sorted":False},
+        # {"opName": "topk", "outName": "topk/rank1_k5_sorted", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "k":5, "sorted":True},
+        # {"opName": "topk", "outName": "topk/rank2_k1", "varShapes":[[3,6]], "varTypes":["float32"], "varInit":["uniform"], "k":1, "sorted":False},
+        # {"opName": "topk", "outName": "topk/rank2_k1_sorted", "varShapes":[[3,6]], "varTypes":["float32"], "varInit":["uniform"], "k":1, "sorted": True},
+        # {"opName": "topk", "outName": "topk/rank2_k5", "varShapes":[[3,6]], "varTypes":["float32"], "varInit":["uniform"], "k":5, "sorted":False},
+        # {"opName": "topk", "outName": "topk/rank2_k5_sorted", "varShapes":[[3,6]], "varTypes":["float32"], "varInit":["uniform"], "k":5, "sorted":True},
+        # {"opName": "topk", "outName": "topk/rank3_k3", "varShapes":[[3,4,5]], "varTypes":["float32"], "varInit":["uniform"], "k":3, "sorted":False},
+        # {"opName": "topk", "outName": "topk/rank3_k3_sorted", "varShapes":[[3,4,5]], "varTypes":["float32"], "varInit":["uniform"], "k":3, "sorted":True}
+        # {"opName": "in_top_k", "outName": "in_top_k/test_4,5_k1", "varShapes":[[4,5], [4]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int5"], "k":1},
+        # {"opName": "in_top_k", "outName": "in_top_k/test_4,5_k3", "varShapes":[[4,5], [4]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int5"], "k":3}
+        # {"opName": "matrix_determinant", "outName": "matrix_determinant/rank2_5,5", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "matrix_determinant", "outName": "matrix_determinant/rank3_2,3,3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "matrix_determinant", "outName": "matrix_determinant/rank4_2,2,3,3", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "matrix_set_diag", "outName": "matrix_set_diag/rank2_5,5", "varShapes":[[5,5], [5]], "varTypes":["float32", "float32"], "varInit":["zeros", "uniform"]},
+        # {"opName": "matrix_set_diag", "outName": "matrix_set_diag/rank2_5,4", "varShapes":[[5,4], [4]], "varTypes":["float32", "float32"], "varInit":["zeros", "uniform"]},
+        # {"opName": "matrix_set_diag", "outName": "matrix_set_diag/rank2_4,5", "varShapes":[[5,4], [4]], "varTypes":["float32", "float32"], "varInit":["zeros", "uniform"]},
+        # {"opName": "matrix_set_diag", "outName": "matrix_set_diag/rank3_2,3,3", "varShapes":[[2,3,3], [2,3]], "varTypes":["float32", "float32"], "varInit":["zeros", "uniform"]},
+        # {"opName": "matrix_set_diag", "outName": "matrix_set_diag/rank3_2,3,4", "varShapes":[[2,3,4], [2,3]], "varTypes":["float32", "float32"], "varInit":["zeros", "uniform"]},
+        # {"opName": "matrix_set_diag", "outName": "matrix_set_diag/rank4_2,2,3,3", "varShapes":[[2,2,3,3], [2,2,3]], "varTypes":["float32", "float32"], "varInit":["zeros", "uniform"]}
+        # {"opName": "identity_n", "outName": "identity_n_2", "varShapes":[[2,3], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        # {"opName": "identity_n", "outName": "identity_n_4", "varShapes":[[2,3], [2], [], [2,1,3]], "varTypes":["float32", "float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform", "uniform"]}
+        # {"opName": "zeta", "outName": "zeta_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        # {"opName": "zeta", "outName": "zeta_rank3", "varShapes":[[2,3,2], [2,3,2]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniformt"]},
+        {"opName": "confusion_matrix", "outName": "confusion/no_num_classes", "varShapes":[[5], [5]], "varTypes":["int32", "int32"], "varInit":["uniform_int5", "uniform_int5"], "num_classes":None},
+        {"opName": "confusion_matrix", "outName": "confusion/with_num_classes", "varShapes":[[5], [5]], "varTypes":["int32", "int32"], "varInit":["uniform_int5", "uniform_int5"], "num_classes":5},
+        {"opName": "confusion_matrix", "outName": "confusion/no_num_classes_with_weights", "varShapes":[[5], [5], [5]], "varTypes":["int32", "int32", "float32"], "varInit":["uniform_int5", "uniform_int5", "uniform"], "num_classes":None},
+        {"opName": "confusion_matrix", "outName": "confusion/with_num_classes_with_weights", "varShapes":[[5], [5], [5]], "varTypes":["int32", "int32", "float32"], "varInit":["uniform_int5", "uniform_int5", "uniform"], "num_classes":5}
            ]
 
     # max, mean, min, prod, sum

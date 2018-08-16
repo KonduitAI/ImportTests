@@ -16,11 +16,17 @@ class VarInitializer:
         else:
             return method(shape, dtype, name)
 
+    def var_zeros(self, shape, dtype, n):
+        return self.var_zero(shape, dtype, n)
+
     def var_zero(self, shape, dtype, n):
         return tf.Variable(tf.zeros(shape=shape, dtype=dtype), name=n)
 
     def var_one(self, shape, dtype, n):
         return tf.Variable(tf.ones(shape=shape, dtype=dtype), name=n)
+
+    def var_ten(self, shape, dtype, n):
+        return tf.Variable(tf.ones(shape=shape, dtype=dtype) * 10, name=n)
 
     def var_range(self, shape, dtype, n):
         return tf.Variable(tf.reshape(tf.range(start=0, limit=np.prod(shape), delta=1, dtype=dtype), shape), name=n)
@@ -30,6 +36,12 @@ class VarInitializer:
 
     def var_uniform10(self, shape, dtype, n):
         return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10), dtype, name=n)
+
+    def var_uniform_int5(self, shape, dtype, n):
+        if(dtype == tf.int32):
+            return tf.Variable(tf.random_uniform(shape, minval=0, maxval=5, dtype=dtype), dtype, name=n)
+        else:
+            return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=5, dtype=dtype)), dtype, name=n)
 
     def var_uniform_int10(self, shape, dtype, n):
         return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=10)), dtype, name=n)
