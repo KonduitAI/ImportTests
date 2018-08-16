@@ -47,3 +47,24 @@ class VarInitializer:
         for i in range(length):
             segmentIds.append(min(numSegments-1, i//numPerSegment))
         return tf.Variable(tf.constant(value=segmentIds, dtype=dtype, shape=shape), name=n)
+
+
+
+
+    def newPlaceholder(selfself, initType, shape, dtype, name):
+        method_name = "placeholder_" + initType
+        try:
+            method = getattr(self, method_name)
+        except AttributeError:
+            print(method_name, "not found")
+        else:
+            return method(shape, dtype, name)
+
+    def placeholder_zero(self, shape, dtype, n):
+        return [tf.placeholder(dtype=dtype, shape=shape, name=n),
+                np.zeros(shape, dtype.as_numpy_dtype())]
+
+    def placeholder_one(self, shape, dtype, n):
+        return [tf.placeholder(dtype=dtype, shape=shape, name=n),
+                np.ones(shape, dtype.as_numpy_dtype())]
+

@@ -44,6 +44,26 @@ class OpTest(TestGraph):
 
         return out
 
+    def createPlaceholders(self, shapes, dtypes, init):
+        print("Creating vars: shapes=", shapes, ", dtypes=", dtypes, ", init=", init)
+        out = []
+        initializer = VarInitializer()
+        for i in range(len(shapes)):
+            s = shapes[i]
+            d = tf.float32
+            if(dtypes is not None):
+                d = dtypes[i]
+
+            n = "in_ph_" + str(i)
+
+            varInit = "uniform"
+            if(init is not None and init[i] is not None):
+                varInit = init[i]
+
+            out.append(initializer.newPlaceholder(varInit, s, d, n))
+
+        return out
+
 
 
 
@@ -73,10 +93,10 @@ def test_mathtransform():
         # {"opName": "batch_to_space", "outName": "batch_to_space/rank4nhwc_crop", "varShapes":[[8,2,2,4], [2,2]], "varTypes":["float32", "int32"], "varInit":["range", "one"]},
         # {"opName": "depth_to_space", "outName": "depth_to_space/rank4nhwc", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NHWC"},
         #{"opName": "depth_to_space", "outName": "depth_to_space/rank4nchw", "varShapes":[[2,4,4,4]], "varTypes":["float32", "int32"], "varInit":["range", "zero"], "data_format":"NCHW"},  #Only NHWC format supported on CPU!?
-        # {"opName": "size", "outName": "size_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
-        # {"opName": "size", "outName": "size_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]},
-        # {"opName": "shape", "outName": "shape_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
-        # {"opName": "shape", "outName": "shape_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]}
+        {"opName": "size", "outName": "size_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
+        {"opName": "size", "outName": "size_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]},
+        {"opName": "shape", "outName": "shape_rank2", "varShapes":[[3,4]], "varTypes":["float32"]},
+        {"opName": "shape", "outName": "shape_rank3", "varShapes":[[2,3,4]], "varTypes":["float32"]}
         # {"opName": "shapen", "outName": "shapen_3x2", "varShapes":[[3,4], [1,2], [2,4]], "varTypes":["float32", "float32", "float32"]},
         # {"opName": "shapen", "outName": "shapen_3x3", "varShapes":[[2,3,4], [1,2,3], [2,1,2]], "varTypes":["float32", "float32", "float32"]}
         # {"opName": "matrix_inverse", "outName": "matrix_inverse/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
@@ -98,10 +118,13 @@ def test_mathtransform():
         varTypes = op.get("varTypes")
         varInit = op.get("varInit")
         phShapes = op.get("phShapes")
+        phTypes = op.get("phTypes")
+        phInit = op.get("phInit")
 
         opCreator = OpCreator(op)
 
         vars = test.createVars(varShapes, varTypes, varInit)
+        #ph = test.createPlaceholders(phShapes, phTypes, phInit)
         opCreator.setVars(vars)
 
         out = opCreator.execute(opName)

@@ -54,13 +54,17 @@ class OpCreator:
         return [tf.depth_to_space(input=self.vars[0], block_size=2, data_format=self.op["data_format"])]
 
     def execute_size(self):
-        return [tf.size(input=self.vars[0])]
+        temp = tf.add(self.vars[0], 1.0)
+        return [tf.add(tf.size(input=temp), 1)]
 
     def execute_shape(self):
-        return [tf.shape(input=self.vars[0])]
+        temp = tf.add(self.vars[0], 1.0)
+        return [tf.add(tf.shape(input=temp), 1)]
 
     def execute_shapen(self):
-        return tf.shape_n(input=self.vars)
+        out = tf.shape_n(input=self.vars)
+        #Concat multiple outputs to avoid graph saving issue
+        return [tf.concat(out, axis=0)]
 
     def execute_matrix_inverse(self):
         return [tf.matrix_inverse(input=self.vars[0])]
