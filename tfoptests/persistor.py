@@ -33,7 +33,9 @@ class TensorFlowPersistor:
         self._placeholders = None
         self._output_tensors = None
         self._placeholder_name_value_dict = None
+        self.skipBoolean = False
         if not os.path.exists("{}/{}".format(self.base_dir, self.save_dir)):
+            #print("Creating dir: " + "{}/{}".format(self.base_dir, self.save_dir))
             os.makedirs("{}/{}".format(self.base_dir, self.save_dir))
 
     def set_placeholders(self, graph_placeholders):
@@ -55,7 +57,13 @@ class TensorFlowPersistor:
         self._sess = sess
         return self
 
+    def set_skip_boolean(self, skip):
+        self.skipBoolean = skip
+        return self
+
     def _write_to_file(self, nparray, content_file, shape_file):
+        os.makedirs(os.path.dirname(content_file), exist_ok=True)
+        os.makedirs(os.path.dirname(shape_file), exist_ok=True)
         if np.isscalar(nparray):
             np.savetxt(shape_file, np.asarray([0]), fmt="%i")
             f = open(content_file, 'w')
@@ -159,9 +167,9 @@ class TensorFlowPersistor:
                     print(op_output.name)
                 with tf.Session(graph=graph) as sess:
                     try:
-                        if op_output.dtype.is_bool:
+                        if op_output.dtype.is_bool and self.skipBoolean is True:
                             if self.verbose:
-                                print("SKIPPING bool")
+                                print("SKIPPING bool (use skipBoolean/set_skip_boolean(False) to change")
                                 print("-----------------------------------------------------")
                         else:
                             op_prediction = sess.run(op_output, feed_dict=placeholder_dict)
