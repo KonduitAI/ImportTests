@@ -121,3 +121,50 @@ class OpCreator:
             weights = self.vars[2]
         return [tf.confusion_matrix(labels=self.vars[0], predictions=self.vars[1], num_classes=self.op["num_classes"], weights=weights)]
 
+    def execute_stack(self):
+        return [tf.stack(values=self.vars, axis=self.op["axis"])]
+
+    def execute_parallel_stack(self):
+        return [tf.parallel_stack(values=self.vars)]
+
+    def execute_accumulate_n(self):
+        return [tf.accumulate_n(self.vars)]
+
+    def execute_angle(self):
+        return [tf.add(tf.angle(self.vars[0]), 1.0)]
+
+    def execute_approximate_equal(self):
+        return [tf.approximate_equal(self.vars[0], self.vars[1])]
+
+    def execute_matmul(self):
+        ta = self.op.get("transpose_a", False)
+        tb = self.op.get("transpose_b", False)
+        print(self.op)
+        print("ta = ",ta)
+        print("tb = ",tb)
+        return [tf.matmul(self.vars[0], self.vars[1], transpose_a=ta, transpose_b=tb, name = "matmul-" + str(self.node_num))]
+
+    def execute_matrix_diag_part(self):
+        return [tf.matrix_diag_part(self.vars[0])]
+
+    def execute_svd(self):
+        shapes = self.op["varShapes"]
+        if(shapes[len(shapes)-1] != shapes[len(shapes)-2]):
+            raise ValueError("Only square inputs currently supported due to multiple outputs issue")
+
+        svd = tf.svd(tensor=self.vars[0], full_matrices=self.op["full_matrices"], compute_uv=self.op["compute_uv"])
+        #Outputs: If compute_uv is false, only one output
+        if(self.op["compute_uv"] is False or len(svd) == 1):
+            if(isinstance(svd, list)):
+                return svd
+            return [svd]
+
+        #Multiple outputs issue: s, shape [..., P], u shape [..., M, P] or [..., M, M]
+        # v shape [..., N,P] or [..., N, N]
+        # Where P is min(M,N)
+        #Workaround for multiple outputs saving issue: if m=n, can add u and v... then need to reshape s to [..., M, 1] and broadcast add...
+        s = svd[0]
+        u = svd[1]
+        v = svd[2]
+        s = tf.expand_dims(s, -1)
+        return [s + u + v]
