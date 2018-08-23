@@ -166,5 +166,45 @@ class OpCreator:
         s = svd[0]
         u = svd[1]
         v = svd[2]
-        s = tf.expand_dims(s, -1)
+        if(self.op["full_matrices"] is False):
+            s = tf.expand_dims(s, -1)
         return [s + u + v]
+
+    def execute_mean_squared_error(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+
+        return [tf.losses.mean_squared_error(labels=self.vars[0], predictions=self.vars[1], weights=weights)]
+
+    def execute_absolute_difference(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+
+        return [tf.losses.absolute_difference(labels=self.vars[0], predictions=self.vars[1], weights=weights)]
+
+    def execute_cosine_distance(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+
+        return [tf.losses.cosine_distance(labels=self.vars[0], predictions=self.vars[1], weights=weights, axis=self.op["axis"], reduction=r)]
+
+    def execute_hinge_loss(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+
+        return [tf.losses.hinge_loss(labels=self.vars[0], logits=self.vars[1], weights=weights, reduction=r)]
+
+    def execute_huber_loss(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+        delta = self.op.get("delta", 1.0)
+
+        return [tf.losses.huber_loss(labels=self.vars[0], predictions=self.vars[1], weights=weights, reduction=r, delta=delta)]
