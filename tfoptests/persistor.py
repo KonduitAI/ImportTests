@@ -84,12 +84,9 @@ class TensorFlowPersistor:
     def _save_intermediate(self, nparray, varname, name='prediction_inbw'):
         self._save_content(nparray, varname, name)
 
-    def _save_prediction(self, output, varname='output', name='prediction'):
-        self._save_content(output, varname, name)
-
     def _save_predictions(self, output_dict, name='prediction'):
         for output_name, output_value in output_dict.items():
-            self._save_content(output_value, output_name, name)
+            self._save_content(output_value, output_name.replace('.0',''), name)
 
     def _save_graph(self, sess, all_saver, data_path="data-all", model_file="model.txt"):
         all_saver.save(sess, "{}/{}/{}".format(self.base_dir, self.save_dir, data_path),
@@ -173,16 +170,15 @@ class TensorFlowPersistor:
                                 print("-----------------------------------------------------")
                         else:
                             op_prediction = sess.run(op_output, feed_dict=placeholder_dict)
-                            tensor_output_name = ("/".join(op_output.name.split("/")[1:])).split(":")[0]
-                            tensor_output_num = op_output.name.split(":")[1]
+                            tensor_output_name = ("/".join(op_output.name.split("/")[1:]))
+                            tensor_output_name = tensor_output_name.replace(":",".")
                             if tensor_output_name in self._list_output_node_names():
                                 prediction_dict[tensor_output_name] = op_prediction
                             if self.verbose:
                                 print(op_prediction)
                                 print("-----------------------------------------------------")
                             modified_tensor_output_name = "____".join(tensor_output_name.split("/"))
-                            save_to = ".".join([modified_tensor_output_name, tensor_output_num])
-                            self._save_intermediate(op_prediction, save_to)
+                            self._save_intermediate(op_prediction, modified_tensor_output_name)
                     except:
                         print("Unexpected error:", sys.exc_info()[0])
                         if self.verbose:
@@ -214,9 +210,6 @@ class TensorFlowPersistor:
     def _check_outputs(self):
         if self._output_tensors is None:
             raise ValueError("Ouput tensor list not set")
-        for a_output in self._output_tensors:
-            if isinstance(a_output, list):
-                raise ValueError('Output tensor elements cannot be lists...')
 
     def _check_inputs(self):
         if self._placeholders is None:
@@ -234,8 +227,24 @@ class TensorFlowPersistor:
 
     def _list_output_node_names(self):
         output_node_names = []
+        # should never be nested more than two levels
         for a_output in self._output_tensors:
-            output_node_names.append(a_output.name.split(":")[0])
+            if isinstance(a_output,list):
+                for element_a_output in a_output:
+                    output_node_names.append(element_a_output.name.replace(":","."))
+            else:
+                output_node_names.append(a_output.name.replace(":",'.'))
+        return output_node_names
+
+    def _list_output_nodes_for_freeze_graph(self):
+        output_node_names = set()
+        # should never be nested more than two levels
+        for a_output in self._output_tensors:
+            if isinstance(a_output,list):
+                for element_a_output in a_output:
+                    output_node_names.add(element_a_output.name.split(":")[0])
+            else:
+                output_node_names.add(a_output.name.split(":")[0])
         return output_node_names
 
     def build_save_frozen_graph(self, skip_intermediate=False):
@@ -254,16 +263,25 @@ class TensorFlowPersistor:
             predictions = self._sess.run(self._output_tensors, feed_dict=placeholder_feed_dict)
             self._save_graph(self._sess, all_saver)
             self._sess.close
-        first_pass_dict = dict(zip(self._list_output_node_names(), predictions))
+        flattened_predictions = []
+        for a_prediction in predictions:
+            if isinstance(a_prediction,list):
+                for element_a_prediction in a_prediction:
+                    flattened_predictions.append(element_a_prediction)
+            else:
+                flattened_predictions.append(a_prediction)
+        if len(self._list_output_node_names()) == len(flattened_predictions):
+            first_pass_dict = dict(zip(self._list_output_node_names(), flattened_predictions))
+        else:
+            raise RuntimeError('Multiple outputs in graphs not handled properly')
         if self.verbose:
-            print(predictions)
+            print(first_pass_dict)
         self._save_predictions(first_pass_dict)
         tf.reset_default_graph()
-        self._freeze_n_save_graph(output_node_names=",".join(self._list_output_node_names()))
+        self._freeze_n_save_graph(output_node_names=",".join(self._list_output_nodes_for_freeze_graph()))
         self.write_frozen_graph_txt()
         if not skip_intermediate:
             second_pass_dict = self._save_intermediate_nodes(self._placeholder_name_value_dict)
-            # TODO: Better way to do this assert??
             assert second_pass_dict.keys() == first_pass_dict.keys()
             for a_output in second_pass_dict.keys():
                 np.testing.assert_equal(first_pass_dict[a_output], second_pass_dict[a_output])

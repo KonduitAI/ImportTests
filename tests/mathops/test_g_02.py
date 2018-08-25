@@ -56,9 +56,9 @@ def test_mathops_two():
     constr = DifferentiableMathOps(in_node_0, in_node_1)
 
     for op in ops:
-        print "Running " + op
+        print("Running " + op)
         answer = constr.execute(op)
-        print answer
+        print(answer)
         constr.set_a(answer)
 
     out_node = tf.floormod(constr.a, constr.b, name="output")
