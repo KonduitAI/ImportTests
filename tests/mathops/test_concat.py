@@ -11,7 +11,7 @@ class ConcatTest(TestGraph):
 def test_concat_one():
     concat_test = ConcatTest(seed=13)
     arrs = []
-    for i in xrange(1, 5, 1):
+    for i in range(1, 5, 1):
         arrs.append(tf.Variable(tf.constant(5, dtype=tf.float32, shape=(1, 1), name=str(str(i) + '_num'))))
     out_node = tf.concat(arrs, 0, name='output')
 

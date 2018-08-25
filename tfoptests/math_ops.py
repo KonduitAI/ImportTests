@@ -2,7 +2,7 @@ import tensorflow as tf
 
 
 class DifferentiableMathOps:
-    def __init__(self, a, b, extra):
+    def __init__(self, a, b, extra=None):
         self.a = a
         self.b = b
         self.node_num = 0
