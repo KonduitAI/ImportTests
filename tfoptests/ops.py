@@ -208,3 +208,153 @@ class OpCreator:
         delta = self.op.get("delta", 1.0)
 
         return [tf.losses.huber_loss(labels=self.vars[0], predictions=self.vars[1], weights=weights, reduction=r, delta=delta)]
+
+    def execute_log_loss(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+        eps = self.op.get("epsilon", 1e-7)
+
+        return [tf.losses.log_loss(labels=self.vars[0], predictions=self.vars[1], weights=weights, reduction=r, epsilon=eps)]
+
+    def execute_sigmoid_cross_entropy(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        ls = self.op.get("label_smoothing",0)
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+
+        return [tf.losses.sigmoid_cross_entropy(multi_class_labels=self.vars[0], logits=self.vars[1], weights=weights, label_smoothing=ls, reduction=r)]
+
+    def execute_softmax_cross_entropy(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        ls = self.op.get("label_smoothing",0)
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+
+        return [tf.losses.softmax_cross_entropy(onehot_labels=self.vars[0], logits=self.vars[1], weights=weights, label_smoothing=ls, reduction=r)]
+
+    def execute_sparse_softmax_cross_entropy(self):
+        weights = 1.0
+        if(len(self.vars) > 2):
+            weights = self.vars[2]
+        r = self.op.get("reduction", tf.losses.Reduction.SUM_BY_NONZERO_WEIGHTS)
+
+        return [tf.losses.sparse_softmax_cross_entropy(labels=self.vars[0], logits=self.vars[1], weights=weights, reduction=r)]
+
+    def execute_l2_loss(self):
+        return [tf.nn.l2_loss(self.vars[0])]
+
+    def execute_nn_cnn1d(self):
+        return [tf.nn.conv1d(value=self.vars[0], filters=self.vars[1], stride=self.op["stride"], padding=self.op["padding"], data_format=self.op["data_format"])]
+
+    def execute_layers_cnn1d(self):
+        kr = self.op.get("kernel_regularizer",None)
+        br = self.op.get("bias_regularizer",None)
+        ar = self.op.get("activity_regularizer",None)
+        kc = self.op.get("kernel_constraint",None)
+        bc = self.op.get("bias_constraint",None)
+        print("kernel constraint: ", kc)
+        print("bias constraint: ", bc)
+        return [tf.layers.conv1d(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                 padding=self.op["padding"], data_format=self.op["data_format"], dilation_rate=self.op["dilation_rate"],
+                                 kernel_regularizer=kr, bias_regularizer=br, activity_regularizer=ar, kernel_constraint=kc, bias_constraint=bc)]
+
+    def execute_max_pooling1d(self):
+        return [tf.layers.max_pooling1d(inputs=self.vars[0], pool_size=self.op["pooling_size"], strides=self.op["stride"], padding=self.op["padding"], data_format=self.op["data_format"])]
+
+    def execute_avg_pooling1d(self):
+        return [tf.layers.average_pooling1d(inputs=self.vars[0], pool_size=self.op["pooling_size"], strides=self.op["stride"], padding=self.op["padding"], data_format=self.op["data_format"])]
+
+    def execute_dense(self):
+        kr = self.op.get("kernel_regularizer",None)
+        br = self.op.get("bias_regularizer",None)
+        return [tf.layers.dense(inputs=self.vars[0], units=self.op["units"], activation=self.op["activation"], use_bias=self.op["use_bias"], kernel_regularizer=kr, bias_regularizer=br)]
+
+    def execute_flatten(self):
+        return [tf.layers.flatten(inputs=self.vars[0])]
+
+    def execute_nn_conv2d(self):
+        return [tf.nn.conv2d(input=self.vars[0], filter=self.vars[1], strides=self.op["strides"], padding=self.op["padding"],
+                             data_format=self.op["data_format"], dilations=self.op.get("dilations", [1,1,1,1]))]
+
+    def execute_layers_conv2d(self):
+        return [tf.layers.conv2d(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                 padding=self.op["padding"], data_format=self.op["data_format"], dilation_rate=self.op["dilation_rate"],
+                                 activation=self.op.get("activation",None), kernel_regularizer=self.op.get("kernel_regularizer",None),
+                                 bias_regularizer=self.op.get("bias_regularizer",None), activity_regularizer=self.op.get("activity_regularizer",None),
+                                 kernel_constraint=self.op.get("kernel_constraint",None), bias_constraint=self.op.get("bias_constraint",None))]
+
+    def execute_layers_sepconv1d(self):
+        return [tf.layers.separable_conv1d(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                           padding=self.op["padding"], data_format=self.op["data_format"], dilation_rate=self.op["dilation_rate"],
+                                           depth_multiplier=self.op["depth_multiplier"],
+                                           activation=self.op.get("activation",None), depthwise_regularizer=self.op.get("kernel_regularizer",None),
+                                           bias_regularizer=self.op.get("bias_regularizer",None), activity_regularizer=self.op.get("activity_regularizer",None),
+                                           depthwise_constraint=self.op.get("kernel_constraint",None), bias_constraint=self.op.get("bias_constraint",None))]
+
+    def execute_layers_sepconv2d(self):
+        return [tf.layers.separable_conv1d(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                           padding=self.op["padding"], data_format=self.op["data_format"], dilation_rate=self.op["dilation_rate"],
+                                           depth_multiplier=self.op["depth_multiplier"],
+                                           activation=self.op.get("activation",None), depthwise_regularizer=self.op.get("kernel_regularizer",None),
+                                           bias_regularizer=self.op.get("bias_regularizer",None), activity_regularizer=self.op.get("activity_regularizer",None),
+                                           depthwise_constraint=self.op.get("kernel_constraint",None), bias_constraint=self.op.get("bias_constraint",None))]
+
+    def execute_layers_conv2d_transpose(self):
+        return [tf.layers.conv2d_transpose(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                 padding=self.op["padding"], data_format=self.op["data_format"],
+                                 activation=self.op.get("activation",None), kernel_regularizer=self.op.get("kernel_regularizer",None),
+                                 bias_regularizer=self.op.get("bias_regularizer",None), activity_regularizer=self.op.get("activity_regularizer",None),
+                                 kernel_constraint=self.op.get("kernel_constraint",None), bias_constraint=self.op.get("bias_constraint",None))]
+
+
+    def execute_layers_conv3d(self):
+        return [tf.layers.conv3d(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                 padding=self.op["padding"], data_format=self.op["data_format"], dilation_rate=self.op["dilation_rate"],
+                                 activation=self.op.get("activation",None), kernel_regularizer=self.op.get("kernel_regularizer",None),
+                                 bias_regularizer=self.op.get("bias_regularizer",None), activity_regularizer=self.op.get("activity_regularizer",None),
+                                 kernel_constraint=self.op.get("kernel_constraint",None), bias_constraint=self.op.get("bias_constraint",None))]
+
+    def execute_max_pooling3d(self):
+        return [tf.layers.max_pooling3d(inputs=self.vars[0], pool_size=self.op["pooling_size"], strides=self.op["stride"], padding=self.op["padding"], data_format=self.op["data_format"])]
+
+    def execute_avg_pooling3d(self):
+        return [tf.layers.average_pooling3d(inputs=self.vars[0], pool_size=self.op["pooling_size"], strides=self.op["stride"], padding=self.op["padding"], data_format=self.op["data_format"])]
+
+    def execute_batchnorm(self):
+        return [tf.layers.batch_normalization(inputs=self.vars[0], axis=self.op["axis"], momentum=self.op.get("momentum",0.99), epsilon=self.op.get("epsilon",0.001),
+                                              center=self.op.get("center",True), scale=self.op.get("scale",True), fused=self.op["fused"])]
+
+    def execute_embedding_lookup(self):
+        nParamArrs = len(self.vars)-1
+        params = []
+        for i in range(nParamArrs):
+            params.append(self.vars[i])
+        print("vars: ", self.vars)
+        print("ids: ", self.vars[nParamArrs])
+        return [tf.nn.embedding_lookup(params=params, ids=self.vars[nParamArrs], partition_strategy=self.op["partition_strategy"], max_norm=self.op["max_norm"])]
+
+    def execute_l2_normalize(self):
+        return [tf.nn.l2_normalize(x=self.vars[0], axis=self.op["axis"], epsilon=self.op["epsilon"])]
+
+    def execute_lrn(self):
+        return [tf.nn.lrn(input=self.vars[0], depth_radius=self.op["depth_radius"], bias=self.op["bias"], alpha=self.op["alpha"], beta=self.op["beta"])]
+
+    def execute_layers_dropout(self):
+        return [tf.layers.dropout(inputs=self.vars[0], rate=self.op["rate"], noise_shape=self.op.get("noise_shape",None), training=self.op["training"])]
+
+    def execute_contrib_nn_alpha_dropout(self):
+        return [tf.contrib.nn.alpha_dropout(x=self.vars[0], keep_prob=self.op["keep_prob"], noise_shape=self.op.get("noise_shape",None))]
+
+    def execute_meshgrid(self):
+        meshgrid = tf.meshgrid(self.vars, indexing=self.op["indexing"])
+        return [tf.stack(meshgrid, axis=0)] #Workaround for multi-output issue
+
+    def execute_eye(self):
+        batch_shape = None
+        if(len(self.vars) > 0):
+            batch_shape = tf.cast(self.vars[0],dtype=tf.int32)
+        return [tf.eye(num_rows=self.op["num_rows"], num_columns=self.op["num_columns"], batch_shape=batch_shape)]

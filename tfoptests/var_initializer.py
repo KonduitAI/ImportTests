@@ -25,6 +25,12 @@ class VarInitializer:
     def var_one(self, shape, dtype, n):
         return tf.Variable(tf.ones(shape=shape, dtype=dtype), name=n)
 
+    def var_two(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=2), dtype=dtype), name=n)
+
+    def var_three(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=3), dtype=dtype), name=n)
+
     def var_ten(self, shape, dtype, n):
         return tf.Variable(tf.ones(shape=shape, dtype=dtype) * 10, name=n)
 
@@ -41,7 +47,7 @@ class VarInitializer:
         return tf.Variable(tf.random_uniform(shape, minval=-1, maxval=1), dtype, name=n)
 
     def var_uniform10(self, shape, dtype, n):
-        return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10), dtype, name=n)
+        return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype), dtype, name=n)
 
     def var_uniform_int5(self, shape, dtype, n):
         if(dtype == tf.int32):
@@ -50,7 +56,10 @@ class VarInitializer:
             return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=5, dtype=dtype)), dtype, name=n)
 
     def var_uniform_int10(self, shape, dtype, n):
-        return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=10)), dtype, name=n)
+        if(dtype == tf.int32):
+            return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype), dtype, name=n)
+        else:
+            return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype)), dtype, name=n)
 
     def var_uniform_sparse(self, shape, dtype, n):
         values = tf.random_uniform(shape) * tf.cast((tf.random_uniform(shape) < 0.5), dtype=tf.float32)
@@ -73,6 +82,19 @@ class VarInitializer:
     def var_bernoulli(self, shape, dtype, n):
         #Random 0 or 1
         return tf.cast((tf.random_uniform(shape) < 0.5), dtype=dtype)
+
+    def var_onehot(self, shape, dtype, n):
+        if(len(shape) is not 2):
+            raise ValueError("Only rank 2 input supported so far")
+
+        # x = np.zeros(shape)
+        # y = np.random.choice(shape[0], shape[1])
+        # x[np.arange(shape[0]), y] = 1
+
+        x = np.eye(shape[1])[np.random.choice(shape[1], size=shape[0])]
+
+        return tf.Variable(x, dtype=dtype, name=n)
+
 
 
 
