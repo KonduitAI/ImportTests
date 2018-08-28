@@ -358,3 +358,74 @@ class OpCreator:
         if(len(self.vars) > 0):
             batch_shape = tf.cast(self.vars[0],dtype=tf.int32)
         return [tf.eye(num_rows=self.op["num_rows"], num_columns=self.op["num_columns"], batch_shape=batch_shape)]
+
+    def execute_log_determinant(self):
+        #Attempting to ensure the input sub-matrices are hermitian positive definite matrix... this doesn't guarantee it??
+        inArr = self.vars[0]
+        if(len(self.op["varShapes"][0]) == 2):
+            inArr = inArr + tf.eye(num_rows=self.op["varShapes"][0][0], num_columns=self.op["varShapes"][0][1])
+        elif(len(self.op["varShapes"][0]) == 3):
+            inArr = inArr + tf.eye(num_rows=self.op["varShapes"][0][1], num_columns=self.op["varShapes"][0][2], batch_shape=[self.op["varShapes"][0][0]])
+        elif(len(self.op["varShapes"][0]) == 4):
+            inArr = inArr + tf.eye(num_rows=self.op["varShapes"][0][2], num_columns=self.op["varShapes"][0][3], batch_shape=[self.op["varShapes"][0][0], self.op["varShapes"][0][1]])
+        else:
+            raise ValueError("Only rank 2-4 implemented")
+
+        return [tf.linalg.logdet(inArr)]
+
+    def execute_slog_determinant(self):
+        #Attempting to ensure the input sub-matrices are hermitian positive definite matrix... this doesn't guarantee it??
+        inArr = self.vars[0]
+        if(len(self.op["varShapes"][0]) == 2):
+            inArr = inArr + tf.eye(num_rows=self.op["varShapes"][0][0], num_columns=self.op["varShapes"][0][1])
+        elif(len(self.op["varShapes"][0]) == 3):
+            inArr = inArr + tf.eye(num_rows=self.op["varShapes"][0][1], num_columns=self.op["varShapes"][0][2], batch_shape=[self.op["varShapes"][0][0]])
+        elif(len(self.op["varShapes"][0]) == 4):
+            inArr = inArr + tf.eye(num_rows=self.op["varShapes"][0][2], num_columns=self.op["varShapes"][0][3], batch_shape=[self.op["varShapes"][0][0], self.op["varShapes"][0][1]])
+        else:
+            raise ValueError("Only rank 2-4 implemented")
+
+        return tf.linalg.slogdet(inArr)
+
+
+    def execute_sequence_mask(self):
+        maxLen = None
+        if(len(self.vars) > 1):
+            maxLen = self.vars[1]
+        return [tf.sequence_mask(lengths=self.vars[0], maxlen=maxLen)]
+
+    def execute_rint(self):
+        return [tf.rint(self.vars[0])]
+
+    def execute_histogram_fixed_width(self):
+        return [tf.histogram_fixed_width(values=self.vars[0], value_range=self.vars[1], nbins=self.op["nbins"])]
+
+    def execute_bincount(self):
+        w = None
+        if(len(self.vars) > 1):
+            w = self.vars[1]
+        return [tf.bincount(arr=self.vars[0], weights=w, minlength=self.op["minlength"], maxlength=self.op["maxlength"])]
+
+    def execute_scatter_nd(self):
+        return [tf.scatter_nd(indices=self.vars[0], updates=self.vars[1], shape=self.op["shape"])]
+
+    def execute_scatter_nd_add(self):
+        # Create an intermediate variable - otherwise the scatter op will modify the variable content in-place
+        # and hence we'll save the input post-modification, rather than pre-modification
+        intermediate = tf.Variable(tf.zeros(self.op["varShapes"][0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_nd_add(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_nd_sub(self):
+        intermediate = tf.Variable(tf.zeros(self.op["varShapes"][0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_nd_sub(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_nd_update(self):
+        intermediate = tf.Variable(tf.zeros(self.op["varShapes"][0]), dtype=tf.float32)
+        intermediate = tf.assign(intermediate, self.vars[0])
+        return [tf.scatter_nd_update(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_sufficient_statistics(self):
+        temp = tf.add(self.vars[0], 1.0)
+        return tf.nn.sufficient_statistics(x=self.vars[0], axes=self.op["axes"], shift=self.op["shift"], keep_dims=self.op["keep_dims"])

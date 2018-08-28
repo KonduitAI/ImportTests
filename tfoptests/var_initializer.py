@@ -65,6 +65,11 @@ class VarInitializer:
         values = tf.random_uniform(shape) * tf.cast((tf.random_uniform(shape) < 0.5), dtype=tf.float32)
         return tf.Variable(values, dtype, name=n)
 
+    def var_fixed_m1_1(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 2):
+            raise ValueError("Shape must be exactly [2]")
+        return tf.Variable([-1, 1], dtype=dtype, name=n)
+
     def var_segment3(self, shape, dtype, n):
         return self.var_segmentN(3, shape, dtype, n)
 
@@ -98,7 +103,7 @@ class VarInitializer:
 
 
 
-    def newPlaceholder(selfself, initType, shape, dtype, name):
+    def newPlaceholder(self, initType, shape, dtype, name):
         method_name = "placeholder_" + initType
         try:
             method = getattr(self, method_name)

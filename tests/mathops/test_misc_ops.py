@@ -601,10 +601,93 @@ def test_mathtransform():
         # {"opName":"eye", "outName":"eye/e22", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":2, "num_columns":2},
         # {"opName":"eye", "outName":"eye/e23", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":2, "num_columns":3},
         # {"opName":"eye", "outName":"eye/e32", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":3, "num_columns":2},
-        {"opName":"eye", "outName":"eye/e22_b1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "num_rows":2, "num_columns":2},
-        {"opName":"eye", "outName":"eye/e23_b2", "varShapes":[[1]], "varTypes":["int32"], "varInit":["two"], "num_rows":2, "num_columns":3},
-        {"opName":"eye", "outName":"eye/e32_b22", "varShapes":[[2]], "varTypes":["int32"], "varInit":["two"], "num_rows":3, "num_columns":2},
+        # {"opName":"eye", "outName":"eye/e22_b1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "num_rows":2, "num_columns":2},
+        # {"opName":"eye", "outName":"eye/e23_b2", "varShapes":[[1]], "varTypes":["int32"], "varInit":["two"], "num_rows":2, "num_columns":3},
+        # {"opName":"eye", "outName":"eye/e32_b22", "varShapes":[[2]], "varTypes":["int32"], "varInit":["two"], "num_rows":3, "num_columns":2},
 
+
+        # {"opName":"log_determinant", "outName":"log_determinant/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"log_determinant", "outName":"log_determinant/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"log_determinant", "outName":"log_determinant/rank4", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"slog_determinant", "outName":"slogdet/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"slog_determinant", "outName":"slogdet/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"slog_determinant", "outName":"slogdet/rank4", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+
+        # {"opName":"sequence_mask", "outName":"sequence_mask/rank1_auto_maxlen", "varShapes":[[5]], "varTypes":["int32"], "varInit":["uniform_int5"]},
+        # {"opName":"sequence_mask", "outName":"sequence_mask/rank1_provided_maxlen", "varShapes":[[5], []], "varTypes":["int32", "int32"], "varInit":["uniform_int5", "ten"]},
+        # {"opName":"sequence_mask", "outName":"sequence_mask/rank2_auto_maxlen", "varShapes":[[3,4]], "varTypes":["int32"], "varInit":["uniform_int5"]},
+        # {"opName":"sequence_mask", "outName":"sequence_mask/rank2_provided_maxlen", "varShapes":[[3,4], []], "varTypes":["int32", "int32"], "varInit":["uniform_int5", "ten"]},
+        # {"opName":"sequence_mask", "outName":"sequence_mask/rank3_auto_maxlen", "varShapes":[[2,3,4]], "varTypes":["int32"], "varInit":["uniform_int5"]},
+        # {"opName":"sequence_mask", "outName":"sequence_mask/rank3_provided_maxlen", "varShapes":[[2,3,4], []], "varTypes":["int32", "int32"], "varInit":["uniform_int5", "ten"]},
+
+        # {"opName":"rint", "outName":"rint/rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["stdnormal"]},
+        # {"opName":"rint", "outName":"rint/rank1", "varShapes":[[10]], "varTypes":["float32"], "varInit":["stdnormal"]},
+        # {"opName":"rint", "outName":"rint/rank2", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["stdnormal"]},
+
+        # {"opName":"histogram_fixed_width", "outName":"histogram_fixed_width/rank0", "varShapes":[[], [2]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "fixed_m1_1"], "nbins":5},
+        # {"opName":"histogram_fixed_width", "outName":"histogram_fixed_width/rank1", "varShapes":[[10], [2]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "fixed_m1_1"], "nbins":5},
+        # {"opName":"histogram_fixed_width", "outName":"histogram_fixed_width/rank2", "varShapes":[[10,10], [2]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "fixed_m1_1"], "nbins":20}
+
+        # {"opName":"bincount", "outName":"bincount/rank0", "varShapes":[[]], "varTypes":["int32"], "varInit":["uniform_int10"], "minlength":None, "maxlength":None},
+        # {"opName":"bincount", "outName":"bincount/rank0_minmax", "varShapes":[[]], "varTypes":["int32"], "varInit":["uniform_int10"], "minlength":3, "maxlength":8},
+        # {"opName":"bincount", "outName":"bincount/rank0_weights", "varShapes":[[],[]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":None, "maxlength":None},
+        # {"opName":"bincount", "outName":"bincount/rank1", "varShapes":[[10]], "varTypes":["int32"], "varInit":["uniform_int10"], "minlength":None, "maxlength":None},
+        # {"opName":"bincount", "outName":"bincount/rank1_minmax", "varShapes":[[10]], "varTypes":["int32"], "varInit":["uniform_int10","uniform"], "minlength":3, "maxlength":8},
+        # {"opName":"bincount", "outName":"bincount/rank1_min10", "varShapes":[[10]], "varTypes":["int32"], "varInit":["uniform_int10","uniform"], "minlength":10, "maxlength":None},
+        # {"opName":"bincount", "outName":"bincount/rank1_max5", "varShapes":[[10]], "varTypes":["int32"], "varInit":["uniform_int10","uniform"], "minlength":None, "maxlength":5},
+        {"opName":"bincount", "outName":"bincount/rank1_weights", "varShapes":[[10],[10]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":None, "maxlength":None},
+        # #TF bug? Next one doess't work
+        # #{"opName":"bincount", "outName":"bincount/rank1_minmax_weights", "varShapes":[[10],[10]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":3, "maxlength":8},
+        # #TF bug? Next one doess't work
+        # # {"opName":"bincount", "outName":"bincount/rank2_minmax_weights", "varShapes":[[5,5],[5,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":3, "maxlength":8},
+        # {"opName":"bincount", "outName":"bincount/rank2_weights", "varShapes":[[5,5],[5,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":None, "maxlength":None},
+
+        # #Scatter ND: arrays are indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
+        #     #This case: update has shape [4]+[] = 4
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank1shape_1indices", "varShapes":[[4,1],[4]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10]},
+        #     #This case: 2 indices, 2 shape -> updates are individual elements
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_2indices", "varShapes":[[4,2],[4]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,10]},
+        #     #This case: 1 indices, 2 shape -> updates are slices of shape [4]+[7]
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_1indices", "varShapes":[[4,1],[4,7]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7]},
+        #     #This case: 2 indices, 3 shape -> updates are slices of shape [4]+[5] = [4,5]
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank3shape_2indices", "varShapes":[[4,2],[4,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7,5]},
+        #     #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank3shape_1indices", "varShapes":[[4,1],[4,7,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7,5]},
+
+        #Scatter ND ADD: arrays are ref, indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
+        #This case: update has shape [4]+[] = 4
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        #This case: 2 indices, 2 shape -> updates are individual elements
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
+        #This case: 1 indices, 2 shape -> updates are slices of shape [4]+[7]
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        #This case: 2 indices, 3 shape -> updates are slices of shape [4]+[5] = [4,5]
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+
+        #Seems like shift=None is NOT supported: "TypeError: Fetch argument None has invalid type <class 'NoneType'>"
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank1", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0], "shift":0.0, "keep_dims":False},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank1_keep", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0], "shift":0.0, "keep_dims":True},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank1_keep_shift05", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0], "shift":0.5, "keep_dims":True},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank2_d0", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0], "shift":0.0, "keep_dims":False},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank2_d1_keep", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform"], "axes":[1], "shift":0.0, "keep_dims":True},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank2_d01_keep_shift05", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0,1], "shift":0.5, "keep_dims":True},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank3_d0", "varShapes":[[3,4,5]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0], "shift":0.0, "keep_dims":False},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank3_d1", "varShapes":[[3,4,5]], "varTypes":["float32"], "varInit":["uniform"], "axes":[1], "shift":0.0, "keep_dims":False},
+        # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank3_d2", "varShapes":[[3,4,5]], "varTypes":["float32"], "varInit":["uniform"], "axes":[2], "shift":0.0, "keep_dims":False},
            ]
 
 
