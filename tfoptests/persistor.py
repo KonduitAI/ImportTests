@@ -81,6 +81,13 @@ class TensorFlowPersistor:
     def _save_input(self, nparray, varname, name='placeholder'):
         self._save_content(nparray, varname, name)
 
+    def _save_node_dtypes(self, dtype_dict):
+        dtype_file = "{}/{}/dtypes".format(self.base_dir, self.save_dir)
+        f = open(dtype_file,"a")
+        for k,v in dtype_dict.items():
+            print("{} {}".format(k,v),file=f)
+        f.close() 
+
     def _save_intermediate(self, nparray, varname, name='prediction_inbw'):
         self._save_content(nparray, varname, name)
 
@@ -140,6 +147,7 @@ class TensorFlowPersistor:
         graph = self.load_frozen_graph()
         placeholder_dict = {}
         prediction_dict = {}
+        dtype_dict = {}
         if self.verbose:
             print("-----------------------------------------------------")
             print("PLACEHOLDER LIST:")
@@ -150,6 +158,8 @@ class TensorFlowPersistor:
                 print(op.name)  # there is a prefix and a suffix - there should only be one prefix
             placeholder_name = "/".join(op.name.split("/")[1:])
             placeholder_dict[op.name + ":0"] = input_dict[placeholder_name]
+            tensor_dtype_string = "{}".format(op_output.dtype).split("'")[1]
+            dtype_dict[placeholder_name] = tensor_dtype_string
         if self.verbose:
             print("-----------------------------------------------------")
 
@@ -179,12 +189,15 @@ class TensorFlowPersistor:
                                 print("-----------------------------------------------------")
                             modified_tensor_output_name = "____".join(tensor_output_name.split("/"))
                             self._save_intermediate(op_prediction, modified_tensor_output_name)
+                            tensor_dtype_string = "{}".format(op_output.dtype).split("'")[1]
+                            dtype_dict[modified_tensor_output_name] = tensor_dtype_string
                     except:
                         print("Unexpected error:", sys.exc_info()[0])
                         if self.verbose:
                             print(op_output)
                             print("SKIPPING")
                             print("-----------------------------------------------------")
+        self._save_node_dtypes(dtype_dict)
         return prediction_dict
 
     def load_external_graph(self, model_file):
