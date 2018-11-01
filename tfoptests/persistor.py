@@ -158,7 +158,7 @@ class TensorFlowPersistor:
                 print(op.name)  # there is a prefix and a suffix - there should only be one prefix
             placeholder_name = "/".join(op.name.split("/")[1:])
             placeholder_dict[op.name + ":0"] = input_dict[placeholder_name]
-            tensor_dtype_string = "{}".format(op_output.dtype).split("'")[1]
+            tensor_dtype_string = "{}".format(op.outputs[0].dtype).split("'")[1]
             dtype_dict[placeholder_name] = tensor_dtype_string
         if self.verbose:
             print("-----------------------------------------------------")
