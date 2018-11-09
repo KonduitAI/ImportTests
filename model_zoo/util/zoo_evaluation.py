@@ -126,13 +126,23 @@ class ZooEvaluation(object):
         print("Outputs: ",outputs)
 
         toSave = {}
+        toSave_dtype_dict = {}
         for i in range(len(outputs)):
             toSave[self.outputNames[i]] = outputs[i]
+            print("Output: ", self.outputNames[i])
+            print("Dtype: ", outputs[i].dtype)
+            toSave_dtype_dict[self.outputNames[i]] = str(outputs[i].dtype)
 
+        print("Values to save: ", toSave)
         tfp = TensorFlowPersistor(base_dir=self.baseDir, save_dir=self.name, verbose=False)
         tfp._save_input(self.getImage(True), self.inputName)
+        dtype_dict = {}
+        dtype_dict[self.inputName] = str(image.dtype)
+        tfp._save_node_dtypes(dtype_dict)
         # tfp._save_predictions({self.outputName:outputs})
         tfp._save_predictions(toSave)
+        tfp._save_node_dtypes(toSave_dtype_dict)
+
 
         #Also sove intermediate nodes:
         # dict = {self.inputName:image}
@@ -157,10 +167,17 @@ class ZooEvaluation(object):
 if __name__ == '__main__':
 
 
+    #How to run this?
+    #1. Download the required models, links below
+    #2. For many models, just implement using the ZooEvaluation class.
+    #3. Some models need special treatment - see eval_data directory for these cases
+    #4. Run with: python model_zoo/util/zoo_evaluation.py
+    #See also: https://gist.github.com/eraly/7d48807ed2c69233072ed06c12bf9b0a
 
 
 
     #DenseNet - uses vgg preprocessing according to readme
+    # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/densenet_2018_04_27.tgz
     z = ZooEvaluation(name="densenet_2018_04_27",prefix="")
     z.graphFile("C:\\Temp\\TF_Graphs\\densenet_2018_04_27\\densenet.pb")\
         .inputName("Placeholder:0")\
@@ -169,70 +186,70 @@ if __name__ == '__main__':
         .inputDims(224, 224, 3)\
         .preprocessingType("vgg")
     z.write()
-    # SqueezeNet: also vgg preprocessing
-    z = ZooEvaluation(name="squeezenet_2018_04_27",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\squeezenet_2018_04_27\\squeezenet.pb")\
-        .inputName("Placeholder:0") \
-        .outputNames(["ArgMax:0", "softmax_tensor:0"])\
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true")\
-        .inputDims(224, 224, 3)\
-        .preprocessingType("vgg")
-    z.write()
-
-    # nasnet_mobile: no preprocessing specified, going to assume inception preprocessing
-    z = ZooEvaluation(name="nasnet_mobile_2018_04_27",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\nasnet_mobile_2018_04_27\\nasnet_mobile.pb") \
-        .inputName("input:0") \
-        .outputNames(["final_layer/predictions:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(224, 224, 3) \
-        .preprocessingType("inception")
-    z.write()
-
-    z = ZooEvaluation(name="inception_v4_2018_04_27",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\inception_v4_2018_04_27\\inception_v4.pb") \
-        .inputName("input:0") \
-        .outputNames(["InceptionV4/Logits/Predictions:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(299, 299, 3) \
-        .preprocessingType("inception")
-    z.write()
-
-    z = ZooEvaluation(name="inception_resnet_v2_2018_04_27",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\inception_resnet_v2_2018_04_27\\inception_resnet_v2.pb") \
-        .inputName("input:0") \
-        .outputNames(["InceptionResnetV2/AuxLogits/Logits/BiasAdd:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(299, 299, 3) \
-        .preprocessingType("inception")
-    z.write()
-
-    z = ZooEvaluation(name="mobilenet_v1_0.5_128",prefix="")   #None)  #"mobilenet_v1_0.5")
-    z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v1_0.5_128\\mobilenet_v1_0.5_128_frozen.pb") \
-    .inputName("input:0") \
-    .outputNames(["MobilenetV1/Predictions/Reshape_1:0"]) \
-    .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-    .inputDims(128, 128, 3) \
-    .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
-    z.write()
-
-    z = ZooEvaluation(name="mobilenet_v2_1.0_224",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v2_1.0_224\\mobilenet_v2_1.0_224_frozen.pb") \
-        .inputName("input:0") \
-        .outputNames(["MobilenetV2/Predictions/Reshape_1:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(224, 224, 3) \
-        .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
-    z.write()
-
-    z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\resnetv2_imagenet_frozen_graph.pb") \
-        .inputName("input_tensor:0") \
-        .outputNames(["softmax_tensor:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(224, 224, 3) \
-        .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
-    z.write()
+    # # SqueezeNet: also vgg preprocessing
+    # z = ZooEvaluation(name="squeezenet_2018_04_27",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\squeezenet_2018_04_27\\squeezenet.pb")\
+    #     .inputName("Placeholder:0") \
+    #     .outputNames(["ArgMax:0", "softmax_tensor:0"])\
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true")\
+    #     .inputDims(224, 224, 3)\
+    #     .preprocessingType("vgg")
+    # z.write()
+    #
+    # # nasnet_mobile: no preprocessing specified, going to assume inception preprocessing
+    # z = ZooEvaluation(name="nasnet_mobile_2018_04_27",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\nasnet_mobile_2018_04_27\\nasnet_mobile.pb") \
+    #     .inputName("input:0") \
+    #     .outputNames(["final_layer/predictions:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(224, 224, 3) \
+    #     .preprocessingType("inception")
+    # z.write()
+    #
+    # z = ZooEvaluation(name="inception_v4_2018_04_27",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\inception_v4_2018_04_27\\inception_v4.pb") \
+    #     .inputName("input:0") \
+    #     .outputNames(["InceptionV4/Logits/Predictions:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(299, 299, 3) \
+    #     .preprocessingType("inception")
+    # z.write()
+    #
+    # z = ZooEvaluation(name="inception_resnet_v2_2018_04_27",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\inception_resnet_v2_2018_04_27\\inception_resnet_v2.pb") \
+    #     .inputName("input:0") \
+    #     .outputNames(["InceptionResnetV2/AuxLogits/Logits/BiasAdd:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(299, 299, 3) \
+    #     .preprocessingType("inception")
+    # z.write()
+    #
+    # z = ZooEvaluation(name="mobilenet_v1_0.5_128",prefix="")   #None)  #"mobilenet_v1_0.5")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v1_0.5_128\\mobilenet_v1_0.5_128_frozen.pb") \
+    # .inputName("input:0") \
+    # .outputNames(["MobilenetV1/Predictions/Reshape_1:0"]) \
+    # .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    # .inputDims(128, 128, 3) \
+    # .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+    # z.write()
+    #
+    # z = ZooEvaluation(name="mobilenet_v2_1.0_224",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v2_1.0_224\\mobilenet_v2_1.0_224_frozen.pb") \
+    #     .inputName("input:0") \
+    #     .outputNames(["MobilenetV2/Predictions/Reshape_1:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(224, 224, 3) \
+    #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+    # z.write()
+    #
+    # z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\resnetv2_imagenet_frozen_graph.pb") \
+    #     .inputName("input_tensor:0") \
+    #     .outputNames(["softmax_tensor:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(224, 224, 3) \
+    #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+    # z.write()
 
     # graph = z.loadGraph()
     # for op in graph.get_operations():

@@ -74,8 +74,13 @@ class TensorFlowPersistor:
             np.savetxt(content_file, np.ndarray.flatten(nparray), fmt="%10.8f")
 
     def _save_content(self, nparray, varname, name):
-        content_file = "{}/{}/{}.{}.csv".format(self.base_dir, self.save_dir, varname, name)
-        shape_file = "{}/{}/{}.{}.shape".format(self.base_dir, self.save_dir, varname, name)
+        varnameClean = varname.replace(":0","")
+        # content_file = "{}/{}/{}.{}.csv".format(self.base_dir, self.save_dir, varname, name)
+        # shape_file = "{}/{}/{}.{}.shape".format(self.base_dir, self.save_dir, varname, name)
+        content_file = "{}/{}/{}.{}.csv".format(self.base_dir, self.save_dir, varnameClean, name)
+        shape_file = "{}/{}/{}.{}.shape".format(self.base_dir, self.save_dir, varnameClean, name)
+        print("Content file: ", content_file)
+        print("shape_file: ", shape_file)
         self._write_to_file(nparray, content_file, shape_file)
 
     def _save_input(self, nparray, varname, name='placeholder'):
