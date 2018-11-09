@@ -129,11 +129,11 @@ class ZooEvaluation(object):
         toSave_dtype_dict = {}
         for i in range(len(outputs)):
             toSave[self.outputNames[i]] = outputs[i]
-            print("Output: ", self.outputNames[i])
-            print("Dtype: ", outputs[i].dtype)
+            #print("Output: ", self.outputNames[i])
+            #print("Dtype: ", outputs[i].dtype)
             toSave_dtype_dict[self.outputNames[i]] = str(outputs[i].dtype)
 
-        print("Values to save: ", toSave)
+        #print("Values to save: ", toSave)
         tfp = TensorFlowPersistor(base_dir=self.baseDir, save_dir=self.name, verbose=False)
         tfp._save_input(self.getImage(True), self.inputName)
         dtype_dict = {}
@@ -178,15 +178,16 @@ if __name__ == '__main__':
 
     #DenseNet - uses vgg preprocessing according to readme
     # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/densenet_2018_04_27.tgz
-    z = ZooEvaluation(name="densenet_2018_04_27",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\densenet_2018_04_27\\densenet.pb")\
-        .inputName("Placeholder:0")\
-        .outputNames(["ArgMax:0", "softmax_tensor:0"])\
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true")\
-        .inputDims(224, 224, 3)\
-        .preprocessingType("vgg")
-    z.write()
+    # z = ZooEvaluation(name="densenet_2018_04_27",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\densenet_2018_04_27\\densenet.pb")\
+    #     .inputName("Placeholder:0")\
+    #     .outputNames(["ArgMax:0", "softmax_tensor:0"])\
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true")\
+    #     .inputDims(224, 224, 3)\
+    #     .preprocessingType("vgg")
+    # z.write()
     # # SqueezeNet: also vgg preprocessing
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/squeezenet_2018_04_27.tgz
     # z = ZooEvaluation(name="squeezenet_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\squeezenet_2018_04_27\\squeezenet.pb")\
     #     .inputName("Placeholder:0") \
@@ -197,6 +198,7 @@ if __name__ == '__main__':
     # z.write()
     #
     # # nasnet_mobile: no preprocessing specified, going to assume inception preprocessing
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/nasnet_mobile_2018_04_27.tgz
     # z = ZooEvaluation(name="nasnet_mobile_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\nasnet_mobile_2018_04_27\\nasnet_mobile.pb") \
     #     .inputName("input:0") \
@@ -206,6 +208,7 @@ if __name__ == '__main__':
     #     .preprocessingType("inception")
     # z.write()
     #
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/inception_v4_2018_04_27.tgz
     # z = ZooEvaluation(name="inception_v4_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\inception_v4_2018_04_27\\inception_v4.pb") \
     #     .inputName("input:0") \
@@ -215,6 +218,7 @@ if __name__ == '__main__':
     #     .preprocessingType("inception")
     # z.write()
     #
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/inception_resnet_v2_2018_04_27.tgz
     # z = ZooEvaluation(name="inception_resnet_v2_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\inception_resnet_v2_2018_04_27\\inception_resnet_v2.pb") \
     #     .inputName("input:0") \
@@ -224,6 +228,7 @@ if __name__ == '__main__':
     #     .preprocessingType("inception")
     # z.write()
     #
+    # # http://download.tensorflow.org/models/mobilenet_v1_2018_02_22/mobilenet_v1_0.5_128.tgz
     # z = ZooEvaluation(name="mobilenet_v1_0.5_128",prefix="")   #None)  #"mobilenet_v1_0.5")
     # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v1_0.5_128\\mobilenet_v1_0.5_128_frozen.pb") \
     # .inputName("input:0") \
@@ -233,6 +238,7 @@ if __name__ == '__main__':
     # .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
     # z.write()
     #
+    # # http://download.tensorflow.org/models/tflite_11_05_08/mobilenet_v2_1.0_224.tgz
     # z = ZooEvaluation(name="mobilenet_v2_1.0_224",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v2_1.0_224\\mobilenet_v2_1.0_224_frozen.pb") \
     #     .inputName("input:0") \
@@ -242,6 +248,7 @@ if __name__ == '__main__':
     #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
     # z.write()
     #
+    # # http://download.tensorflow.org/models/official/resnetv2_imagenet_frozen_graph.pb
     # z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\resnetv2_imagenet_frozen_graph.pb") \
     #     .inputName("input_tensor:0") \

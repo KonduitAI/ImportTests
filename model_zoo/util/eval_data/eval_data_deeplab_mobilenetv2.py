@@ -65,6 +65,13 @@ if __name__ == '__main__':
         tfp._save_input(input, "graph/ImageTensor")
         tfp._save_predictions({"graph/SemanticPredictions":seg_map})
 
+        #Save type info
+        dtype_dict = {}
+        dtype_dict[INPUT_TENSOR_NAME] = str(input.dtype)
+        dtype_dict["graph/SemanticPredictions"] = str(seg_map.dtype)
+        tfp._save_node_dtypes(dtype_dict)
+
+
     print(seg_map)
 
 
