@@ -31,6 +31,9 @@ class VarInitializer:
     def var_three(self, shape, dtype, n):
         return tf.Variable(tf.cast(tf.fill(dims=shape, value=3), dtype=dtype), name=n)
 
+    def var_four(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=4), dtype=dtype), name=n)
+
     def var_ten(self, shape, dtype, n):
         return tf.Variable(tf.ones(shape=shape, dtype=dtype) * 10, name=n)
 
@@ -48,6 +51,12 @@ class VarInitializer:
 
     def var_uniform10(self, shape, dtype, n):
         return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype), dtype, name=n)
+
+    def var_uniform_int3(self, shape, dtype, n):
+        if(dtype == tf.int32):
+            return tf.Variable(tf.random_uniform(shape, minval=0, maxval=3, dtype=dtype), dtype, name=n)
+        else:
+            return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=3, dtype=dtype)), dtype, name=n)
 
     def var_uniform_int5(self, shape, dtype, n):
         if(dtype == tf.int32):
@@ -69,6 +78,26 @@ class VarInitializer:
         if(len(shape) is not 1 or shape[0] is not 2):
             raise ValueError("Shape must be exactly [2]")
         return tf.Variable([-1, 1], dtype=dtype, name=n)
+
+    def var_fixed_2_1(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 2):
+            raise ValueError("Shape must be exactly [2]")
+        return tf.Variable([2,1], dtype=dtype, name=n)
+
+    def var_fixed_5_3(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 2):
+            raise ValueError("Shape must be exactly [2]")
+        return tf.Variable([5, 3], dtype=dtype, name=n)
+
+    def var_fixed_2_2_4(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 3):
+            raise ValueError("Shape must be exactly [3]")
+        return tf.Variable([2,2,4], dtype=dtype, name=n)
+
+    def var_fixed_2_1_4(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 3):
+            raise ValueError("Shape must be exactly [3]")
+        return tf.Variable([2,1,4], dtype=dtype, name=n)
 
     def var_segment3(self, shape, dtype, n):
         return self.var_segmentN(3, shape, dtype, n)
@@ -101,6 +130,16 @@ class VarInitializer:
         return tf.Variable(x, dtype=dtype, name=n)
 
 
+    def var_boolean(self, shape, dtype, n):
+        print(dtype)
+        # if(dtype is not tf.bool):
+        return tf.Variable(tf.random_uniform(shape) >= 0.5, dtype=dtype)
+
+    def var_booleanFalse(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=False), dtype=dtype), name=n)
+
+    def var_booleanTrue(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=True), dtype=dtype), name=n)
 
 
     def newPlaceholder(self, initType, shape, dtype, name):

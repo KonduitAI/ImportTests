@@ -429,3 +429,67 @@ class OpCreator:
     def execute_sufficient_statistics(self):
         temp = tf.add(self.vars[0], 1.0)
         return tf.nn.sufficient_statistics(x=self.vars[0], axes=self.op["axes"], shift=self.op["shift"], keep_dims=self.op["keep_dims"])
+
+    def execute_split(self):
+        num_or_size_splits=self.op.get("num_or_size_split", None)
+        return tf.split(value=self.vars[0], num_or_size_splits=num_or_size_splits, axis=self.op["axis"])
+
+    def execute_reduce_logsumexp(self):
+        return [tf.reduce_logsumexp(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+
+    def execute_nth_element(self):
+        return [tf.contrib.nn.nth_element(input=self.vars[0], n=self.vars[1], reverse=self.op["reverse"])]
+
+    def execute_reduce_any(self):
+        return [tf.reduce_any(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+
+    def execute_reduce_all(self):
+        return [tf.reduce_all(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+
+    def execute_boolean_mask(self):
+        return [tf.boolean_mask(tensor=self.vars[0], mask=self.vars[1])]
+
+    def execute_where(self):
+        c = self.vars[0]
+        x = None
+        y = None
+        if(len(self.vars) > 1):
+            x = self.vars[1]
+            y = self.vars[2]
+        else:
+            tf.Variable(tf.add(self.vars[0], 0.0))
+        # print("x: ",x)
+        # print("y: ",y)
+        # print("cond: ",c)
+        return [tf.where(condition=c, x=x, y=y)]
+
+    def execute_broadcast_dynamic_shape(self):
+        return [tf.broadcast_dynamic_shape(self.vars[0], self.vars[1])]
+
+    def execute_broadcast_to(self):
+        #return [tf.broadcast_to(input=self.vars[0], shape=self.vars[1])]
+        return [tf.contrib.framework.broadcast_to(input=self.vars[0], shape=self.vars[1])]
+
+    def execute_unsorted_segment_max(self):
+        return [tf.unsorted_segment_max(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
+
+    def execute_unsorted_segment_min(self):
+        return [tf.unsorted_segment_min(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
+
+    def execute_unsorted_segment_mean(self):
+        return [tf.unsorted_segment_mean(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
+
+    def execute_unsorted_segment_prod(self):
+        return [tf.unsorted_segment_prod(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
+
+    def execute_unsorted_segment_sqrt_n(self):
+        return [tf.unsorted_segment_sqrt_n(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
+
+    def execute_unsorted_segment_sum(self):
+        return [tf.unsorted_segment_sum(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
+
+    def execute_truncatemod(self):
+        return [tf.truncatemod(x=self.vars[0], y=self.vars[1])]
+
+    def execute_tensordot(self):
+        return [tf.tensordot(a=self.vars[0], b=self.vars[1], axes=self.op["axes"])]

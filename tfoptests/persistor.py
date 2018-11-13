@@ -85,6 +85,7 @@ class TensorFlowPersistor:
         self._save_content(nparray, varname, name)
 
     def _save_node_dtypes(self, dtype_dict):
+        print("Saving dtypes...")
         dtype_file = "{}/{}/dtypes".format(self.base_dir, self.save_dir)
         f = open(dtype_file,"a")
         for k,v in dtype_dict.items():
@@ -291,8 +292,21 @@ class TensorFlowPersistor:
         else:
             raise RuntimeError('Multiple outputs in graphs not handled properly')
         if self.verbose:
+            print("FIRST PASS DICT:")
             print(first_pass_dict)
         self._save_predictions(first_pass_dict)
+
+        # Determine and save input and output dtypes
+        dtypesToSave = {}
+        for inVar in placeholder_feed_dict:
+            dtypesToSave[inVar.name] = placeholder_feed_dict[inVar].dtype
+        for i in range(0, len(self._list_output_node_names())):
+            outName = self._list_output_node_names()[i]
+            outVal = predictions[i]
+            print("outName: ", outName)
+            dtypesToSave[outName] = str(outVal.dtype)
+        print("dtypesToSave: ", dtypesToSave)
+        self._save_node_dtypes(dtypesToSave)
         tf.reset_default_graph()
         self._freeze_n_save_graph(output_node_names=",".join(self._list_output_nodes_for_freeze_graph()))
         self.write_frozen_graph_txt()
@@ -300,5 +314,5 @@ class TensorFlowPersistor:
             second_pass_dict = self._save_intermediate_nodes(self._placeholder_name_value_dict)
             assert second_pass_dict.keys() == first_pass_dict.keys()
             for a_output in second_pass_dict.keys():
-                np.testing.assert_equal(first_pass_dict[a_output], second_pass_dict[a_output])
+               np.testing.assert_equal(first_pass_dict[a_output], second_pass_dict[a_output])
         return predictions

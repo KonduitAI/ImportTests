@@ -155,21 +155,21 @@ def test_mathtransform():
 
         #Problem here: ref should be a variable, indices/updates should be placeholder not variable
         #Order of args: ref, indices, updates
-        #["scatter_add", "scatter_add_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_add", "scatter_add_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_sub", "scatter_sub_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_sub", "scatter_sub_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_mul", "scatter_mul_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_mul", "scatter_mul_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_div", "scatter_div_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_div", "scatter_div_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_update", "scatter_update_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_update", "scatter_update_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_max", "scatter_max_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_max", "scatter_max_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_min", "scatter_min_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        #["scatter_min", "scatter_min_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
-        # TODO Matrix case is giving obscure error: ValueError: Shapes must be equal rank, but are 3 and 4 for 'scatter_add-1' (op: 'ScatterAdd') with input shapes: [5,5,3], [2,2], [2,2,3]
+        # ["scatter_add", "scatter_add_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_add", "scatter_add_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_sub", "scatter_sub_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_sub", "scatter_sub_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_mul", "scatter_mul_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_mul", "scatter_mul_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_div", "scatter_div_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_div", "scatter_div_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_update", "scatter_update_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_update", "scatter_update_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_max", "scatter_max_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_max", "scatter_max_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_min", "scatter_min_scalar", [[10,3], [], [3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # ["scatter_min", "scatter_min_vector", [[10,3], [2], [2,3]], [tf.float32, tf.int32, tf.float32], None, None, None, [False, True, True]],
+        # # TODO Matrix case is giving obscure error: ValueError: Shapes must be equal rank, but are 3 and 4 for 'scatter_add-1' (op: 'ScatterAdd') with input shapes: [5,5,3], [2,2], [2,2,3]
         #["scatter_add", "scatter_add_matrix", [[5,5,3], [2,2], [2,2,3]], [tf.float32, tf.int32, tf.float32], None, None, [None, "uniform5", None], [False, True, True]]
 
         #Not exporting correctly?
