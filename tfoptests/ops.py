@@ -493,3 +493,13 @@ class OpCreator:
 
     def execute_tensordot(self):
         return [tf.tensordot(a=self.vars[0], b=self.vars[1], axes=self.op["axes"])]
+
+    def execute_assert_equal(self):
+        # return [tf.assert_equal(x=self.vars[0], y=self.vars[1])]
+        # ret = tf.assert_equal(x=self.vars[0], y=self.vars[1])
+        # print(ret)
+        # return [ret]
+        with tf.control_dependencies([tf.assert_equal(x=self.vars[0], y=self.vars[1])]):
+            out = tf.add(self.vars[0], self.vars[1])
+        print(out)
+        return [out]
