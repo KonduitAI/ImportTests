@@ -495,11 +495,61 @@ class OpCreator:
         return [tf.tensordot(a=self.vars[0], b=self.vars[1], axes=self.op["axes"])]
 
     def execute_assert_equal(self):
-        # return [tf.assert_equal(x=self.vars[0], y=self.vars[1])]
-        # ret = tf.assert_equal(x=self.vars[0], y=self.vars[1])
-        # print(ret)
-        # return [ret]
         with tf.control_dependencies([tf.assert_equal(x=self.vars[0], y=self.vars[1])]):
             out = tf.add(self.vars[0], self.vars[1])
-        print(out)
+        return [out]
+
+    def execute_assert_greater(self):
+        with tf.control_dependencies([tf.assert_greater(x=self.vars[0], y=self.vars[1])]):
+            out = tf.add(self.vars[0], self.vars[1])
+        return [out]
+
+    def execute_assert_greater_equal(self):
+        with tf.control_dependencies([tf.assert_greater_equal(x=self.vars[0], y=self.vars[1])]):
+            out = tf.add(self.vars[0], self.vars[1])
+        return [out]
+
+    def execute_assert_less(self):
+        with tf.control_dependencies([tf.assert_less(x=self.vars[0], y=self.vars[1])]):
+            out = tf.add(self.vars[0], self.vars[1])
+        return [out]
+
+    def execute_assert_less_equal(self):
+        with tf.control_dependencies([tf.assert_less_equal(x=self.vars[0], y=self.vars[1])]):
+            out = tf.add(self.vars[0], self.vars[1])
+        return [out]
+
+    def execute_assert_none_equal(self):
+        with tf.control_dependencies([tf.assert_none_equal(x=self.vars[0], y=self.vars[1])]):
+            out = tf.add(self.vars[0], self.vars[1])
+        return [out]
+
+    def execute_assert_integer(self):
+        with tf.control_dependencies([tf.assert_integer(x=self.vars[0])]):
+            out = tf.add(self.vars[0], 1)
+        return [out]
+
+    def execute_assert_negative(self):
+        with tf.control_dependencies([tf.assert_negative(x=self.vars[0])]):
+            out = tf.add(self.vars[0], 1)
+        return [out]
+
+    def execute_assert_positive(self):
+        with tf.control_dependencies([tf.assert_positive(x=self.vars[0])]):
+            out = tf.add(self.vars[0], 1)
+        return [out]
+
+    def execute_assert_rank(self):
+        with tf.control_dependencies([tf.assert_rank(x=self.vars[0], rank=self.vars[1])]):
+            out = tf.add(self.vars[0], tf.cast(self.vars[1], self.vars[0].dtype))
+        return [out]
+
+    def execute_assert_rank_at_least(self):
+        with tf.control_dependencies([tf.assert_rank_at_least(x=self.vars[0], rank=self.vars[1])]):
+            out = tf.add(self.vars[0], tf.cast(self.vars[1], self.vars[0].dtype))
+        return [out]
+
+    def execute_assert_type(self):
+        with tf.control_dependencies([tf.assert_type(tensor=self.vars[0], tf_type=self.op["tf_type"])]):
+            out = tf.add(self.vars[0], 1)
         return [out]

@@ -37,6 +37,12 @@ class VarInitializer:
     def var_ten(self, shape, dtype, n):
         return tf.Variable(tf.ones(shape=shape, dtype=dtype) * 10, name=n)
 
+    def var_minus_one(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=-1), dtype=dtype), name=n)
+
+    def var_minus_two(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=-2), dtype=dtype), name=n)
+
     def var_range(self, shape, dtype, n):
         return tf.Variable(tf.reshape(tf.range(start=0, limit=np.prod(shape), delta=1, dtype=dtype), shape), name=n)
 
@@ -49,23 +55,26 @@ class VarInitializer:
     def var_uniform_m1_1(self, shape, dtype, n):
         return tf.Variable(tf.random_uniform(shape, minval=-1, maxval=1), dtype, name=n)
 
+    def var_uniform_m1_0(self, shape, dtype, n):
+        return tf.Variable(tf.random_uniform(shape, minval=-1, maxval=0), dtype, name=n)
+
     def var_uniform10(self, shape, dtype, n):
         return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype), dtype, name=n)
 
     def var_uniform_int3(self, shape, dtype, n):
-        if(dtype == tf.int32):
+        if(dtype == tf.int32 or dtype == tf.int64):
             return tf.Variable(tf.random_uniform(shape, minval=0, maxval=3, dtype=dtype), dtype, name=n)
         else:
             return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=3, dtype=dtype)), dtype, name=n)
 
     def var_uniform_int5(self, shape, dtype, n):
-        if(dtype == tf.int32):
+        if(dtype == tf.int32 or dtype == tf.int64):
             return tf.Variable(tf.random_uniform(shape, minval=0, maxval=5, dtype=dtype), dtype, name=n)
         else:
             return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=5, dtype=dtype)), dtype, name=n)
 
     def var_uniform_int10(self, shape, dtype, n):
-        if(dtype == tf.int32):
+        if(dtype == tf.int32 or dtype == tf.int64):
             return tf.Variable(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype), dtype, name=n)
         else:
             return tf.Variable(tf.floor(tf.random_uniform(shape, minval=0, maxval=10, dtype=dtype)), dtype, name=n)
