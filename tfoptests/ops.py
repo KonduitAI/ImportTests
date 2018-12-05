@@ -553,3 +553,38 @@ class OpCreator:
         with tf.control_dependencies([tf.assert_type(tensor=self.vars[0], tf_type=self.op["tf_type"])]):
             out = tf.add(self.vars[0], 1)
         return [out]
+
+    def execute_cond(self):
+        def ifTrue():
+            return tf.lin_space(start=1.0, stop=5.0, num=5)
+        def ifFalse():
+            return tf.ones(shape=[5], dtype=tf.float32)
+        return [tf.cond(self.vars[0], ifTrue, ifFalse)]
+
+    def execute_case(self):
+        input = self.vars[0]
+        a = (input <= 1, lambda: input * 1)
+        b = (input <= 2, lambda: input * 2)
+        c = (input <= 3, lambda: input * 3)
+        default = lambda: input * 4
+        pairs = [a,b,c]
+        return [tf.case(pairs, default)]
+
+    def execute_while1(self):
+        # Simple counter loop, there condition is less than self.vars[1]
+        def condition(i, j):
+            return i < j
+        def body(i, j):
+            return i+1, j
+        loop = tf.while_loop(condition, body, (0.0, self.vars[0]))
+        return loop
+
+    def execute_while2(self):
+        # Loop: keep dividing self.vars[1] by 2 until sum(self.vars[1]) < sum(self.vars[0])
+        def condition(x, y):
+            return tf.reduce_sum(y) < tf.reduce_sum(x)
+        def body(x, y):
+            return x, y/2
+        loop = tf.while_loop(condition, body, (self.vars[0], self.vars[1]))
+        return loop
+

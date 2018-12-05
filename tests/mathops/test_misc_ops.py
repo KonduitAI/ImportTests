@@ -871,8 +871,22 @@ def test_mathtransform():
         # {"opName":"assert_type", "outName":"assert_type/rank0_int32", "varShapes":[[]], "varTypes":["int32"], "varInit":["one"], "tf_type":tf.int32},
         # {"opName":"assert_type", "outName":"assert_type/rank1_float32", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform"], "tf_type":tf.float32},
         # {"opName":"assert_type", "outName":"assert_type/rank2_float32", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["three"], "tf_type":tf.float32},
-        {"opName":"assert_type", "outName":"assert_type/rank2_int64", "varShapes":[[2,2]], "varTypes":["int64"], "varInit":["zero"], "tf_type":tf.int64},
+        # {"opName":"assert_type", "outName":"assert_type/rank2_int64", "varShapes":[[2,2]], "varTypes":["int64"], "varInit":["zero"], "tf_type":tf.int64},
 
+        # {"opName":"cond", "outName":"cond/cond_true", "varShapes":[[]], "varTypes":["bool"], "varInit":["booleanTrue"]},
+        # {"opName":"cond", "outName":"cond/cond_false", "varShapes":[[]], "varTypes":["bool"], "varInit":["booleanFalse"]},
+
+        # {"opName":"case", "outName":"case/cond_1", "varShapes":[[]], "varTypes":["float32"], "varInit":["zero"]},
+        # {"opName":"case", "outName":"case/cond_1b", "varShapes":[[]], "varTypes":["float32"], "varInit":["one"]},
+        # {"opName":"case", "outName":"case/cond_2", "varShapes":[[]], "varTypes":["float32"], "varInit":["two"]},
+        # {"opName":"case", "outName":"case/cond_3", "varShapes":[[]], "varTypes":["float32"], "varInit":["three"]},
+        # {"opName":"case", "outName":"case/cond_default", "varShapes":[[]], "varTypes":["float32"], "varInit":["four"]},
+
+        # {"opName":"while1", "outName":"while1/iter_1", "varShapes":[[]], "varTypes":["float32"], "varInit":["one"]},
+        # {"opName":"while1", "outName":"while1/iter_3", "varShapes":[[]], "varTypes":["float32"], "varInit":["three"]},
+
+        {"opName":"while2", "outName":"while2/a", "varShapes":[[2],[2]], "varTypes":["float32", "float32"], "varInit":["one", "fixed_5_3"]},
+        # {"opName":"while2", "outName":"while2/b", "varShapes":[[2,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["two", "ten"]},
            ]
 
 
