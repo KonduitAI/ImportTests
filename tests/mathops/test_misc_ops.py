@@ -770,36 +770,123 @@ def test_mathtransform():
         # {"opName":"broadcast_to", "outName":"broadcast_to/1,3_5,3", "varShapes":[[1,3],[2]], "varTypes":["int32", "int32"], "varInit":["uniform", "fixed_5_3"]},
         # {"opName":"broadcast_to", "outName":"broadcast_to/2,1,4_2,2,4", "varShapes":[[2,1,4],[3]], "varTypes":["int32", "int32"], "varInit":["uniform", "fixed_2_2_4"]},
 
-        {"opName": "unsorted_segment_max", "outName": "unsorted_segment/unsorted_segment_max_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
-        {"opName": "unsorted_segment_mean", "outName": "unsorted_segment/unsorted_segment_mean_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
-        {"opName": "unsorted_segment_min", "outName": "unsorted_segment/unsorted_segment_min_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
-        {"opName": "unsorted_segment_prod", "outName": "unsorted_segment/unsorted_segment_prod_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
-        {"opName": "unsorted_segment_sum", "outName": "unsorted_segment/unsorted_segment_sum_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
-        {"opName": "unsorted_segment_sqrt_n", "outName": "unsorted_segment/unsorted_segment_sqrt_n_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
-        {"opName": "unsorted_segment_max", "outName": "unsorted_segment/unsorted_segment_max_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_mean", "outName": "unsorted_segment/unsorted_segment_mean_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_min", "outName": "unsorted_segment/unsorted_segment_min_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_prod", "outName": "unsorted_segment/unsorted_segment_prod_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_sum", "outName": "unsorted_segment/unsorted_segment_sum_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_sqrt_n", "outName": "unsorted_segment/unsorted_segment_sqrt_n_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_max", "outName": "unsorted_segment/unsorted_segment_max_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_mean", "outName": "unsorted_segment/unsorted_segment_mean_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_min", "outName": "unsorted_segment/unsorted_segment_min_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_prod", "outName": "unsorted_segment/unsorted_segment_prod_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_sum", "outName": "unsorted_segment/unsorted_segment_sum_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
-        {"opName": "unsorted_segment_sqrt_n", "outName": "unsorted_segment/unsorted_segment_sqrt_n_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_max", "outName": "unsorted_segment/unsorted_segment_max_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
+        # {"opName": "unsorted_segment_mean", "outName": "unsorted_segment/unsorted_segment_mean_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
+        # {"opName": "unsorted_segment_min", "outName": "unsorted_segment/unsorted_segment_min_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
+        # {"opName": "unsorted_segment_prod", "outName": "unsorted_segment/unsorted_segment_prod_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
+        # {"opName": "unsorted_segment_sum", "outName": "unsorted_segment/unsorted_segment_sum_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
+        # {"opName": "unsorted_segment_sqrt_n", "outName": "unsorted_segment/unsorted_segment_sqrt_n_rank1", "varShapes":[[20], [20]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int5"], "num_segments":5},
+        # {"opName": "unsorted_segment_max", "outName": "unsorted_segment/unsorted_segment_max_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_mean", "outName": "unsorted_segment/unsorted_segment_mean_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_min", "outName": "unsorted_segment/unsorted_segment_min_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_prod", "outName": "unsorted_segment/unsorted_segment_prod_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_sum", "outName": "unsorted_segment/unsorted_segment_sum_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_sqrt_n", "outName": "unsorted_segment/unsorted_segment_sqrt_n_rank2", "varShapes":[[6,3], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_max", "outName": "unsorted_segment/unsorted_segment_max_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_mean", "outName": "unsorted_segment/unsorted_segment_mean_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_min", "outName": "unsorted_segment/unsorted_segment_min_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_prod", "outName": "unsorted_segment/unsorted_segment_prod_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_sum", "outName": "unsorted_segment/unsorted_segment_sum_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        # {"opName": "unsorted_segment_sqrt_n", "outName": "unsorted_segment/unsorted_segment_sqrt_n_rank3", "varShapes":[[6,3,2], [6]], "varTypes":["float32", "int32"], "varInit":["uniform_int10", "uniform_int3"], "num_segments":3},
+        #
+        # {"opName":"truncatemod", "outName":"truncatemod/1_4", "varShapes":[[],[4]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "stdnormal"]},
+        # {"opName":"truncatemod", "outName":"truncatemod/4_4", "varShapes":[[4],[4]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "stdnormal"]},
+        # {"opName":"truncatemod", "outName":"truncatemod/3,4_3,1", "varShapes":[[3,4],[3,1]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "stdnormal"]},
+        #
+        # #axes=1: equivalent to mmul, as is axes=[[1],[0]]
+        # {"opName":"tensordot", "outName":"tensordot/4,3_3,2_a1", "varShapes":[[4,3],[3,2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":1},
+        # {"opName":"tensordot", "outName":"tensordot/4,3_3,2_a1-0", "varShapes":[[4,3],[3,2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[1],[0]]},
+        # {"opName":"tensordot", "outName":"tensordot/4,3_2,3_a1-1", "varShapes":[[4,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[1],[1]]},
+        # {"opName":"tensordot", "outName":"tensordot/3,4_2,3_a1-1", "varShapes":[[4,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[1],[1]]},
+        # {"opName":"tensordot", "outName":"tensordot/4,3,2_2,5,4_a2,0-0,2", "varShapes":[[4,3,2],[2,5,4]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[2,0],[0,2]]},
 
-        {"opName":"truncatemod", "outName":"truncatemod/1_4", "varShapes":[[],[4]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "stdnormal"]},
-        {"opName":"truncatemod", "outName":"truncatemod/4_4", "varShapes":[[4],[4]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "stdnormal"]},
-        {"opName":"truncatemod", "outName":"truncatemod/3,4_3,1", "varShapes":[[3,4],[3,1]], "varTypes":["float32", "float32"], "varInit":["stdnormal", "stdnormal"]},
+        # {"opName":"assert_equal", "outName":"assert_equal/scalar_float32", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["one", "one"]},
+        # {"opName":"assert_equal", "outName":"assert_equal/scalar_int32", "varShapes":[[],[]], "varTypes":["int32", "int32"], "varInit":["one", "one"]},
+        # {"opName":"assert_equal", "outName":"assert_equal/scalar_rank1_float32", "varShapes":[[],[1]], "varTypes":["float32", "float32"], "varInit":["two", "two"]},
+        # {"opName":"assert_equal", "outName":"assert_equal/scalar_rank1_int32", "varShapes":[[1],[]], "varTypes":["int32", "int32"], "varInit":["one", "one"]},
+        # {"opName":"assert_equal", "outName":"assert_equal/3,4_3,4_float32", "varShapes":[[3,4],[3,4]], "varTypes":["float32", "float32"], "varInit":["four", "four"]},
+        # {"opName":"assert_equal", "outName":"assert_equal/3,4_1,4_int32", "varShapes":[[3,4],[1,4]], "varTypes":["int32", "int32"], "varInit":["three", "three"]},
 
-        #axes=1: equivalent to mmul, as is axes=[[1],[0]]
-        {"opName":"tensordot", "outName":"tensordot/4,3_3,2_a1", "varShapes":[[4,3],[3,2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":1},
-        {"opName":"tensordot", "outName":"tensordot/4,3_3,2_a1-0", "varShapes":[[4,3],[3,2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[1],[0]]},
-        {"opName":"tensordot", "outName":"tensordot/4,3_2,3_a1-1", "varShapes":[[4,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[1],[1]]},
-        {"opName":"tensordot", "outName":"tensordot/3,4_2,3_a1-1", "varShapes":[[4,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[1],[1]]},
-        {"opName":"tensordot", "outName":"tensordot/4,3,2_2,5,4_a2,0-0,2", "varShapes":[[4,3,2],[2,5,4]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "axes":[[2,0],[0,2]]},
+        # {"opName":"assert_greater", "outName":"assert_greater/scalar_float32", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["two", "one"]},
+        # {"opName":"assert_greater", "outName":"assert_greater/scalar_int32", "varShapes":[[],[]], "varTypes":["int32", "int32"], "varInit":["two", "one"]},
+        # {"opName":"assert_greater", "outName":"assert_greater/scalar_rank1_float32", "varShapes":[[],[1]], "varTypes":["float32", "float32"], "varInit":["three", "two"]},
+        # {"opName":"assert_greater", "outName":"assert_greater/scalar_rank1_int32", "varShapes":[[1],[]], "varTypes":["int32", "int32"], "varInit":["one", "zero"]},
+        # {"opName":"assert_greater", "outName":"assert_greater/3,4_3,4_float32", "varShapes":[[3,4],[3,4]], "varTypes":["float32", "float32"], "varInit":["four", "one"]},
+        # {"opName":"assert_greater", "outName":"assert_greater/3,4_1,4_int32", "varShapes":[[3,4],[1,4]], "varTypes":["int32", "int32"], "varInit":["three", "one"]},
+        #
+        # {"opName":"assert_greater_equal", "outName":"assert_greater_equal/scalar_float32", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["two", "one"]},
+        # {"opName":"assert_greater_equal", "outName":"assert_greater_equal/scalar_int32", "varShapes":[[],[]], "varTypes":["int32", "int32"], "varInit":["one", "one"]},
+        # {"opName":"assert_greater_equal", "outName":"assert_greater_equal/scalar_rank1_float32", "varShapes":[[],[1]], "varTypes":["float32", "float32"], "varInit":["three", "two"]},
+        # {"opName":"assert_greater_equal", "outName":"assert_greater_equal/scalar_rank1_int32", "varShapes":[[1],[]], "varTypes":["int32", "int32"], "varInit":["one", "zero"]},
+        # {"opName":"assert_greater_equal", "outName":"assert_greater_equal/3,4_3,4_float32", "varShapes":[[3,4],[3,4]], "varTypes":["float32", "float32"], "varInit":["four", "four"]},
+        # {"opName":"assert_greater_equal", "outName":"assert_greater_equal/3,4_1,4_int32", "varShapes":[[3,4],[1,4]], "varTypes":["int32", "int32"], "varInit":["three", "one"]},
+        #
+        # {"opName":"assert_less", "outName":"assert_less/scalar_float32", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["zero", "one"]},
+        # {"opName":"assert_less", "outName":"assert_less/scalar_int32", "varShapes":[[],[]], "varTypes":["int32", "int32"], "varInit":["one", "two"]},
+        # {"opName":"assert_less", "outName":"assert_less/scalar_rank1_float32", "varShapes":[[],[1]], "varTypes":["float32", "float32"], "varInit":["zero", "two"]},
+        # {"opName":"assert_less", "outName":"assert_less/scalar_rank1_int32", "varShapes":[[1],[]], "varTypes":["int32", "int32"], "varInit":["one", "three"]},
+        # {"opName":"assert_less", "outName":"assert_less/3,4_3,4_float32", "varShapes":[[3,4],[3,4]], "varTypes":["float32", "float32"], "varInit":["two", "four"]},
+        # {"opName":"assert_less", "outName":"assert_less/3,4_1,4_int32", "varShapes":[[3,4],[1,4]], "varTypes":["int32", "int32"], "varInit":["three", "four"]},
+        #
+        # {"opName":"assert_less_equal", "outName":"assert_less_equal/scalar_float32", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["zero", "one"]},
+        # {"opName":"assert_less_equal", "outName":"assert_less_equal/scalar_int32", "varShapes":[[],[]], "varTypes":["int32", "int32"], "varInit":["one", "one"]},
+        # {"opName":"assert_less_equal", "outName":"assert_less_equal/scalar_rank1_float32", "varShapes":[[],[1]], "varTypes":["float32", "float32"], "varInit":["two", "two"]},
+        # {"opName":"assert_less_equal", "outName":"assert_less_equal/scalar_rank1_int32", "varShapes":[[1],[]], "varTypes":["int32", "int32"], "varInit":["one", "three"]},
+        # {"opName":"assert_less_equal", "outName":"assert_less_equal/3,4_3,4_float32", "varShapes":[[3,4],[3,4]], "varTypes":["float32", "float32"], "varInit":["two", "four"]},
+        # {"opName":"assert_less_equal", "outName":"assert_less_equal/3,4_1,4_int32", "varShapes":[[3,4],[1,4]], "varTypes":["int32", "int32"], "varInit":["two", "three"]},
+        #
+        # {"opName":"assert_none_equal", "outName":"assert_none_equal/scalar_float32", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["one", "two"]},
+        # {"opName":"assert_none_equal", "outName":"assert_none_equal/scalar_int32", "varShapes":[[],[]], "varTypes":["int32", "int32"], "varInit":["two", "one"]},
+        # {"opName":"assert_none_equal", "outName":"assert_none_equal/scalar_rank1_float32", "varShapes":[[],[1]], "varTypes":["float32", "float32"], "varInit":["two", "three"]},
+        # {"opName":"assert_none_equal", "outName":"assert_none_equal/scalar_rank1_int32", "varShapes":[[1],[]], "varTypes":["int32", "int32"], "varInit":["one", "four"]},
+        # {"opName":"assert_none_equal", "outName":"assert_none_equal/3,4_3,4_float32", "varShapes":[[3,4],[3,4]], "varTypes":["float32", "float32"], "varInit":["zero", "four"]},
+        # {"opName":"assert_none_equal", "outName":"assert_none_equal/3,4_1,4_int32", "varShapes":[[3,4],[1,4]], "varTypes":["int32", "int32"], "varInit":["three", "zero"]},
 
+        # {"opName":"assert_integer", "outName":"assert_integer/scalar_int32", "varShapes":[[]], "varTypes":["int32"], "varInit":["one"]},
+        # {"opName":"assert_integer", "outName":"assert_integer/scalar_int64", "varShapes":[[]], "varTypes":["int64"], "varInit":["two"]},
+        # {"opName":"assert_integer", "outName":"assert_integer/scalar_rank1_int32", "varShapes":[[3]], "varTypes":["int32"], "varInit":["three"]},
+        # {"opName":"assert_integer", "outName":"assert_integer/3,4_3,4_int64", "varShapes":[[3,4]], "varTypes":["int64"], "varInit":["four"]},
+        #
+        # {"opName":"assert_negative", "outName":"assert_negative/scalar_int32", "varShapes":[[]], "varTypes":["int32"], "varInit":["minus_one"]},
+        # {"opName":"assert_negative", "outName":"assert_negative/scalar_int64", "varShapes":[[]], "varTypes":["int64"], "varInit":["minus_two"]},
+        # {"opName":"assert_negative", "outName":"assert_negative/scalar_rank1_float32", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform_m1_0"]},
+        # {"opName":"assert_negative", "outName":"assert_negative/3,4_3,4_float64", "varShapes":[[3,4]], "varTypes":["float64"], "varInit":["uniform_m1_0"]},
+
+        # {"opName":"assert_positive", "outName":"assert_positive/scalar_float32", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"assert_positive", "outName":"assert_positive/scalar_int64", "varShapes":[[]], "varTypes":["int64"], "varInit":["two"]},
+        # {"opName":"assert_positive", "outName":"assert_positive/rank1_int32", "varShapes":[[3]], "varTypes":["int32"], "varInit":["uniform_int3"]},
+        # {"opName":"assert_positive", "outName":"assert_positive/3,4_3,4_int64", "varShapes":[[3,4]], "varTypes":["int64"], "varInit":["uniform"]},
+
+        # {"opName":"assert_rank", "outName":"assert_rank/rank0_int32", "varShapes":[[], []], "varTypes":["int32", "int32"], "varInit":["one", "zero"]},
+        # {"opName":"assert_rank", "outName":"assert_rank/rank1_float64", "varShapes":[[3], []], "varTypes":["float64", "int32"], "varInit":["uniform", "one"]},
+        # {"opName":"assert_rank", "outName":"assert_rank/rank2_float32", "varShapes":[[2,3], []], "varTypes":["float32", "int32"], "varInit":["three", "two"]},
+
+        # {"opName":"assert_rank_at_least", "outName":"assert_rank_at_least/rank0_int32", "varShapes":[[], []], "varTypes":["int32", "int32"], "varInit":["one", "zero"]},
+        # {"opName":"assert_rank_at_least", "outName":"assert_rank_at_least/rank1_float64", "varShapes":[[3], []], "varTypes":["float64", "int32"], "varInit":["uniform", "zero"]},
+        # {"opName":"assert_rank_at_least", "outName":"assert_rank_at_least/rank1_float32", "varShapes":[[3], []], "varTypes":["float32", "int32"], "varInit":["uniform", "one"]},
+        # {"opName":"assert_rank_at_least", "outName":"assert_rank_at_least/rank2_float32", "varShapes":[[2,3], []], "varTypes":["float32", "int32"], "varInit":["three", "two"]},
+        # {"opName":"assert_rank_at_least", "outName":"assert_rank_at_least/rank2_float64", "varShapes":[[2,3], []], "varTypes":["float64", "int32"], "varInit":["three", "one"]},
+        # {"opName":"assert_rank_at_least", "outName":"assert_rank_at_least/rank2_float32", "varShapes":[[2,3], []], "varTypes":["float32", "int32"], "varInit":["three", "zero"]},
+
+        # {"opName":"assert_type", "outName":"assert_type/rank0_int32", "varShapes":[[]], "varTypes":["int32"], "varInit":["one"], "tf_type":tf.int32},
+        # {"opName":"assert_type", "outName":"assert_type/rank1_float32", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform"], "tf_type":tf.float32},
+        # {"opName":"assert_type", "outName":"assert_type/rank2_float32", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["three"], "tf_type":tf.float32},
+        # {"opName":"assert_type", "outName":"assert_type/rank2_int64", "varShapes":[[2,2]], "varTypes":["int64"], "varInit":["zero"], "tf_type":tf.int64},
+
+        # {"opName":"cond", "outName":"cond/cond_true", "varShapes":[[]], "varTypes":["bool"], "varInit":["booleanTrue"]},
+        # {"opName":"cond", "outName":"cond/cond_false", "varShapes":[[]], "varTypes":["bool"], "varInit":["booleanFalse"]},
+
+        # {"opName":"case", "outName":"case/cond_1", "varShapes":[[]], "varTypes":["float32"], "varInit":["zero"]},
+        # {"opName":"case", "outName":"case/cond_1b", "varShapes":[[]], "varTypes":["float32"], "varInit":["one"]},
+        # {"opName":"case", "outName":"case/cond_2", "varShapes":[[]], "varTypes":["float32"], "varInit":["two"]},
+        # {"opName":"case", "outName":"case/cond_3", "varShapes":[[]], "varTypes":["float32"], "varInit":["three"]},
+        # {"opName":"case", "outName":"case/cond_default", "varShapes":[[]], "varTypes":["float32"], "varInit":["four"]},
+
+        # {"opName":"while1", "outName":"while1/iter_1", "varShapes":[[]], "varTypes":["float32"], "varInit":["one"]},
+        # {"opName":"while1", "outName":"while1/iter_3", "varShapes":[[]], "varTypes":["float32"], "varInit":["three"]},
+
+        {"opName":"while2", "outName":"while2/a", "varShapes":[[2],[2]], "varTypes":["float32", "float32"], "varInit":["one", "fixed_5_3"]},
+        # {"opName":"while2", "outName":"while2/b", "varShapes":[[2,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["two", "ten"]},
            ]
 
 
@@ -833,6 +920,7 @@ def test_mathtransform():
         tfp.set_placeholders([]) \
             .set_output_tensors(out) \
             .set_test_data(test.get_test_data()) \
+            .set_verbose(True) \
             .build_save_frozen_graph()
 
 

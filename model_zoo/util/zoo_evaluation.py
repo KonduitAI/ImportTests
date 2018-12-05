@@ -74,6 +74,11 @@ class ZooEvaluation(object):
             #     image = image.eval(session=sess)
             image = tf.convert_to_tensor(image)
             image = inception_preprocessing.preprocess_for_eval(image, height=self.inputH, width=self.inputW)
+        elif(self.preprocessingType == "resize_only"):
+            image = np.expand_dims(image, 0)
+            image = tf.image.resize_bilinear(image, [self.inputH, self.inputW], align_corners=False)
+            image = tf.squeeze(image, axis=0)
+            # image = tf.convert_to_tensor(image)
         else:
             raise ValueError("Unknown preprocessing type: ", self.preprocessingType)
         # image = tf.expand_dims(image, 0)
@@ -129,8 +134,8 @@ class ZooEvaluation(object):
         toSave_dtype_dict = {}
         for i in range(len(outputs)):
             toSave[self.outputNames[i]] = outputs[i]
-            #print("Output: ", self.outputNames[i])
-            #print("Dtype: ", outputs[i].dtype)
+            print("Output: ", self.outputNames[i])
+            print("Dtype: ", outputs[i].dtype)
             toSave_dtype_dict[self.outputNames[i]] = str(outputs[i].dtype)
 
         #print("Values to save: ", toSave)
@@ -257,6 +262,33 @@ if __name__ == '__main__':
     #     .inputDims(224, 224, 3) \
     #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
     # z.write()
+
+
+    # # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz
+    # # https://github.com/tensorflow/models/blob/master/research/object_detection/object_detection_tutorial.ipynb
+    # # Seems like this can be use on (nearly) any image size??? Docs and notebook are very vague on this point
+    # # 320x320 input is arbitrary, not based on anything
+    # # Outputs: detection_boxes, detection_scores, num_detections, detection_classes
+    # # Preprocessing: unclear from docs, but it does have some preprocessing built into the network
+    # z = ZooEvaluation(name="ssd_mobilenet_v1_coco_2018_01_28",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_coco_2018_01_28\\frozen_inference_graph.pb") \
+    #     .inputName("image_tensor:0") \
+    #     .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(320, 320, 3) \
+    #     .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
+    # z.write()
+
+    # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03.tar.gz
+    # As above, for ssd_mobilenet_v1_coco_2018_01_28
+    z = ZooEvaluation(name="ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03",prefix="")
+    z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03\\frozen_inference_graph.pb") \
+        .inputName("image_tensor:0") \
+        .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
+        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+        .inputDims(300, 300, 3) \
+        .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
+    z.write()
 
     # graph = z.loadGraph()
     # for op in graph.get_operations():

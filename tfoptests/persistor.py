@@ -61,6 +61,10 @@ class TensorFlowPersistor:
         self.skipBoolean = skip
         return self
 
+    def set_verbose(self, verbose):
+        self.verbose = verbose
+        return self
+
     def _write_to_file(self, nparray, content_file, shape_file):
         os.makedirs(os.path.dirname(content_file), exist_ok=True)
         os.makedirs(os.path.dirname(shape_file), exist_ok=True)
@@ -189,7 +193,7 @@ class TensorFlowPersistor:
                             if tensor_output_name in self._list_output_node_names():
                                 prediction_dict[tensor_output_name] = op_prediction
                             if self.verbose:
-                                print(op_prediction)
+                                print("PREDICTIONS: ", op_prediction)
                                 print("-----------------------------------------------------")
                             modified_tensor_output_name = "____".join(tensor_output_name.split("/"))
                             self._save_intermediate(op_prediction, modified_tensor_output_name)
