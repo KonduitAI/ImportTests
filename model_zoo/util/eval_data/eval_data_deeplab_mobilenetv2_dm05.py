@@ -6,29 +6,21 @@ from six.moves import urllib
 from PIL import Image
 from tfoptests.persistor import TensorFlowPersistor
 
-# http://download.tensorflow.org/models/deeplabv3_mnv2_pascal_trainval_2018_01_29.tar.gz
+# http://download.tensorflow.org/models/deeplabv3_mnv2_dm05_pascal_trainaug_2018_10_01.tar.gz
 # https://github.com/tensorflow/models/blob/8caa269db25165fdf21e73262921aa31bc595d70/research/deeplab/g3doc/model_zoo.md
 # https://github.com/tensorflow/models/blob/277a9ad5681c0534f1b079cf4bd080faa4f59695/research/deeplab/deeplab_demo.ipynb
+# TODO THIS PROBABLY REQUIRES LATER VERSION OF TF - CAN'T LOAD ON 0.10?
 def load_graph(frozen_graph_filename):
-    # We load the protobuf file from the disk and parse it to retrieve the
-    # unserialized graph_def
     with tf.gfile.GFile(frozen_graph_filename, "rb") as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
-
-    # Then, we import the graph_def into a new Graph and returns it
     with tf.Graph().as_default() as graph:
-        # The name var will prefix every op/nodes in your graph
-        # Since we load everything in a new graph, this is not needed
-        # new_input = tf.placeholder(tf.float32, [1, 224, 224, 3], name="input")
-        # tf.import_graph_def(graph_def, name="prefix", input_map={"input_tensor": new_input})
-
         tf.import_graph_def(graph_def, name="graph")
     return graph
 
 
 if __name__ == '__main__':
-    file = "C:\Temp\TF_Graphs\deeplabv3_mnv2_pascal_trainval_2018_01_29\\frozen_inference_graph.pb"
+    file = "C:\Temp\TF_Graphs\deeplabv3_mnv2_dm05_pascal_trainaug\\frozen_inference_graph.pb"
     base_dir = "C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models"
     graph = load_graph(file)
 
@@ -61,13 +53,13 @@ if __name__ == '__main__':
             OUTPUT_TENSOR_NAME,
             feed_dict={INPUT_TENSOR_NAME: [input]})
         seg_map = batch_seg_map[0]
-        tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplab_mobilenetv2_coco_voc_trainval")
-        tfp._save_input(input, "ImageTensor")
-        tfp._save_predictions({"SemanticPredictions":seg_map})
+        tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplab_mobilenetv2_dm05_coco_voc_trainaug")
+        tfp._save_input(input, "graph/ImageTensor")
+        tfp._save_predictions({"graph/SemanticPredictions":seg_map})
 
         #Save type info
         dtype_dict = {}
-        dtype_dict["ImageTensor"] = str(input.dtype)
+        dtype_dict[INPUT_TENSOR_NAME] = str(input.dtype)
         dtype_dict["graph/SemanticPredictions"] = str(seg_map.dtype)
         tfp._save_node_dtypes(dtype_dict)
 

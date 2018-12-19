@@ -467,8 +467,7 @@ class OpCreator:
         return [tf.broadcast_dynamic_shape(self.vars[0], self.vars[1])]
 
     def execute_broadcast_to(self):
-        #return [tf.broadcast_to(input=self.vars[0], shape=self.vars[1])]
-        return [tf.contrib.framework.broadcast_to(input=self.vars[0], shape=self.vars[1])]
+        return [tf.broadcast_to(input=self.vars[0], shape=self.vars[1])]
 
     def execute_unsorted_segment_max(self):
         return [tf.unsorted_segment_max(data=self.vars[0], segment_ids=self.vars[1], num_segments=self.op["num_segments"])]
@@ -587,4 +586,13 @@ class OpCreator:
             return x, y/2
         loop = tf.while_loop(condition, body, (self.vars[0], self.vars[1]))
         return loop
+
+    def execute_sum_dynamic_axis(self):
+        if(self.op["axistype"] == "argmin"):
+            print("ARGMIN")
+            axis = tf.math.argmin(tf.shape(self.vars[0]))
+        else:
+            print("ARGMAX")
+            axis = tf.math.argmax(tf.shape(self.vars[0]))
+        return [tf.reduce_sum(self.vars[0], axis=axis, keepdims=self.op["keepdims"])]
 

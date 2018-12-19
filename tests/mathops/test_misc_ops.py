@@ -437,6 +437,12 @@ def test_mathtransform():
         # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nhwc_b2_k2_s1_d2_SAME", "varShapes":[[2, 5, 5, 2], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"SAME", "data_format":"NHWC", "dilation":[1,2,2,1]},
         # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nhwc_b2_k2_s1_d1_VALID", "varShapes":[[2, 5, 5, 2], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"VALID", "data_format":"NHWC"},
         # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nhwc_b1_k2_s2_SAME", "varShapes":[[2, 5, 5, 2], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,2,2,1], "padding":"SAME", "data_format":"NHWC"},
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b1_k2_s1_d1_SAME", "varShapes":[[1, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"SAME", "data_format":"NCHW"},
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b2_k3_s1_d1_SAME", "varShapes":[[2, 2, 5, 5], [3, 3, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"SAME", "data_format":"NCHW"},
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b2_k2_s1_d1_SAME", "varShapes":[[2, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"SAME", "data_format":"NCHW"},
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b2_k2_s1_d2_SAME", "varShapes":[[2, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"SAME", "data_format":"NCHW", "dilation":[1,1,2,2]},
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b2_k2_s1_d1_VALID", "varShapes":[[2, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"VALID", "data_format":"NCHW"},
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b1_k2_s2_SAME", "varShapes":[[2, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,2], "padding":"SAME", "data_format":"NCHW"},
 
         #Again, no channels_first on CPU
         # {"opName":"layers_conv2d", "outName":"cnn2d_layers/channels_last_b1_k2_s1_d1_SAME", "varShapes":[[1, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2], "strides":[1,1], "padding":"SAME", "data_format":"channels_last", "dilation_rate":[1,1]},
@@ -642,8 +648,8 @@ def test_mathtransform():
         # # {"opName":"bincount", "outName":"bincount/rank2_minmax_weights", "varShapes":[[5,5],[5,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":3, "maxlength":8},
         # {"opName":"bincount", "outName":"bincount/rank2_weights", "varShapes":[[5,5],[5,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10","uniform"], "minlength":None, "maxlength":None},
 
-        # #Scatter ND: arrays are indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
-        #     #This case: update has shape [4]+[] = 4
+        #Scatter ND: arrays are indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
+            #This case: update has shape [4]+[] = 4
         # {"opName":"scatter_nd", "outName":"scatter_nd/rank1shape_1indices", "varShapes":[[4,1],[4]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10]},
         #     #This case: 2 indices, 2 shape -> updates are individual elements
         # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_2indices", "varShapes":[[4,2],[4]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,10]},
@@ -654,18 +660,18 @@ def test_mathtransform():
         #     #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
         # {"opName":"scatter_nd", "outName":"scatter_nd/rank3shape_1indices", "varShapes":[[4,1],[4,7,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7,5]},
 
-        #Scatter ND ADD: arrays are ref, indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
-        #This case: update has shape [4]+[] = 4
+        # #Scatter ND ADD: arrays are ref, indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
+        # #This case: update has shape [4]+[] = 4
         # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        #This case: 2 indices, 2 shape -> updates are individual elements
+        # #This case: 2 indices, 2 shape -> updates are individual elements
         # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
-        #This case: 1 indices, 2 shape -> updates are slices of shape [4]+[7]
+        # #This case: 1 indices, 2 shape -> updates are slices of shape [4]+[7]
         # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        #This case: 2 indices, 3 shape -> updates are slices of shape [4]+[5] = [4,5]
+        # # This case: 2 indices, 3 shape -> updates are slices of shape [4]+[5] = [4,5]
         # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
+        # #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
         # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-
+        #
         # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
         # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
         # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
@@ -885,8 +891,13 @@ def test_mathtransform():
         # {"opName":"while1", "outName":"while1/iter_1", "varShapes":[[]], "varTypes":["float32"], "varInit":["one"]},
         # {"opName":"while1", "outName":"while1/iter_3", "varShapes":[[]], "varTypes":["float32"], "varInit":["three"]},
 
-        {"opName":"while2", "outName":"while2/a", "varShapes":[[2],[2]], "varTypes":["float32", "float32"], "varInit":["one", "fixed_5_3"]},
+        # {"opName":"while2", "outName":"while2/a", "varShapes":[[2],[2]], "varTypes":["float32", "float32"], "varInit":["one", "fixed_5_3"]},
         # {"opName":"while2", "outName":"while2/b", "varShapes":[[2,3],[2,3]], "varTypes":["float32", "float32"], "varInit":["two", "ten"]},
+
+        #Reductions with dynamic reduce dimensions
+        # {"opName":"sum_dynamic_axis", "outName":"reduce_dynamic_axis/sum_rank2_argmin_shape", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"], "axistype":"argmin", "keepdims":False},
+        # {"opName":"sum_dynamic_axis", "outName":"reduce_dynamic_axis/sum_rank2_argmax_shape", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"], "axistype":"argmax", "keepdims":True}
+
            ]
 
 

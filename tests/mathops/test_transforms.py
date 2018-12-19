@@ -24,20 +24,20 @@ def test_mathtransform():
 
         #Order here: [name, numInputs, broadcastable]
         #Order here: [name, numInputs, shape1, shape2]
-        #["atan2", 2, [3,4], [3,4]],     #broadcastable
-        #["atan2", 2, [3,1,4], [1,2,4]],
-        #["div", 2, [3,4], [3,4]],       #Broadcastable
-        #["div", 2, [3,4], [1,4]],
-        #["div", 2, [3,1], [1,4]],
-        #["div_scalar", 1, [3,4], None],    #Can't find this in TF docs... :/
-        #["log_sigmoid", 1, [3,4], None],
-        #All of these comparison ops support broadcasting...
-        #["equal", 2, [3,4], [3,4]],
-        #["equal", 2, [1,4], [3,4]],
-        #["greater", 2, [3,4], [3,4]],
-        #["greater", 2, [3,4], [4]],
-        #["greater", 2, [3,1], [1,4]],
-        #["greater", 2, [3,4], []],
+        # ["atan2", 2, [3,4], [3,4]],     #broadcastable
+        # ["atan2", 2, [3,1,4], [1,2,4]],
+        # ["div", 2, [3,4], [3,4]],       #Broadcastable
+        # ["div", 2, [3,4], [1,4]],
+        # ["div", 2, [3,1], [1,4]],
+        # ["div_scalar", 1, [3,4], None],    #Can't find this in TF docs... :/
+        # ["log_sigmoid", 1, [3,4], None],
+        # # All of these comparison ops support broadcasting...
+        # ["equal", 2, [3,4], [3,4]],
+        # ["equal", 2, [1,4], [3,4]],
+        # ["greater", 2, [3,4], [3,4]],
+        # ["greater", 2, [3,4], [4]],
+        # ["greater", 2, [3,1], [1,4]],
+        # ["greater", 2, [3,4], []],
         # ["greater_equal", 2, [3,4], [3,4]],
         # ["greater_equal", 2, [3,4], [4]],
         # ["greater_equal", 2, [3,4], []],
@@ -47,10 +47,10 @@ def test_mathtransform():
         # ["less_equal", 2, [3,4], [3,4]],
         # ["less_equal", 2, [3,4], [4]],
         # ["less_equal", 2, [3,4], []],
-        #["leaky_relu", 1, [3,4], None]
-        #["hard_sigmoid", 1, [3,4], None]
-        # ["relu", 1, [3,4], None]
-        #["selu", 1, [3,4], None]
+        # ["leaky_relu", 1, [3,4], None],
+        # ["hard_sigmoid", 1, [3,4], None],
+        # ["relu", 1, [3,4], None],
+        # ["selu", 1, [3,4], None],
         # ["max", 2, [3,4], [3,4]],
         # ["max", 2, [3,4], [4]],
         # ["max", 2, [3,1], [1,4]],
@@ -63,7 +63,7 @@ def test_mathtransform():
         # ["matmul", 2, [4,3], [4,5], {'transpose_a': True, 'transpose_b': False}],
         # ["matmul", 2, [3,4], [5,4], {'transpose_a': False, 'transpose_b': True}],
         # ["matmul", 2, [4,3], [5,4], {'transpose_a': True, 'transpose_b': True}],
-        # ["sign", 1, [3,4], None]
+        # ["sign", 1, [3,4], None],
         # ["mul", 2, [3,4], [3,4]],       #Broadcastable
         # ["mul", 2, [3,4], [1,4]],
         # ["mul", 2, [], [3,4]],
@@ -83,7 +83,7 @@ def test_mathtransform():
         # ["logicaland", 2, [3,4], [3,4]],       #Broadcastable
         # ["logicaland", 2, [3,4], [1,4]],
         # ["logicaland", 2, [], [3,4]],
-        # ["logicaland", 2, [3,1,5], [1,2,1]]
+        # ["logicaland", 2, [3,1,5], [1,2,1]],
         # ["cumsum", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":False, "testname":"cumsum_0ff"}],
         # ["cumsum", 1, [3,4], None, {"axis":1, "exclusive":False, "reverse":False, "testname":"cumsum_1ff"}],
         # ["cumsum", 1, [3,4], None, {"axis":-1, "exclusive":False, "reverse":False, "testname":"cumsum_-1ff"}],
@@ -93,7 +93,7 @@ def test_mathtransform():
         # ["cumprod", 1, [3,4], None, {"axis":1, "exclusive":False, "reverse":False, "testname":"cumprod_1ff"}],
         # ["cumprod", 1, [3,4], None, {"axis":-2, "exclusive":False, "reverse":False, "testname":"cumprod_-1ff"}],
         # ["cumprod", 1, [3,4], None, {"axis":1, "exclusive":True, "reverse":False, "testname":"cumprod_1tf"}],
-        # ["cumprod", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":True, "testname":"cumprod_0ft"}],
+        # ["cumprod", 1, [3,4], None, {"axis":0, "exclusive":False, "reverse":True, "testname":"cumprod_0ft"}]
            ]
 
 
@@ -135,7 +135,7 @@ def test_mathtransform():
         extra = None
         if(len(op) > 4):
             extra = op[4]
-            if(extra["testname"] is not None):
+            if("testname" in extra and extra["testname"] is not None):
                 basename = extra["testname"]
         constr = DifferentiableMathOps(in_node_0, in_node_1, extra)
         answer = constr.execute(op[0])
