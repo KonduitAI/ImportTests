@@ -30,5 +30,5 @@ def test_pool_0():
     print(predictions_after_freeze[0].shape)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     test_pool_0()

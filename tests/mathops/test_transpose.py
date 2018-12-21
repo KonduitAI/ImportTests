@@ -35,3 +35,6 @@ def test_simple_transpose():
         .set_output_tensors(predictions) \
         .set_test_data(simple_t.get_test_data()) \
         .build_save_frozen_graph()
+
+if __name__ == '__main__':
+    test_simple_transpose()

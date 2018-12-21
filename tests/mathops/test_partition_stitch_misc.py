@@ -60,3 +60,6 @@ def test_tensor_rearrange():
         .set_output_tensors(predictions) \
         .set_test_data(tensor_rearrange.get_test_data()) \
         .build_save_frozen_graph()
+
+if __name__ == '__main__':
+    test_tensor_rearrange()
