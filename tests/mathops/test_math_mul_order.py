@@ -40,3 +40,6 @@ def test_mat_mul_order():
         .set_output_tensors(predictions) \
         .set_test_data(simple_m.get_test_data()) \
         .build_save_frozen_graph()
+
+if __name__ == '__main__':
+    test_mat_mul_order()

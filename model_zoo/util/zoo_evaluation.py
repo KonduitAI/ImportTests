@@ -281,14 +281,14 @@ if __name__ == '__main__':
 
     # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03.tar.gz
     # As above, for ssd_mobilenet_v1_coco_2018_01_28
-    z = ZooEvaluation(name="ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03",prefix="")
-    z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03\\frozen_inference_graph.pb") \
-        .inputName("image_tensor:0") \
-        .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(300, 300, 3) \
-        .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
-    z.write()
+    # z = ZooEvaluation(name="ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03",prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03\\frozen_inference_graph.pb") \
+    #     .inputName("image_tensor:0") \
+    #     .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(300, 300, 3) \
+    #     .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
+    # z.write()
 
     # graph = z.loadGraph()
     # for op in graph.get_operations():

@@ -48,5 +48,5 @@ def test_conv_5():
         .build_save_frozen_graph()
     print(predictions_after_freeze[0].shape)
 
-    if __name__ == "main":
-        test_conv_5()
+if __name__ == '__main__':
+    test_conv_5()

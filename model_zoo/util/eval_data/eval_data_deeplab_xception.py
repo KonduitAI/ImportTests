@@ -27,6 +27,9 @@ if __name__ == '__main__':
     # for op in graph.get_operations():
     #     print(op.name)
 
+    # for op in graph.get_operations():
+    #     print(op.name)
+
     url = 'https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true'
 
     try:
@@ -54,13 +57,13 @@ if __name__ == '__main__':
             feed_dict={INPUT_TENSOR_NAME: [input]})
         seg_map = batch_seg_map[0]
         tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplabv3_pascal_train_aug_2018_01_04")
-        tfp._save_input(input, "graph/ImageTensor")
-        tfp._save_predictions({"graph/SemanticPredictions":seg_map})
+        tfp._save_input(input, "ImageTensor")
+        tfp._save_predictions({"SemanticPredictions":seg_map})
 
         #Save type info
         dtype_dict = {}
-        dtype_dict[INPUT_TENSOR_NAME] = str(input.dtype)
-        dtype_dict["graph/SemanticPredictions"] = str(seg_map.dtype)
+        dtype_dict["ImageTensor"] = str(input.dtype)
+        dtype_dict["SemanticPredictions"] = str(seg_map.dtype)
         tfp._save_node_dtypes(dtype_dict)
 
     print(seg_map)
