@@ -28,8 +28,10 @@ def load_graph(frozen_graph_filename):
 
 
 if __name__ == '__main__':
-    file = "C:\Temp\TF_Graphs\deeplabv3_mnv2_pascal_trainval_2018_01_29\\frozen_inference_graph.pb"
-    base_dir = "C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models"
+    # file = "C:\Temp\TF_Graphs\deeplabv3_mnv2_pascal_trainval_2018_01_29\\frozen_inference_graph.pb"
+    # base_dir = "C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models"
+    file = "/TF_Graphs/deeplabv3_mnv2_pascal_trainval_2018_01_29/frozen_inference_graph.pb"
+    base_dir = "/dl4j-test-resources/src/main/resources/tf_graphs/zoo_models"
     graph = load_graph(file)
 
     # for op in graph.get_operations():

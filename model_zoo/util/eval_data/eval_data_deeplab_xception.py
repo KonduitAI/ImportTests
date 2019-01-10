@@ -3,7 +3,7 @@ from io import BytesIO
 import tensorflow as tf
 import numpy as np
 from six.moves import urllib
-from PIL import Image
+from PIL import Image           #pip install Pillow
 from tfoptests.persistor import TensorFlowPersistor
 
 # http://download.tensorflow.org/models/deeplabv3_pascal_train_aug_2018_01_04.tar.gz
@@ -20,8 +20,10 @@ def load_graph(frozen_graph_filename):
 
 
 if __name__ == '__main__':
-    file = "C:\Temp\TF_Graphs\deeplabv3_pascal_train_aug_2018_01_04\\frozen_inference_graph.pb"
-    base_dir = "C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models"
+    # file = "C:\Temp\TF_Graphs\deeplabv3_pascal_train_aug_2018_01_04\\frozen_inference_graph.pb"
+    # base_dir = "C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models"
+    file = "/TF_Graphs/deeplabv3_pascal_train_aug_2018_01_04/frozen_inference_graph.pb"
+    base_dir = "/dl4j-test-resources/src/main/resources/tf_graphs/zoo_models"
     graph = load_graph(file)
 
     # for op in graph.get_operations():
@@ -51,16 +53,19 @@ if __name__ == '__main__':
     target_size = (int(resize_ratio * width), int(resize_ratio * height))
     resized_image = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
     input = np.asarray(resized_image)
+    print("About to perform inference...")
     with tf.Session(graph=graph) as sess:
         batch_seg_map = sess.run(
             OUTPUT_TENSOR_NAME,
             feed_dict={INPUT_TENSOR_NAME: [input]})
         seg_map = batch_seg_map[0]
+        print("Saving input and predictions...")
         tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplabv3_pascal_train_aug_2018_01_04")
         tfp._save_input(input, "ImageTensor")
         tfp._save_predictions({"SemanticPredictions":seg_map})
 
         #Save type info
+        print("Saving datatype info...")
         dtype_dict = {}
         dtype_dict["ImageTensor"] = str(input.dtype)
         dtype_dict["SemanticPredictions"] = str(seg_map.dtype)
