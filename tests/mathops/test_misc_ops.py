@@ -898,6 +898,85 @@ def test_mathtransform():
         # {"opName":"sum_dynamic_axis", "outName":"reduce_dynamic_axis/sum_rank2_argmin_shape", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"], "axistype":"argmin", "keepdims":False},
         # {"opName":"sum_dynamic_axis", "outName":"reduce_dynamic_axis/sum_rank2_argmax_shape", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"], "axistype":"argmax", "keepdims":True}
 
+
+        #TensorArray - get and set ops
+        # {"opName":"tensorarray_identity", "outName":"tensor_array/getset_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"],\
+        #     "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_getset", "outName":"tensor_array/getset_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_getset", "outName":"tensor_array/getset_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # #Next test: initially size 1, but dynamic so add 3
+        # {"opName":"tensorarray_getset", "outName":"tensor_array/getset_sz3-1_int32_dynamic_name_shape", "varShapes":[[2,3],[2,3],[2,3]], "varTypes":["int32","int32","int32"], "varInit":["uniform_int10","uniform_int10","uniform_int10"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[2,3]},
+
+        #TensorArray - size
+        # {"opName":"tensorarray_size", "outName":"tensor_array/size_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"], \
+        #  "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_size", "outName":"tensor_array/size_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_size", "outName":"tensor_array/size_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_size", "outName":"tensor_array/size_sz3-1_int32_dynamic_name_shape", "varShapes":[[2,3],[2,3],[2,3]], "varTypes":["int32","int32","int32"], "varInit":["uniform_int10","uniform_int10","uniform_int10"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[2,3]},
+
+        #TensorArray - Concat (note that shapes must match, but first dim can differ - but not possible in practice, just gives inconsistent shapes exception???)
+        # {"opName":"tensorarray_concat", "outName":"tensor_array/concat_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"], \
+        #  "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_concat", "outName":"tensor_array/concat_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_concat", "outName":"tensor_array/concat_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_concat", "outName":"tensor_array/concat_sz3-1_int32_dynamic_name_shape", "varShapes":[[2,3],[2,3],[2,3]], "varTypes":["int32","int32","int32"], "varInit":["uniform_int10","uniform_int10","uniform_int10"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[2,3], "infer_shape":False},
+
+        #TensorArray - Stack
+        # {"opName":"tensorarray_stack", "outName":"tensor_array/stack_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"], \
+        #  "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_stack", "outName":"tensor_array/stack_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_stack", "outName":"tensor_array/stack_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_stack", "outName":"tensor_array/stack_sz3-1_int32_dynamic_name_shape", "varShapes":[[2,3],[2,3],[2,3]], "varTypes":["int32","int32","int32"], "varInit":["uniform_int10","uniform_int10","uniform_int10"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[2,3], "infer_shape":False},
+
+        #TensorArray - Unstack
+        # {"opName":"tensorarray_unstack", "outName":"tensor_array/unstack_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"], \
+        #  "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_unstack", "outName":"tensor_array/unstack_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_unstack", "outName":"tensor_array/unstack_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_unstack", "outName":"tensor_array/unstack_sz3-1_int32_dynamic_name_shape", "varShapes":[[2,3],[2,3],[2,3]], "varTypes":["int32","int32","int32"], "varInit":["uniform_int10","uniform_int10","uniform_int10"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[2,3], "infer_shape":False},
+
+        #TensorArray - identity (set, identity, get)
+        # {"opName":"tensorarray_identity", "outName":"tensor_array/identity_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"],\
+        #     "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_identity", "outName":"tensor_array/identity_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_identity", "outName":"tensor_array/identity_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # #Next test: initially size 1, but dynamic so add 3
+        # {"opName":"tensorarray_identity", "outName":"tensor_array/identity_sz3-1_int32_dynamic_name_shape", "varShapes":[[2,3],[2,3],[2,3]], "varTypes":["int32","int32","int32"], "varInit":["uniform_int10","uniform_int10","uniform_int10"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[2,3]},
+
+        # #TensorArray - Split (basically, standard Split op + tensor array scatter  - i.e., split then put results into TensorArray)
+        # # In these tests, first variable is the values, second is the lengths of each split. Note that size of each has to be same size...
+        # {"opName":"tensorarray_split", "outName":"tensor_array/split_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3],[1]], "varTypes":["float32", "int32"], "varInit":["uniform", "two"],\
+        #     "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_split", "outName":"tensor_array/split_sz2_float64_nodynamic_name_noshape", "varShapes":[[4,3],[2]], "varTypes":["float64","int32"], "varInit":["uniform","two"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_split", "outName":"tensor_array/split_sz3-1_int32_dynamic_name_shape", "varShapes":[[9,3],[3]], "varTypes":["int32","int32"], "varInit":["uniform_int10","three"], \
+        #  "dtype":tf.int32, "size":1, "dynamic_size":True, "tensor_array_name":None, "element_shape":[3,3]},
+
+        # TensorArray - close
+        # {"opName":"tensorarray_close", "outName":"tensor_array/close_sz1_float32_nodynamic_noname_noshape", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"],\
+        #     "dtype":tf.float32, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+        # {"opName":"tensorarray_close", "outName":"tensor_array/close_sz1_int64_nodynamic_noname_shape2-3", "varShapes":[[2,3]], "varTypes":["int64"], "varInit":["uniform_int5"], \
+        #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
+        # {"opName":"tensorarray_close", "outName":"tensor_array/close_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
+        #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
            ]
 
 

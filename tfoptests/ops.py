@@ -589,10 +589,130 @@ class OpCreator:
 
     def execute_sum_dynamic_axis(self):
         if(self.op["axistype"] == "argmin"):
-            print("ARGMIN")
             axis = tf.math.argmin(tf.shape(self.vars[0]))
         else:
-            print("ARGMAX")
             axis = tf.math.argmax(tf.shape(self.vars[0]))
         return [tf.reduce_sum(self.vars[0], axis=axis, keepdims=self.op["keepdims"])]
+
+    def execute_tensorarray_getset(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            ta = ta.write(i, self.vars[i])
+
+        out = []
+        for i in range(n):
+            out.append(ta.read(i))
+        return out
+
+    def execute_tensorarray_size(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            ta = ta.write(i, self.vars[i])
+
+        return [ta.size()]
+
+    def execute_tensorarray_concat(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            ta = ta.write(i, self.vars[i])
+
+        return [ta.concat()]
+
+    def execute_tensorarray_stack(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            ta = ta.write(i, self.vars[i])
+
+        return [ta.stack()]
+
+    def execute_tensorarray_unstack(self):
+        #Unstack: create empty tensor array, stack the test array inputs, then unstack them to the TensorArray
+        # (then pull them out for testing...)
+
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+
+        stack = tf.stack(self.vars, axis=0)
+
+        ta = ta.unstack(stack)  #Stack to increase rank by 1 before TensorArray unstack
+
+        n = len(self.vars)
+        out = []
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            out.append(ta.read(i))
+
+        return out
+
+    def execute_tensorarray_identity(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            ta = ta.write(i, self.vars[i])
+
+        ta2 = ta.identity()
+        out = []
+        for i in range(n):
+            out.append(ta2.read(i))
+        return out
+
+    def execute_tensorarray_split(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+
+        ta = ta.split(value=self.vars[0], lengths=self.vars[1])
+
+        n = self.op["varShapes"][1][0]
+        out = []
+        for i in range(n):
+            out.append(ta.read(i))
+        return out
+
+    def execute_tensorarray_close(self):
+        infershape = True
+        if("infer_shape" in self.op):
+            infershape = self.op["infer_shape"]
+        ta = tf.TensorArray(dtype=self.op["dtype"], size=self.op["size"], dynamic_size=self.op["dynamic_size"], tensor_array_name=self.op["tensor_array_name"], element_shape=self.op["element_shape"], infer_shape=infershape)
+        n = len(self.vars)
+        for i in range(n):
+            #Note: on each write, need to use the new/returned TensorArray for all subsequent ops
+            ta = ta.write(i, self.vars[i])
+
+        out = []
+        for i in range(n):
+            out.append(ta.read(i))
+
+        ta = ta.close()     #Needs to be consumed...
+        with tf.control_dependencies([ta]):
+            out.append(tf.Variable(tf.ones(shape=[2,2], dtype=tf.float32)))
+        return out
 

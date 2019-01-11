@@ -50,7 +50,7 @@ class VarInitializer:
         return tf.Variable(tf.random_normal(shape=shape, mean=0.0, stddev=1.0, dtype=dtype), dtype=dtype, name=n)
 
     def var_uniform(self, shape, dtype, n):
-        return tf.Variable(tf.random_uniform(shape), dtype, name=n)
+        return tf.Variable(tf.random_uniform(shape,dtype=dtype), dtype, name=n)
 
     def var_uniform_m1_1(self, shape, dtype, n):
         return tf.Variable(tf.random_uniform(shape, minval=-1, maxval=1), dtype, name=n)
@@ -92,6 +92,11 @@ class VarInitializer:
         if(len(shape) is not 1 or shape[0] is not 2):
             raise ValueError("Shape must be exactly [2]")
         return tf.Variable([2,1], dtype=dtype, name=n)
+
+    def var_fixed_3_1(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 2):
+            raise ValueError("Shape must be exactly [2]")
+        return tf.Variable([3,1], dtype=dtype, name=n)
 
     def var_fixed_5_3(self, shape, dtype, n):
         if(len(shape) is not 1 or shape[0] is not 2):
