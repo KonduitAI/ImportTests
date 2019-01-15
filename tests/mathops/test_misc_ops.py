@@ -612,12 +612,11 @@ def test_mathtransform():
         # {"opName":"eye", "outName":"eye/e32_b22", "varShapes":[[2]], "varTypes":["int32"], "varInit":["two"], "num_rows":3, "num_columns":2},
 
 
-        # {"opName":"log_determinant", "outName":"log_determinant/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName":"log_determinant", "outName":"log_determinant/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName":"log_determinant", "outName":"log_determinant/rank4", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName":"slog_determinant", "outName":"slogdet/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName":"slog_determinant", "outName":"slogdet/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName":"slog_determinant", "outName":"slogdet/rank4", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"]},
+        #log determinant op: requires SYMMETRIC matrix. slogdet uses log determinant internally - so same thing...
+        # {"opName":"log_determinant", "outName":"log_determinant/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["positive_def_symmetric_33"]},
+        # {"opName":"log_determinant", "outName":"log_determinant/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["positive_def_symmetric_233"]},
+        # {"opName":"slog_determinant", "outName":"slogdet/rank2", "varShapes":[[3,3]], "varTypes":["float32"], "varInit":["positive_def_symmetric_33"]},
+        # {"opName":"slog_determinant", "outName":"slogdet/rank3", "varShapes":[[2,3,3]], "varTypes":["float32"], "varInit":["positive_def_symmetric_233"]},
 
         # {"opName":"sequence_mask", "outName":"sequence_mask/rank1_auto_maxlen", "varShapes":[[5]], "varTypes":["int32"], "varInit":["uniform_int5"]},
         # {"opName":"sequence_mask", "outName":"sequence_mask/rank1_provided_maxlen", "varShapes":[[5], []], "varTypes":["int32", "int32"], "varInit":["uniform_int5", "ten"]},

@@ -155,6 +155,19 @@ class VarInitializer:
     def var_booleanTrue(self, shape, dtype, n):
         return tf.Variable(tf.cast(tf.fill(dims=shape, value=True), dtype=dtype), name=n)
 
+    def var_positive_def_symmetric_33(self, shape, dtype, n):
+        if(len(shape) is not 2 or shape[0] is not 3 or shape[1] is not 3):
+            raise ValueError("Only 3x3 inputs allowed for this initializer")
+
+        return tf.Variable(tf.constant([[1.77878559, 0.23089433, 0.50563407],[0.23089433, 1.72714126, 0.89252293],[0.50563407, 0.89252293, 1.54612088]], dtype=dtype))
+
+    def var_positive_def_symmetric_233(self, shape, dtype, n):
+        if(len(shape) is not 3 or shape[0] is not 2 or shape[1] is not 3 or shape[1] is not 3):
+            raise ValueError("Only 2x3x3 inputs allowed for this initializer")
+
+        v1 = self.var_positive_def_symmetric_33([3,3], dtype, n)
+        v2 = self.var_positive_def_symmetric_33([3,3], dtype, n)
+        return tf.stack([v1, v2], axis=0)
 
     def newPlaceholder(self, initType, shape, dtype, name):
         method_name = "placeholder_" + initType
