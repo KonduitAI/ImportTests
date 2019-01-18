@@ -2,14 +2,14 @@ from io import BytesIO
 import tensorflow as tf
 import numpy as np
 from six.moves import urllib
-from PIL import Image
+from PIL import Image   #pip install Pillow
 from tfoptests.persistor import TensorFlowPersistor
 import vgg_preprocessing
 import inception_preprocessing
 
 class ZooEvaluation(object):
 
-    def __init__(self, name, baseDir="C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models", prefix="graph"):
+    def __init__(self, name, baseDir="/dl4j-test-resources/src/main/resources/tf_graphs/zoo_models", prefix="graph"):
         tf.reset_default_graph()
         self.name = name
         self.baseDir = baseDir
@@ -149,11 +149,14 @@ class ZooEvaluation(object):
         tfp._save_node_dtypes(toSave_dtype_dict)
 
 
-        #Also sove intermediate nodes:
+        #Also save intermediate nodes:
         # dict = {self.inputName:image}
         dict = {self.inputName:self.getImage(True)}
-        # print("DICTIONARY: ", dict)
-        # tfp._save_intermediate_nodes2(input_dict=dict, graph=graph)
+        print("DICTIONARY: ", dict)
+        print("OUTPUT NAMES: ", self.outputNames)
+        tfp.set_output_tensors(self.outputNames)
+        tfp.set_verbose(True)
+        tfp._save_intermediate_nodes(input_dict=dict, graph=graph)
 
 
     def loadGraph(self):
@@ -202,8 +205,8 @@ if __name__ == '__main__':
     #     .preprocessingType("vgg")
     # z.write()
     #
-    # # nasnet_mobile: no preprocessing specified, going to assume inception preprocessing
-    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/nasnet_mobile_2018_04_27.tgz
+    # nasnet_mobile: no preprocessing specified, going to assume inception preprocessing
+    # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/nasnet_mobile_2018_04_27.tgz
     # z = ZooEvaluation(name="nasnet_mobile_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\nasnet_mobile_2018_04_27\\nasnet_mobile.pb") \
     #     .inputName("input:0") \
@@ -253,15 +256,15 @@ if __name__ == '__main__':
     #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
     # z.write()
     #
-    # # http://download.tensorflow.org/models/official/resnetv2_imagenet_frozen_graph.pb
-    # z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\resnetv2_imagenet_frozen_graph.pb") \
-    #     .inputName("input_tensor:0") \
-    #     .outputNames(["softmax_tensor:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-    #     .inputDims(224, 224, 3) \
-    #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
-    # z.write()
+    # http://download.tensorflow.org/models/official/resnetv2_imagenet_frozen_graph.pb
+    z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
+    z.graphFile("/TF_Graphs/resnetv2_imagenet_frozen_graph.pb") \
+        .inputName("input_tensor:0") \
+        .outputNames(["softmax_tensor:0"]) \
+        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+        .inputDims(224, 224, 3) \
+        .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+    z.write()
 
 
     # # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz

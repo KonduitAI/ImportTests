@@ -11,6 +11,7 @@ import errno
 import shutil
 import tensorflow as tf
 import numpy as np
+import traceback
 from tensorflow.python.tools import freeze_graph
 
 BASE_DIR = os.environ['DL4J_TEST_RESOURCES'] + '/src/main/resources/tf_graphs/examples'
@@ -153,6 +154,9 @@ class TensorFlowPersistor:
 
     def _save_intermediate_nodes(self, input_dict):
         graph = self.load_frozen_graph()
+        self._save_intermediate_nodes(input_dict, graph)
+
+    def _save_intermediate_nodes(self, input_dict, graph):
         placeholder_dict = {}
         prediction_dict = {}
         dtype_dict = {}
@@ -162,10 +166,17 @@ class TensorFlowPersistor:
         for op in graph.get_operations():
             if op.type != "Placeholder":
                 continue
-            if self.verbose:
-                print(op.name)  # there is a prefix and a suffix - there should only be one prefix
-            placeholder_name = "/".join(op.name.split("/")[1:])
-            placeholder_dict[op.name + ":0"] = input_dict[placeholder_name]
+            if("/" in op.name):
+                placeholder_name = "/".join(op.name.split("/")[1:])
+            else:
+                placeholder_name = op.name
+            print("op.name: ", op.name)  # there is a prefix and a suffix - there should only be one prefix
+            print("placeholder name: ", placeholder_name)
+            if(placeholder_name in input_dict):
+                placeholder_dict[op.name + ":0"] = input_dict[placeholder_name]
+            else:
+                placeholder_dict[op.name + ":0"] = input_dict[placeholder_name + ":0"]
+
             tensor_dtype_string = "{}".format(op.outputs[0].dtype).split("'")[1]
             dtype_dict[placeholder_name] = tensor_dtype_string
         if self.verbose:
@@ -188,9 +199,12 @@ class TensorFlowPersistor:
                                 print("-----------------------------------------------------")
                         else:
                             op_prediction = sess.run(op_output, feed_dict=placeholder_dict)
-                            tensor_output_name = ("/".join(op_output.name.split("/")[1:]))
+                            #tensor_output_name = ("/".join(op_output.name.split("/")[1:]))
+                            tensor_output_name = op_output.name
                             tensor_output_name = tensor_output_name.replace(":",".")
-                            if tensor_output_name in self._list_output_node_names():
+                            namelist = self._list_output_node_names()
+                            print("NAMELIST: ", namelist)
+                            if tensor_output_name in namelist:
                                 prediction_dict[tensor_output_name] = op_prediction
                             if self.verbose:
                                 print("PREDICTIONS: ", op_prediction)
@@ -200,7 +214,9 @@ class TensorFlowPersistor:
                             tensor_dtype_string = "{}".format(op_output.dtype).split("'")[1]
                             dtype_dict[modified_tensor_output_name] = tensor_dtype_string
                     except:
-                        print("Unexpected error:", sys.exc_info()[0])
+                        #print("Unexpected error:", sys.exc_info()[0])
+                        print("Unexpected error:", sys.exc_info())
+                        traceback.print_tb(sys.exc_info()[2])
                         if self.verbose:
                             print(op_output)
                             print("SKIPPING")
@@ -249,12 +265,21 @@ class TensorFlowPersistor:
     def _list_output_node_names(self):
         output_node_names = []
         # should never be nested more than two levels
+        if(self._output_tensors is None):
+            raise ValueError("Output tensors have not been defined!")
         for a_output in self._output_tensors:
             if isinstance(a_output,list):
+                print("IS LIST: ", a_output)
                 for element_a_output in a_output:
-                    output_node_names.append(element_a_output.name.replace(":","."))
+                    if(hasattr(element_a_output, 'name')):
+                        output_node_names.append(element_a_output.name.replace(":",'.'))
+                else:
+                    output_node_names.append(element_a_output.replace(":",'.'))
             else:
-                output_node_names.append(a_output.name.replace(":",'.'))
+                if(hasattr(a_output, 'name')):
+                    output_node_names.append(a_output.name.replace(":",'.'))
+                else:
+                    output_node_names.append(a_output.replace(":",'.'))
         return output_node_names
 
     def _list_output_nodes_for_freeze_graph(self):
