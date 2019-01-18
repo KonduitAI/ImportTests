@@ -156,7 +156,7 @@ class ZooEvaluation(object):
         print("OUTPUT NAMES: ", self.outputNames)
         tfp.set_output_tensors(self.outputNames)
         tfp.set_verbose(True)
-        tfp._save_intermediate_nodes(input_dict=dict, graph=graph)
+        tfp._save_intermediate_nodes2(input_dict=dict, graph=graph)
 
 
     def loadGraph(self):
