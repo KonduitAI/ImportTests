@@ -716,3 +716,12 @@ class OpCreator:
             out.append(tf.Variable(tf.ones(shape=[2,2], dtype=tf.float32)))
         return out
 
+    def execute_extractImagePatches(self):
+        out = [tf.image.extract_image_patches(images=self.vars[0], ksizes=self.op["ksizes"], strides=self.op["strides"], rates=self.op["rates"], padding=self.op["padding"])]
+        return out
+
+    def execute_stopGradient(self):
+        temp = tf.tanh(self.vars[0])
+        out = [tf.stop_gradient(temp)]
+        return out
+

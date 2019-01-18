@@ -444,6 +444,8 @@ def test_mathtransform():
         # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b2_k2_s1_d1_VALID", "varShapes":[[2, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"VALID", "data_format":"NCHW"},
         # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nchw_b1_k2_s2_SAME", "varShapes":[[2, 2, 5, 5], [2, 2, 2, 3]], "varTypes":["float32","float32"], "strides":[1,1,1,2], "padding":"SAME", "data_format":"NCHW"},
 
+        # {"opName":"nn_conv2d", "outName":"cnn2d_nn/nhwc_35_35_32_b1_k3_s1_SAME", "varShapes":[[1, 35, 35, 3], [3, 3, 3, 192]], "varTypes":["float32","float32"], "strides":[1,1,1,1], "padding":"SAME", "data_format":"NHWC"},
+
         #Again, no channels_first on CPU
         # {"opName":"layers_conv2d", "outName":"cnn2d_layers/channels_last_b1_k2_s1_d1_SAME", "varShapes":[[1, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2], "strides":[1,1], "padding":"SAME", "data_format":"channels_last", "dilation_rate":[1,1]},
         # {"opName":"layers_conv2d", "outName":"cnn2d_layers/channels_last_b1_k2_s1_d2_SAME", "varShapes":[[1, 5, 5, 2]], "varTypes":["float32","float32"], "filters":2, "kernel_size":[2,2], "strides":[1,1], "padding":"SAME", "data_format":"channels_last", "dilation_rate":[2,2]},
@@ -976,6 +978,22 @@ def test_mathtransform():
         #  "dtype":tf.int64, "size":1, "dynamic_size":False, "tensor_array_name":None, "element_shape":[2,3]},
         # {"opName":"tensorarray_close", "outName":"tensor_array/close_sz2_float64_nodynamic_name_noshape", "varShapes":[[2,3],[2,3]], "varTypes":["float64","float64"], "varInit":["uniform","uniform"], \
         #  "dtype":tf.float64, "size":2, "dynamic_size":False, "tensor_array_name":None, "element_shape":None},
+
+        #ExtractImagePatches
+        # {"opName":"extractImagePatches", "outName":"extractImagePatches/sz1-6-6-2_float32_k3_s1_r1_SAME", "varShapes":[[1,6,6,2]], "varTypes":["float32"], "varInit":["uniform"],\
+        #     "ksizes":[1,3,3,1], "strides":[1,1,1,1], "rates":[1,1,1,1], "padding":"SAME"},
+        # {"opName":"extractImagePatches", "outName":"extractImagePatches/sz1-6-6-2_float32_k3_s1_r1_VALID", "varShapes":[[1,6,6,2]], "varTypes":["float32"], "varInit":["uniform"], \
+        #  "ksizes":[1,3,3,1], "strides":[1,1,1,1], "rates":[1,1,1,1], "padding":"VALID"},
+        # {"opName":"extractImagePatches", "outName":"extractImagePatches/sz1-8-8-2_int32_k2_s2_r1_SAME", "varShapes":[[1,8,8,2]], "varTypes":["int32"], "varInit":["uniform_int10"], \
+        #  "ksizes":[1,2,2,1], "strides":[1,2,2,1], "rates":[1,1,1,1], "padding":"SAME"},
+        # {"opName":"extractImagePatches", "outName":"extractImagePatches/sz1-8-8-2_int64_k2_s1_r2_SAME", "varShapes":[[1,8,8,2]], "varTypes":["int64"], "varInit":["uniform_int10"], \
+        #  "ksizes":[1,2,2,1], "strides":[1,1,1,1], "rates":[1,2,2,1], "padding":"SAME"},
+
+        #Stop gradient op
+        {"opName":"stopGradient", "outName":"stopGradient/rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
+        {"opName":"stopGradient", "outName":"stopGradient/rank1", "varShapes":[[3]], "varTypes":["float64"], "varInit":["uniform"]},
+        {"opName":"stopGradient", "outName":"stopGradient/rank2", "varShapes":[[3,4]], "varTypes":["float64"], "varInit":["uniform"]}
+
            ]
 
 
