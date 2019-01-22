@@ -151,12 +151,12 @@ class ZooEvaluation(object):
 
         #Also save intermediate nodes:
         # dict = {self.inputName:image}
-        dict = {self.inputName:self.getImage(True)}
-        print("DICTIONARY: ", dict)
-        print("OUTPUT NAMES: ", self.outputNames)
-        tfp.set_output_tensors(self.outputNames)
-        tfp.set_verbose(True)
-        tfp._save_intermediate_nodes2(input_dict=dict, graph=graph)
+        # dict = {self.inputName:self.getImage(True)}
+        # print("DICTIONARY: ", dict)
+        # print("OUTPUT NAMES: ", self.outputNames)
+        # tfp.set_output_tensors(self.outputNames)
+        # tfp.set_verbose(True)
+        # tfp._save_intermediate_nodes2(input_dict=dict, graph=graph)
 
 
     def loadGraph(self):
@@ -257,13 +257,17 @@ if __name__ == '__main__':
     # z.write()
     #
     # http://download.tensorflow.org/models/official/resnetv2_imagenet_frozen_graph.pb
+    # https://github.com/tensorflow/models/blob/master/research/tensorrt/README.md
+    # "Some ResNet models represent 1000 categories, and some represent all 1001, with the 0th category being "background". The models provided are of the latter type."
+    # Runs "imagenet_preprocessing" on the images - https://github.com/tensorflow/models/blob/master/official/resnet/imagenet_preprocessing.py
+    # Which seems to be merely scaling, no normalization
     z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
     z.graphFile("/TF_Graphs/resnetv2_imagenet_frozen_graph.pb") \
         .inputName("input_tensor:0") \
         .outputNames(["softmax_tensor:0"]) \
         .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
         .inputDims(224, 224, 3) \
-        .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+        .preprocessingType("resize_only")
     z.write()
 
 
