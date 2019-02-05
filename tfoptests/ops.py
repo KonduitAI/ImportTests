@@ -941,3 +941,10 @@ class OpCreator:
         concatStatesBwd = tf.concat(statesBwd, axis=0)
         return [concatOutputs, concatStatesFwd, concatStatesBwd]
 
+    def execute_cast(self):
+        out = [tf.cast(self.vars[0], dtype=self.op["dtype"])]
+        return out
+
+    def execute_reshape(self):
+        return [tf.reshape(self.vars[0], shape=self.op["shape"])]
+

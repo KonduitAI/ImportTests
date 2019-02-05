@@ -1154,6 +1154,24 @@ def test_mathtransform():
         #      "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":False, "size":3},
         # {"opName":"stack_bidir_basicrnncell", "outName":"rnn/bstack/d_n2", "varShapes":[[4,1,5], [1,3], [1,3], [1,3], [1,3]], "varTypes":["float32", "float32", "float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform", "uniform", "uniform"], "static":False, "timeSteps":4,
         #     "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":True, "size":2},
+
+
+
+        #####################################################################################################################################
+        # Empty array tests
+
+        # {"opName": "stack", "outName": "emptyArrayTests/stack/rank1_axis0", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
+        # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape0-1_axis0", "varShapes":[[0,2], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
+        # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape0-1_axis1", "varShapes":[[0,1], [0,1]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":1},
+        # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape2-0_axis0", "varShapes":[[2,0], [2,0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
+        # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape1-0_axis1", "varShapes":[[1,0], [1,0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":1},
+
+        # {"opName": "cast", "outName": "emptyArrayTests/cast/rank2_shape2-0", "varShapes":[[2,0]], "varTypes":["float32"], "varInit":["empty", "empty"], "dtype":tf.int32},
+        # {"opName": "cast", "outName": "emptyArrayTests/cast/rank1_shape0", "varShapes":[[0]], "varTypes":["int32"], "varInit":["empty", "empty"], "dtype":tf.int64},
+
+        # {"opName": "reshape", "outName": "emptyArrayTests/reshape/rank2_shape2-0_0-1-2", "varShapes":[[2,0]], "varTypes":["float32"], "varInit":["empty", "empty"], "shape":[0,1,2]},
+        # {"opName": "reshape", "outName": "emptyArrayTests/reshape/rank3_shape0-1-2_10-0", "varShapes":[[0,1,2]], "varTypes":["float32"], "varInit":["empty", "empty"], "shape":[10,0]},
+
            ]
 
 
