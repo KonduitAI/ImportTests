@@ -725,3 +725,22 @@ class OpCreator:
         out = [tf.stop_gradient(temp)]
         return out
 
+    def execute_lstmcell(self):
+        lstm = tf.nn.rnn_cell.LSTMCell(num_units=self.op["num_units"], use_peepholes=self.op["use_peepholes"], cell_clip=self.op["cell_clip"],
+                                       proj_clip=self.op["proj_clip"], forget_bias=self.op["forget_bias"], activation=self.op["activation"])
+
+        initState = None
+        if(len(self.vars) > 1):
+            initState = [self.vars[1], self.vars[2]]
+            if(self.op["static"] == False):
+                initState = tf.nn.rnn_cell.LSTMStateTuple(initState[0], initState[1])
+
+        if(self.op["static"] == True):
+            x = tf.unstack(self.vars[0], num=self.op["timeSteps"], axis=1)
+            outputs, states = tf.nn.static_rnn(lstm, inputs=x, initial_state=initState, dtype=self.op["dtype"])
+        else:
+            outputs, states = tf.nn.dynamic_rnn(lstm, inputs=self.vars[0], initial_state=initState, dtype=self.op["dtype"], time_major=self.op["time_major"])
+
+        concatOutputs = tf.concat(outputs, axis=0)
+        concatStates = tf.concat(states, axis=0)
+        return [concatOutputs, concatStates]

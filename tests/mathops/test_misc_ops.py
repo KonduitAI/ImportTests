@@ -990,9 +990,32 @@ def test_mathtransform():
         #  "ksizes":[1,2,2,1], "strides":[1,1,1,1], "rates":[1,2,2,1], "padding":"SAME"},
 
         #Stop gradient op
-        {"opName":"stopGradient", "outName":"stopGradient/rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
-        {"opName":"stopGradient", "outName":"stopGradient/rank1", "varShapes":[[3]], "varTypes":["float64"], "varInit":["uniform"]},
-        {"opName":"stopGradient", "outName":"stopGradient/rank2", "varShapes":[[3,4]], "varTypes":["float64"], "varInit":["uniform"]}
+        # {"opName":"stopGradient", "outName":"stopGradient/rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName":"stopGradient", "outName":"stopGradient/rank1", "varShapes":[[3]], "varTypes":["float64"], "varInit":["uniform"]},
+        # {"opName":"stopGradient", "outName":"stopGradient/rank2", "varShapes":[[3,4]], "varTypes":["float64"], "varInit":["uniform"]}
+
+        #Note: For RNNs, TF uses [batch, seqLength, nIn]
+        #LSTM - Static
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/static_batch1_nIn5_nOut3_tsLength4_noPH_noClip_fBias1_Tanh_noInitState_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,\
+        #     "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float32},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/static_batch2_nIn2_nOut3_tsLength4_withPH_noClip_fBias1_Tanh_noInitState_double", "varShapes":[[2,4,2]], "varTypes":["float64"], "varInit":["uniform"], "static":True, "timeSteps":4, \
+        #  "num_units":3, "use_peepholes":True, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float64},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/static_batch1_nIn5_nOut3_tsLength4_noPH_clip-0.3-0.4_fBias1_Tanh_noInitState_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4, \
+        #  "num_units":3, "use_peepholes":False, "cell_clip":0.3, "proj_clip":0.4, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float32},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/static_batch1_nIn5_nOut3_tsLength4_noPH_noClip_fBias1_Softsign_withInitState_float", "varShapes":[[1,4,5],[1,3],[1,3]], "varTypes":["float32","float32","float32"], "varInit":["uniform","uniform","uniform"],
+        #     "static":True, "timeSteps":4, "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "activation":"softsign", "dtype":tf.float32},
+
+        #LSTM - Dynamic. Supports time_major: if true, [max_time, batch_size, depth]; If false [batch_size, max_time, depth]
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/dynamic_b1_nIn5_nOut3_ts4_noPH_noClip_fB1_Tanh_noInitState_float_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #     "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float32, "time_major":False},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/dynamic_b1_nIn5_nOut3_ts4_noPH_noClip_fB1_Tanh_noIS_float_withTM", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float32, "time_major":False},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/dynamic_b2_nIn2_nOut3_ts4_withPH_noClip_fB1_Tanh_noIS_double_noTM", "varShapes":[[2,4,2]], "varTypes":["float64"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":True, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float64, "time_major":False},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/dynamic_b1_nIn5_nOut3_ts4_noPH_clip-0.3-0.4_fB1_Tanh_noIS_float_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":False, "cell_clip":0.3, "proj_clip":0.4, "forget_bias":1.0, "activation":"tanh", "dtype":tf.float32, "time_major":False},
+        # {"opName":"lstmcell", "outName":"rnn/lstmcell/dynamic_b1_nIn5_nOut3_ts4_noPH_noClip_fB2_Softsign_withIS_float_noTM", "varShapes":[[1,4,5],[1,3],[1,3]], "varTypes":["float32","float32","float32"], "varInit":["uniform","uniform","uniform"],
+        #     "static":False, "timeSteps":4, "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":2.0, "activation":"softsign", "dtype":tf.float32, "time_major":False},
 
            ]
 
