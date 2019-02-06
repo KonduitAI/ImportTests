@@ -1174,6 +1174,16 @@ def test_mathtransform():
         # {"opName": "identity", "outName": "identity/identity_rank1", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform"]},
         # {"opName": "identity", "outName": "identity/identity_rank2", "varShapes":[[2,3]], "varTypes":["int32"], "varInit":["uniform_int10"]},
 
+        # {"opName": "gather", "outName": "gather/gather_3-3-1_2_axis0", "varShapes":[[3,3,1], [2]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int3"], "axis":0},
+        # {"opName": "gather", "outName": "gather/gather_4-4_1_axis1", "varShapes":[[4,4], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int3"], "axis":1},
+        # {"opName": "gather", "outName": "gather/gather_2-2-3_3_axis-1", "varShapes":[[2,2,3], [3]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int3"], "axis":-1},
+
+        # {"opName": "ones", "outName": "ones/ones_rank0", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "dtype":tf.int64},
+        # {"opName": "ones", "outName": "ones/ones_rank2", "varShapes":[[2]], "varTypes":["int32"], "varInit":["fixed_2_1"], "dtype":tf.float64},
+
+        # {"opName": "ones_like", "outName": "ones_like/rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "ones_like", "outName": "ones_like/rank2", "varShapes":[[2,2]], "varTypes":["float64"], "varInit":["uniform"]},
+
         #####################################################################################################################################
         # Empty array tests
         # {"opName": "arg_max", "outName": "emptyArrayTests/arg_max/rank1_dim0", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "dimension":0},
@@ -1202,13 +1212,29 @@ def test_mathtransform():
         # {"opName": "fill", "outName": "emptyArrayTests/fill/fill_2-0_val3", "varShapes":[[2], []], "varTypes":["int32", "float"], "varInit":["fixed_2_0", "three"]},
         # {"opName": "fill", "outName": "emptyArrayTests/fill/fill_0-0-3_val3", "varShapes":[[3], []], "varTypes":["int32", "float"], "varInit":["fixed_0_0_3", "three"]},
 
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_2-3_emptyIndicesR1_axis0", "varShapes":[[2,3], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":0},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_2-3_emptyIndicesR1_axis1", "varShapes":[[2,3], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":1},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_2-3-1_emptyIndicesR1_axis0", "varShapes":[[2,3,1], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":0},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_2-3-1_emptyIndicesR1_axis2", "varShapes":[[2,3,1], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":2},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_emptyR2_emptyR1_axis0", "varShapes":[[2,0], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":0},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_emptyR2_emptyR1_axis1", "varShapes":[[2,0], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":1},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_emptyR3_emptyR1_axis2", "varShapes":[[2,0,3], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":2},
+        # {"opName": "gather", "outName": "emptyArrayTests/gather/gather_emptyR3_emptyR1_axis-1", "varShapes":[[2,0,3], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "empty"], "axis":-1},
+
         # {"opName": "identity", "outName": "emptyArrayTests/identity/identity_rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
         # {"opName": "identity", "outName": "emptyArrayTests/identity/identity_rank2", "varShapes":[[2,0]], "varTypes":["int32"], "varInit":["empty"]},
         # {"opName": "identity", "outName": "emptyArrayTests/identity/identity_rank3", "varShapes":[[0,1,0]], "varTypes":["int64"], "varInit":["empty"]},
 
-        {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
-        {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank2", "varShapes":[[2,0], [0,3]], "varTypes":["int32", "int32"], "varInit":["empty", "empty"]},
-        {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank3", "varShapes":[[0,1,0], [0,0,2]], "varTypes":["int64", "int64"], "varInit":["empty", "empty"]},
+        # {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank2", "varShapes":[[2,0], [0,3]], "varTypes":["int32", "int32"], "varInit":["empty", "empty"]},
+        # {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank3", "varShapes":[[0,1,0], [0,0,2]], "varTypes":["int64", "int64"], "varInit":["empty", "empty"]},
+
+        # {"opName": "ones", "outName": "emptyArrayTests/ones/ones_rank1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["zero"], "dtype":tf.int32},
+        # {"opName": "ones", "outName": "emptyArrayTests/ones/ones_rank2", "varShapes":[[2]], "varTypes":["int32"], "varInit":["fixed_2_0"], "dtype":tf.float32},
+        # {"opName": "ones", "outName": "emptyArrayTests/ones/ones_rank3", "varShapes":[[3]], "varTypes":["int32"], "varInit":["fixed_0_0_3"], "dtype":tf.int64},
+
+        # {"opName": "ones_like", "outName": "emptyArrayTests/ones_like/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "ones_like", "outName": "emptyArrayTests/ones_like/rank2", "varShapes":[[2,0]], "varTypes":["float64"], "varInit":["empty"]},
 
         # {"opName": "stack", "outName": "emptyArrayTests/stack/rank1_axis0", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
         # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape0-1_axis0", "varShapes":[[0,2], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
@@ -1242,14 +1268,10 @@ def test_mathtransform():
     eye
     floormod
     floor_div
-    *gather
     gather_nd
-    *identity_n
     meshgrid
     norm
     no_op
-    *ones
-    *ones_like
     one_hot
     pad
     parallel_stack

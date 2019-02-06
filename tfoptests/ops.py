@@ -968,3 +968,12 @@ class OpCreator:
 
     def execute_fill(self):
         return [tf.fill(dims=self.vars[0], value=self.vars[1])]
+
+    def execute_gather(self):
+        return [tf.gather(params=self.vars[0], indices=self.vars[1], axis=self.op["axis"])]
+
+    def execute_ones(self):
+        return [tf.ones(shape=self.vars[0], dtype=self.op["dtype"])]
+
+    def execute_ones_like(self):
+        return [tf.ones_like(tensor=self.vars[0])]
