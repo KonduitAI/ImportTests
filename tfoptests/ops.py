@@ -429,6 +429,27 @@ class OpCreator:
         intermediate = tf.assign(intermediate, self.vars[0])
         return [tf.scatter_nd_update(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
 
+    def execute_scatter_add(self):
+        return [tf.scatter_add(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_div(self):
+        return [tf.scatter_div(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_max(self):
+        return [tf.scatter_max(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_min(self):
+        return [tf.scatter_min(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_mul(self):
+        return [tf.scatter_mul(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_sub(self):
+        return [tf.scatter_sub(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_update(self):
+        return [tf.scatter_update(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
     def execute_sufficient_statistics(self):
         temp = tf.add(self.vars[0], 1.0)
         return tf.nn.sufficient_statistics(x=self.vars[0], axes=self.op["axes"], shift=self.op["shift"], keep_dims=self.op["keep_dims"])
@@ -977,3 +998,38 @@ class OpCreator:
 
     def execute_ones_like(self):
         return [tf.ones_like(tensor=self.vars[0])]
+
+    def execute_zeros(self):
+        return [tf.zeros(shape=self.vars[0], dtype=self.op["dtype"])]
+
+    def execute_zeros_like(self):
+        return [tf.zeros_like(tensor=self.vars[0])]
+
+    def execute_range(self):
+        return [tf.range(start=self.vars[0], limit=self.vars[1], delta=self.vars[2])]
+
+    def execute_rank(self):
+        return [tf.rank(self.vars[0])]
+
+    def execute_realdiv(self):
+        return [tf.realdiv(self.vars[0], self.vars[1])]
+
+    def execute_reverse(self):
+        return [tf.reverse(tensor=self.vars[0], axis=self.op["axis"])]
+
+    def execute_slice(self):
+        return [tf.slice(self.vars[0], begin=self.vars[1], size=self.vars[1])]
+
+    def execute_squeeze(self):
+        print("Squeeze shape: ", self.vars[0])
+        return [tf.squeeze(input=self.vars[0], axis=self.op["axis"])]
+
+    def execute_strided_slice(self):
+        return [tf.strided_slice(self.vars[0], begin=self.op["begin"], end=self.op["end"], strides=self.op["strides"], begin_mask=self.op["begin_mask"], end_mask=self.op["end_mask"])]
+
+    def execute_transpose(self):
+        return [tf.transpose(self.vars[0], perm=self.op["perm"])]
+
+    def execute_unstack(self):
+        self.vars[0] = tf.reshape(self.vars[0], self.op["varShapes"][0])
+        return tf.unstack(value=self.vars[0], num=self.op["num"], axis=self.op["axis"])

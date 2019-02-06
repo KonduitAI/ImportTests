@@ -162,7 +162,11 @@ class VarInitializer:
         if(foundZero == False):
             raise ValueError("At least one entry in empty array must be 0")
 
-        return [tf.Variable(tf.cast(tf.fill(shape, value=0), dtype=dtype))]
+        fill = tf.fill(shape, value=0)
+        print("Fille shape: ", fill.shape)
+        var = tf.Variable(tf.cast(fill, dtype=dtype))
+        print("Var shape: ", var.shape)
+        return [var]
 
     def var_boolean(self, shape, dtype, n):
         print(dtype)
