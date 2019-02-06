@@ -88,6 +88,11 @@ class VarInitializer:
             raise ValueError("Shape must be exactly [2]")
         return tf.Variable([-1, 1], dtype=dtype, name=n)
 
+    def var_fixed_2_0(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 2):
+            raise ValueError("Shape must be exactly [2]")
+        return tf.Variable([2,0], dtype=dtype, name=n)
+
     def var_fixed_2_1(self, shape, dtype, n):
         if(len(shape) is not 1 or shape[0] is not 2):
             raise ValueError("Shape must be exactly [2]")
@@ -107,6 +112,11 @@ class VarInitializer:
         if(len(shape) is not 1 or shape[0] is not 3):
             raise ValueError("Shape must be exactly [3]")
         return tf.Variable([2,2,4], dtype=dtype, name=n)
+
+    def var_fixed_0_0_3(self, shape, dtype, n):
+        if(len(shape) is not 1 or shape[0] is not 3):
+            raise ValueError("Shape must be exactly [3]")
+        return tf.Variable([0,0,3], dtype=dtype, name=n)
 
     def var_fixed_2_1_4(self, shape, dtype, n):
         if(len(shape) is not 1 or shape[0] is not 3):

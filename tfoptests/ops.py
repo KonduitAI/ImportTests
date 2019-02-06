@@ -108,6 +108,9 @@ class OpCreator:
     def execute_matrix_set_diag(self):
         return [tf.matrix_set_diag(input=self.vars[0], diagonal=self.vars[1])]
 
+    def execute_identity(self):
+        return [tf.identity(self.vars[0])]
+
     def execute_identity_n(self):
         return tf.identity_n(self.vars)
 
@@ -948,3 +951,20 @@ class OpCreator:
     def execute_reshape(self):
         return [tf.reshape(self.vars[0], shape=self.op["shape"])]
 
+    def execute_arg_max(self):
+        return [tf.arg_max(input=self.vars[0], dimension=self.op["dimension"])]
+
+    def execute_arg_min(self):
+        return [tf.arg_min(input=self.vars[0], dimension=self.op["dimension"])]
+
+    def execute_assign(self):
+        return [tf.assign(ref=self.vars[0], value=self.vars[1])]
+
+    def execute_concat(self):
+        return [tf.concat(values=self.vars, axis=self.op["axis"])]
+
+    def execute_expand_dims(self):
+        return [tf.expand_dims(input=self.vars[0], axis=self.op["axis"])]
+
+    def execute_fill(self):
+        return [tf.fill(dims=self.vars[0], value=self.vars[1])]

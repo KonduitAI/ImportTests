@@ -1155,149 +1155,60 @@ def test_mathtransform():
         # {"opName":"stack_bidir_basicrnncell", "outName":"rnn/bstack/d_n2", "varShapes":[[4,1,5], [1,3], [1,3], [1,3], [1,3]], "varTypes":["float32", "float32", "float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform", "uniform", "uniform"], "static":False, "timeSteps":4,
         #     "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":True, "size":2},
 
+        # {"opName": "arg_max", "outName": "arg_max/rank1_dim0", "varShapes":[[4]], "varTypes":["float32"], "varInit":["uniform"], "dimension":0},
+        # {"opName": "arg_max", "outName": "arg_max/rank2_dim1", "varShapes":[[0,1]], "varTypes":["float32"], "varInit":["uniform"], "dimension":1},
+        # {"opName": "arg_min", "outName": "arg_min/rank1_dim0", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform"], "dimension":0},
+        # {"opName": "arg_min", "outName": "arg_min/rank2_dim1", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"], "dimension":1},
 
+        # {"opName": "expand_dims", "outName": "expand_dims/rank1_axis0", "varShapes":[[1]], "varTypes":["float32"], "varInit":["uniform"], "axis":0},
+        # {"opName": "expand_dims", "outName": "expand_dims/rank1_axis-1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform"], "axis":-1},
+        # {"opName": "expand_dims", "outName": "expand_dims/rank1_axis1", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform"], "axis":1},
+        # {"opName": "expand_dims", "outName": "expand_dims/rank2_axis0", "varShapes":[[1,2]], "varTypes":["float32"], "varInit":["uniform"], "axis":0},
+        # {"opName": "expand_dims", "outName": "expand_dims/rank2_axis-1", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform"], "axis":-1},
+        # {"opName": "expand_dims", "outName": "expand_dims/rank2_axis1", "varShapes":[[3,1]], "varTypes":["float32"], "varInit":["uniform"], "axis":1},
+        # {"opName": "expand_dims", "outName": "expand_dims/rank2_axis2", "varShapes":[[1,3]], "varTypes":["float32"], "varInit":["uniform"], "axis":2},
+
+        # {"opName": "fill", "outName": "fill/fill_3-1_val3", "varShapes":[[2], []], "varTypes":["int32", "float"], "varInit":["fixed_3_1", "three"]},
+
+        # {"opName": "identity", "outName": "identity/identity_rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "identity", "outName": "identity/identity_rank1", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform"]},
+        # {"opName": "identity", "outName": "identity/identity_rank2", "varShapes":[[2,3]], "varTypes":["int32"], "varInit":["uniform_int10"]},
 
         #####################################################################################################################################
         # Empty array tests
-        '''
-        Ops requiring tests: (note that some of these might not support 0 shapes)
-        arg_max
-        arg_min
-        *assign
-        assign_add, assign_sub
-        batch_to_space
-        boolean_mask
-        broadcast_dynamic_shape
-        broadcast_static_shape
-        broadcast_to
-        clip_by_average_norm
-        clip_by_norm
-        clip_by_value
-        *concat
-        dynamic_partition
-        dynamic_stitch
-        edit_distance
-        *expand_dims
-        eye
-        *fill
-        floormod
-        floor_div
-        *gather
-        gather_nd
-        *identity
-        *identity_n
-        meshgrid
-        norm
-        no_op
-        *ones
-        *ones_like
-        one_hot
-        pad
-        parallel_stack
-        *range
-        *rank
-        *realdiv
-        *reshape
-        *reverse
-        reverse_sequence
-        roll
-        *scatter_* (add, div, max, min, mul, nd, nd_add, nd_sub, nd_update, sub, update)
-        sequence_mask
-        *shape
-        *shape_n
-        size
-        *slice
-        *split
-        *squeeze
-        *stack
-        *strided_slice
-        tile
-        *transpose
-        unique
-        *unstack
-        *zeros
-        *zeros_like
-        
-        tf.linalg:
-        det
-        diag
-        diag_part
-        inv
-        logdet
-        tensor_diag
-        tensor_diag_part
-        trace
-        
-        tf.math:
-        *abs
-        *accumulate_n
-        acos
-        acosh
-        *add
-        *add_n
-        angle
-        argmax
-        argmin
-        asin
-        asinh
-        atan
-        atan2
-        atanh
-        bincount
-        ceil
-        *cos
-        *cosh
-        *count_nonzero
-        *cumprod
-        *cumsum
-        *divide
-        *equal
-        erf
-        *exp
-        *floor
-        *floordiv
-        *greater
-        *greater_equal
-        *invert_permutation
-        in_top_k
-        l2_normalize
-        *less
-        *less_equal
-        *log
-        *logical_* (and, not, or, xor)
-        *log_sigmoid
-        *maximum
-        *minimum
-        *multiply
-        *negative
-        *not_equal
-        *pow
-        *reciprocal
-        *reduce_* (any, all, logsumexp, max, mean, min, prod, sum)
-        *round
-        *rsqrt
-        *scalar_mul
-        *segment_* (max, mean, min, prod, sum)
-        *sigmoid
-        *sign
-        *sin
-        *sinh
-        *softplus
-        *sqrt
-        *square
-        *squared_difference
-        *subtract
-        *tan
-        *tanh
-        *top_k
-        *truediv
-        *unsorted_segment_* (max, mean, min, prod, sqrt_n, sum)
-        xdivy
-        xlogy
-        *zero_fraction
-        zeta
-        
-        '''
+        # {"opName": "arg_max", "outName": "emptyArrayTests/arg_max/rank1_dim0", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "dimension":0},
+        # {"opName": "arg_max", "outName": "emptyArrayTests/arg_max/rank2_dim0", "varShapes":[[0,1]], "varTypes":["float32"], "varInit":["empty"], "dimension":0},
+        # {"opName": "arg_min", "outName": "emptyArrayTests/arg_min/rank1_dim0", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "dimension":0},
+        # {"opName": "arg_min", "outName": "emptyArrayTests/arg_min/rank2_dim1", "varShapes":[[2,0]], "varTypes":["float32"], "varInit":["empty"], "dimension":1},
+
+        # "AttributeError: 'list' object has no attribute 'dtype'" ???
+        # {"opName": "assign", "outName": "emptyArrayTests/assign/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "assign", "outName": "emptyArrayTests/assign/rank2", "varShapes":[[2,0], [0,3]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+
+        # {"opName": "concat", "outName": "emptyArrayTests/concat/rank1_dim0", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
+        # {"opName": "concat", "outName": "emptyArrayTests/concat/rank2_dim0", "varShapes":[[0,1], [0,1]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
+        # {"opName": "concat", "outName": "emptyArrayTests/concat/rank2_dim1", "varShapes":[[0,2], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":1},
+        # {"opName": "concat", "outName": "emptyArrayTests/concat/rank2_dim0b", "varShapes":[[2,0], [2,0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
+        # {"opName": "concat", "outName": "emptyArrayTests/concat/rank2_dim1b", "varShapes":[[2,0], [3,0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":1},
+
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank1_axis0", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "axis":0},
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank1_axis-1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "axis":-1},
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank1_axis1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "axis":1},
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank2_axis0", "varShapes":[[0,2]], "varTypes":["float32"], "varInit":["empty"], "axis":0},
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank2_axis-1", "varShapes":[[2,0]], "varTypes":["float32"], "varInit":["empty"], "axis":-1},
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank2_axis1", "varShapes":[[3,0]], "varTypes":["float32"], "varInit":["empty"], "axis":1},
+        # {"opName": "expand_dims", "outName": "emptyArrayTests/expand_dims/rank2_axis2", "varShapes":[[0,0]], "varTypes":["float32"], "varInit":["empty"], "axis":2},
+
+        # {"opName": "fill", "outName": "emptyArrayTests/fill/fill_2-0_val3", "varShapes":[[2], []], "varTypes":["int32", "float"], "varInit":["fixed_2_0", "three"]},
+        # {"opName": "fill", "outName": "emptyArrayTests/fill/fill_0-0-3_val3", "varShapes":[[3], []], "varTypes":["int32", "float"], "varInit":["fixed_0_0_3", "three"]},
+
+        # {"opName": "identity", "outName": "emptyArrayTests/identity/identity_rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "identity", "outName": "emptyArrayTests/identity/identity_rank2", "varShapes":[[2,0]], "varTypes":["int32"], "varInit":["empty"]},
+        # {"opName": "identity", "outName": "emptyArrayTests/identity/identity_rank3", "varShapes":[[0,1,0]], "varTypes":["int64"], "varInit":["empty"]},
+
+        {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank2", "varShapes":[[2,0], [0,3]], "varTypes":["int32", "int32"], "varInit":["empty", "empty"]},
+        {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank3", "varShapes":[[0,1,0], [0,0,2]], "varTypes":["int64", "int64"], "varInit":["empty", "empty"]},
 
         # {"opName": "stack", "outName": "emptyArrayTests/stack/rank1_axis0", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
         # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape0-1_axis0", "varShapes":[[0,2], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
@@ -1313,6 +1224,138 @@ def test_mathtransform():
 
            ]
 
+    '''
+    Ops requiring tests: (note that some of these might not support 0 shapes)
+    *assign
+    assign_add, assign_sub
+    batch_to_space
+    boolean_mask
+    broadcast_dynamic_shape
+    broadcast_static_shape
+    broadcast_to
+    clip_by_average_norm
+    clip_by_norm
+    clip_by_value
+    dynamic_partition
+    dynamic_stitch
+    edit_distance
+    eye
+    floormod
+    floor_div
+    *gather
+    gather_nd
+    *identity_n
+    meshgrid
+    norm
+    no_op
+    *ones
+    *ones_like
+    one_hot
+    pad
+    parallel_stack
+    *range
+    *rank
+    *realdiv
+    *reshape
+    *reverse
+    reverse_sequence
+    roll
+    *scatter_* (add, div, max, min, mul, nd, nd_add, nd_sub, nd_update, sub, update)
+    sequence_mask
+    *shape
+    *shape_n
+    size
+    *slice
+    *split
+    *squeeze
+    *stack
+    *strided_slice
+    tile
+    *transpose
+    unique
+    *unstack
+    *zeros
+    *zeros_like
+    
+    tf.linalg:
+    det
+    diag
+    diag_part
+    inv
+    logdet
+    tensor_diag
+    tensor_diag_part
+    trace
+    
+    tf.math:
+    *abs
+    *accumulate_n
+    acos
+    acosh
+    *add
+    *add_n
+    angle
+    argmax
+    argmin
+    asin
+    asinh
+    atan
+    atan2
+    atanh
+    bincount
+    ceil
+    *cos
+    *cosh
+    *count_nonzero
+    *cumprod
+    *cumsum
+    *divide
+    *equal
+    erf
+    *exp
+    *floor
+    *floordiv
+    *greater
+    *greater_equal
+    *invert_permutation
+    in_top_k
+    l2_normalize
+    *less
+    *less_equal
+    *log
+    *logical_* (and, not, or, xor)
+    *log_sigmoid
+    *maximum
+    *minimum
+    *multiply
+    *negative
+    *not_equal
+    *pow
+    *reciprocal
+    *reduce_* (any, all, logsumexp, max, mean, min, prod, sum)
+    *round
+    *rsqrt
+    *scalar_mul
+    *segment_* (max, mean, min, prod, sum)
+    *sigmoid
+    *sign
+    *sin
+    *sinh
+    *softplus
+    *sqrt
+    *square
+    *squared_difference
+    *subtract
+    *tan
+    *tanh
+    *top_k
+    *truediv
+    *unsorted_segment_* (max, mean, min, prod, sqrt_n, sum)
+    xdivy
+    xlogy
+    *zero_fraction
+    zeta
+    '''
 
 
     for op in ops:
