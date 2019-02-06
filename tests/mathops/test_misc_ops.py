@@ -1159,6 +1159,145 @@ def test_mathtransform():
 
         #####################################################################################################################################
         # Empty array tests
+        '''
+        Ops requiring tests: (note that some of these might not support 0 shapes)
+        arg_max
+        arg_min
+        *assign
+        assign_add, assign_sub
+        batch_to_space
+        boolean_mask
+        broadcast_dynamic_shape
+        broadcast_static_shape
+        broadcast_to
+        clip_by_average_norm
+        clip_by_norm
+        clip_by_value
+        *concat
+        dynamic_partition
+        dynamic_stitch
+        edit_distance
+        *expand_dims
+        eye
+        *fill
+        floormod
+        floor_div
+        *gather
+        gather_nd
+        *identity
+        *identity_n
+        meshgrid
+        norm
+        no_op
+        *ones
+        *ones_like
+        one_hot
+        pad
+        parallel_stack
+        *range
+        *rank
+        *realdiv
+        *reshape
+        *reverse
+        reverse_sequence
+        roll
+        *scatter_* (add, div, max, min, mul, nd, nd_add, nd_sub, nd_update, sub, update)
+        sequence_mask
+        *shape
+        *shape_n
+        size
+        *slice
+        *split
+        *squeeze
+        *stack
+        *strided_slice
+        tile
+        *transpose
+        unique
+        *unstack
+        *zeros
+        *zeros_like
+        
+        tf.linalg:
+        det
+        diag
+        diag_part
+        inv
+        logdet
+        tensor_diag
+        tensor_diag_part
+        trace
+        
+        tf.math:
+        *abs
+        *accumulate_n
+        acos
+        acosh
+        *add
+        *add_n
+        angle
+        argmax
+        argmin
+        asin
+        asinh
+        atan
+        atan2
+        atanh
+        bincount
+        ceil
+        *cos
+        *cosh
+        *count_nonzero
+        *cumprod
+        *cumsum
+        *divide
+        *equal
+        erf
+        *exp
+        *floor
+        *floordiv
+        *greater
+        *greater_equal
+        *invert_permutation
+        in_top_k
+        l2_normalize
+        *less
+        *less_equal
+        *log
+        *logical_* (and, not, or, xor)
+        *log_sigmoid
+        *maximum
+        *minimum
+        *multiply
+        *negative
+        *not_equal
+        *pow
+        *reciprocal
+        *reduce_* (any, all, logsumexp, max, mean, min, prod, sum)
+        *round
+        *rsqrt
+        *scalar_mul
+        *segment_* (max, mean, min, prod, sum)
+        *sigmoid
+        *sign
+        *sin
+        *sinh
+        *softplus
+        *sqrt
+        *square
+        *squared_difference
+        *subtract
+        *tan
+        *tanh
+        *top_k
+        *truediv
+        *unsorted_segment_* (max, mean, min, prod, sqrt_n, sum)
+        xdivy
+        xlogy
+        *zero_fraction
+        zeta
+        
+        '''
 
         # {"opName": "stack", "outName": "emptyArrayTests/stack/rank1_axis0", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
         # {"opName": "stack", "outName": "emptyArrayTests/stack/rank2_shape0-1_axis0", "varShapes":[[0,2], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"], "axis":0},
