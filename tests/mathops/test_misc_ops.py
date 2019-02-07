@@ -1017,6 +1017,121 @@ def test_mathtransform():
         # {"opName":"lstmcell", "outName":"rnn/lstmcell/dynamic_b1_nIn5_nOut3_ts4_noPH_noClip_fB2_Softsign_withIS_float_noTM", "varShapes":[[1,4,5],[1,3],[1,3]], "varTypes":["float32","float32","float32"], "varInit":["uniform","uniform","uniform"],
         #     "static":False, "timeSteps":4, "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":2.0, "activation":"softsign", "dtype":tf.float32, "time_major":False},
 
+        #BasicRNNCell - Static
+        # {"opName":"basicrnncell", "outName":"rnn/basicrnncell/static_b1_nIn5_nOut3_ts4_tanh_noIS_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #      "num_units":3, "activation":"tanh", "dtype":tf.float32},
+        # {"opName":"basicrnncell", "outName":"rnn/basicrnncell/static_b1_nIn5_nOut3_ts4_sigmoid_withIS_double", "varShapes":[[1,4,5], [1,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "activation":"sigmoid", "dtype":tf.float64},
+
+        #BasicRNNCell - dynamic
+        # {"opName":"basicrnncell", "outName":"rnn/basicrnncell/dynamic_b1_nIn5_nOut3_ts4_relu_noIS_noTM_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #      "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":False},
+        # {"opName":"basicrnncell", "outName":"rnn/basicrnncell/dynamic_b1_nIn5_nOut3_ts4_relu_noIS_withTM_float", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":True},
+        # {"opName":"basicrnncell", "outName":"rnn/basicrnncell/dynamic_b1_nIn5_nOut3_ts4_sigmoid_withIS_noTM_double", "varShapes":[[1,4,5], [1,3]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"softsign", "dtype":tf.float64, "time_major":False},
+
+        #BasicLSTMCell - Static
+        # {"opName":"basiclstmcell", "outName":"rnn/basiclstmcell/static_b1_nIn5_nOut3_ts4_tanh_noIS_fb1_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #      "num_units":3, "activation":"tanh", "dtype":tf.float32, "forget_bias":1.0},
+        # {"opName":"basiclstmcell", "outName":"rnn/basiclstmcell/static_b1_nIn5_nOut3_ts4_sigmoid_withIS_fb2_double", "varShapes":[[1,4,5], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "activation":"sigmoid", "dtype":tf.float64, "forget_bias":2.0},
+
+        #BasicLSTMCell - dynamic
+        # {"opName":"basiclstmcell", "outName":"rnn/basiclstmcell/dynamic_b1_nIn5_nOut3_ts4_tanh_noIS_noTM_fb1_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #      "num_units":3, "activation":"tanh", "dtype":tf.float32, "time_major":False, "forget_bias":1.0},
+        # {"opName":"basiclstmcell", "outName":"rnn/basiclstmcell/dynamic_b1_nIn5_nOut3_ts4_tanh_noIS_withTM_fb1_float", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"tanh", "dtype":tf.float32, "time_major":True, "forget_bias":1.0},
+        # {"opName":"basiclstmcell", "outName":"rnn/basiclstmcell/dynamic_b1_nIn5_nOut3_ts4_softsign_withIS_noTM_fb2_double", "varShapes":[[1,4,5], [1,3], [1,3]], "varTypes":["float64", "float64", "float64"], "varInit":["uniform", "uniform", "uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"softsign", "dtype":tf.float64, "time_major":False, "forget_bias":2.0},
+
+        #GRUCell - Static
+        # {"opName":"grucell", "outName":"rnn/grucell/static_b1_nIn5_nOut3_ts4_tanh_noIS_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #      "num_units":3, "activation":"tanh", "dtype":tf.float32},
+        # {"opName":"grucell", "outName":"rnn/grucell/static_b1_nIn5_nOut3_ts4_softsign_withIS_double", "varShapes":[[1,4,5], [1,3]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "activation":"softsign", "dtype":tf.float64},
+
+        #GRUCell - dynamic
+        # {"opName":"grucell", "outName":"rnn/grucell/dynamic_b1_nIn5_nOut3_ts4_relu_noIS_noTM_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #      "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":False},
+        # {"opName":"grucell", "outName":"rnn/grucell/dynamic_b1_nIn5_nOut3_ts4_relu_noIS_withTM_float", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":True},
+        # {"opName":"grucell", "outName":"rnn/grucell/dynamic_b1_nIn5_nOut3_ts4_sigmoid_withIS_noTM_double", "varShapes":[[1,4,5], [1,3]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"softsign", "dtype":tf.float64, "time_major":False},
+
+        #GRUBlockCellV2 - Static
+        #Note: GRUBlockCellV2: "Only differs from GRUBlockCell by variable names." - GRUBlockCell is deprecated
+        # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/static_b1_n5-3_ts4_noIS_f32", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #      "num_units":3, "dtype":tf.float32},
+        # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/static_b1_n5-3_ts4_withIS_f32", "varShapes":[[1,4,5], [1,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "dtype":tf.float32},
+
+        #GRUBlockCellV2 - dynamic
+        # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/dynamic_b1_n5-3_ts4_noIS_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #      "num_units":3, "dtype":tf.float32, "time_major":False},
+        # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/dynamic_b1_n5-3_ts4_noIS_withTM", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "dtype":tf.float32, "time_major":True},
+
+        #LSTMBlockCell - Static. Note: float32 and float16 only
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/static_batch1_n5-3_tsLength4_noPH_noClip_fBias1_noIS", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "use_peepholes":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/static_batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[2,4,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":True, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/static_batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_noIS", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
+
+        #LSTMBlockCell - Dynamic. Supports time_major: if true, [max_time, batch_size, depth]; If false [batch_size, max_time, depth]
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/dynamic_b1_n5-3_ts4_noPH_noClip_fB1_noIS_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #     "num_units":3, "use_peepholes":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32, "time_major":False},
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/dynamic_b1_n5-3_ts4_noPH_noClip_fB1_noIS_withTM", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":1.0, "dtype":tf.float32, "time_major":False},
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/dynamic_b1_n5-3_ts4_noPH_clip-0.3-0.4_fB1_Tanh_noIS_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "use_peepholes":False, "cell_clip":0.3, "proj_clip":0.4, "forget_bias":1.0, "dtype":tf.float32, "time_major":False},
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/dynamic_b1_n5-3_ts4_noPH_noClip_fB2_withIS_noTM", "varShapes":[[1,4,5],[1,3],[1,3]], "varTypes":["float32","float32","float32"], "varInit":["uniform","uniform","uniform"],
+        #     "static":False, "timeSteps":4, "num_units":3, "use_peepholes":False, "cell_clip":None, "proj_clip":None, "forget_bias":2.0, "dtype":tf.float32, "time_major":False},
+
+        #SRUCell - Static
+        # {"opName":"srucell", "outName":"rnn/srucell/static_b1_n5-3_tanh_ts4_noIS_f32", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #      "num_units":3, "dtype":tf.float32, "activation":tf.nn.tanh},
+        # {"opName":"srucell", "outName":"rnn/srucell/static_b1_n5-3_relu_ts4_withIS_f32", "varShapes":[[1,4,5], [1,3]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "dtype":tf.float32, "activation":tf.nn.relu},
+
+        #SRUCell - dynamic
+        # {"opName":"srucell", "outName":"rnn/srucell/dynamic_b1_n5-3_tanh_ts4_noIS_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #      "num_units":3, "dtype":tf.float32, "time_major":False, "activation":tf.nn.tanh},
+        # {"opName":"srucell", "outName":"rnn/srucell/dynamic_b1_n5-3_elu_ts4_noIS_withTM", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "dtype":tf.float32, "time_major":True, "activation":tf.nn.elu},
+
+        #LSTMBlockFusedCell. Note: these don't use rnn static/dynamic, the whole RNN is one op. Also note they expect [time,batch,inSize] inputs only (not configurable)
+        # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_noClip_fBias1_noIS", "varShapes":[[5,1,4]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "use_peephole":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
+        # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[4,2,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peephole":True, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
+        # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_withIS", "varShapes":[[5,1,4], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peephole":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
+
+        # Bidirectional dynamic RNN + BasicRNNCell
+        # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/static_b1_nIn5_nOut3_ts4_tanh_noIS_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #      "num_units":3, "activation":"tanh", "dtype":tf.float32},
+        # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/static_b1_nIn5_nOut3_ts4_sigmoid_withIS_double", "varShapes":[[1,4,5], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "activation":"sigmoid", "dtype":tf.float64},
+
+        # Bidirectional static RNN + BasicRNNCell
+        # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/dynamic_b1_n5-3_ts4_relu_noIS_noTM_f32", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #      "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":False},
+        # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/dynamic_b1_n5-3_ts4_relu_noIS_withTM_f32", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"relu", "dtype":tf.float32, "time_major":True},
+        # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/dynamic_b1_n5-3_ts4_sig_withIS_noTM_f64", "varShapes":[[1,4,5], [1,3], [1,3]], "varTypes":["float64", "float64", "float64"], "varInit":["uniform", "uniform", "uniform"], "static":False, "timeSteps":4,
+        #  "num_units":3, "activation":"softsign", "dtype":tf.float64, "time_major":False},
+
+
+        #TimeReversedFusedRNN + LSTMBlockFusedCell. Note: these don't use rnn static/dynamic, the whole RNN is one op. Also note they expect [time,batch,inSize] inputs only (not configurable)
+        # {"opName":"timereversed_lstmblockfusedcell", "outName":"rnn/tr_lstmbfc/batch1_n5-3_tsLength4_noPH_noClip_fBias1_noIS", "varShapes":[[5,1,4]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #     "num_units":3, "use_peephole":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
+        # {"opName":"timereversed_lstmblockfusedcell", "outName":"rnn/tr_lstmbfc/batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[4,2,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peephole":True, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
+        # {"opName":"timereversed_lstmblockfusedcell", "outName":"rnn/tr_lstmbfc/batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_withIS", "varShapes":[[5,1,4], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peephole":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
            ]
 
 
