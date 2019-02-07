@@ -887,4 +887,57 @@ class OpCreator:
             concatStates = tf.concat(states, axis=0)
             return [concatOutputs, concatStates]
 
-    # def execute_
+    def execute_timereversed_lstmblockfusedcell(self):
+        initState = None
+        if(len(self.vars) > 1):
+            initState = [self.vars[1], self.vars[2]]
+            if(self.op["static"] == False):
+                initState = tf.nn.rnn_cell.LSTMStateTuple(initState[0], initState[1])
+
+        rnn = tf.contrib.rnn.LSTMBlockFusedCell(num_units=self.op["num_units"], forget_bias=self.op["forget_bias"], cell_clip=self.op["cell_clip"], use_peephole=self.op["use_peephole"])
+        rnn = tf.contrib.rnn.TimeReversedFusedRNN(rnn)
+        outputs, states = rnn(inputs=self.vars[0], initial_state=initState, dtype=self.op["dtype"])
+
+        concatStates = tf.concat(states, axis=0)
+        return [outputs, concatStates]
+
+
+    def execute_fused_adaptor_basicrnncell(self):
+        initState = None
+        if(len(self.vars) > 1):
+            initState = self.vars[1]
+
+        rnn = tf.nn.rnn_cell.BasicRNNCell(num_units=self.op["num_units"], activation=self.op["activation"])
+        rnn = tf.contrib.rnn.FusedRNNCellAdaptor(cell=rnn, use_dynamic_rnn=self.op["use_dynamic_rnn"])
+        outputs, states = rnn(inputs=self.vars[0], initial_state=initState, dtype=self.op["dtype"])
+
+        concatStates = tf.concat(states, axis=0)
+        return [outputs, concatStates]
+
+    def execute_stack_bidir_basicrnncell(self):
+        rnn1 = []
+        rnn2 = []
+        for i in range(self.op["size"]):
+            rnn1.append(tf.nn.rnn_cell.BasicRNNCell(num_units=self.op["num_units"], activation=self.op["activation"]))
+            rnn2.append(tf.nn.rnn_cell.BasicRNNCell(num_units=self.op["num_units"], activation=self.op["activation"]))
+
+        initState1 = None
+        initState2 = None
+        if(len(self.vars) > 1):
+            initState1 = []
+            initState2 = []
+            for i in range(self.op["size"]):
+                initState1.append(self.vars[1 + 2*i])
+                initState2.append(self.vars[2 + 2*i])
+
+        if(self.op["static"] == True):
+            x = tf.unstack(self.vars[0], num=self.op["timeSteps"], axis=1)
+            outputs, statesFwd, statesBwd = tf.contrib.rnn.stack_bidirectional_rnn(cells_fw=rnn1, cells_bw=rnn2, inputs=x, initial_states_fw=initState1, initial_states_bw=initState2, dtype=self.op["dtype"])
+        else:
+            outputs, statesFwd, statesBwd = tf.contrib.rnn.stack_bidirectional_dynamic_rnn(cells_fw=rnn1, cells_bw=rnn2, inputs=self.vars[0], initial_states_fw=initState1, initial_states_bw=initState2, dtype=self.op["dtype"], time_major=self.op["time_major"])
+
+        concatOutputs = tf.concat(outputs, axis=0)
+        concatStatesFwd = tf.concat(statesFwd, axis=0)
+        concatStatesBwd = tf.concat(statesBwd, axis=0)
+        return [concatOutputs, concatStatesFwd, concatStatesBwd]
+
