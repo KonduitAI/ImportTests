@@ -1033,3 +1033,138 @@ class OpCreator:
     def execute_unstack(self):
         self.vars[0] = tf.reshape(self.vars[0], self.op["varShapes"][0])
         return tf.unstack(value=self.vars[0], num=self.op["num"], axis=self.op["axis"])
+
+    def execute_abs(self):
+        return [tf.math.abs(self.vars[0])]
+
+    def execute_add(self):
+        return [tf.math.add(self.vars[0], self.vars[1])]
+
+    def execute_sub(self):
+        return [tf.math.subtract(self.vars[0], self.vars[1])]
+
+    def execute_mul(self):
+        return [tf.math.multiply(self.vars[0], self.vars[1])]
+
+    def execute_div(self):
+        return [tf.math.divide(self.vars[0], self.vars[1])]
+
+    def execute_add_n(self):
+        return [tf.math.add_n(self.vars)]
+
+    def execute_cos(self):
+        return [tf.math.cos(self.vars[0])]
+
+    def execute_sin(self):
+        return [tf.math.sin(self.vars[0])]
+
+    def execute_tan(self):
+        return [tf.math.tan(self.vars[0])]
+
+    def execute_cosh(self):
+        return [tf.math.cosh(self.vars[0])]
+
+    def execute_acos(self):
+        return [tf.math.acos(self.vars[0])]
+
+    def execute_acosh(self):
+        return [tf.math.acosh(self.vars[0])]
+
+    def execute_asin(self):
+        return [tf.math.asin(self.vars[0])]
+
+    def execute_asinh(self):
+        return [tf.math.asinh(self.vars[0])]
+
+    def execute_atan(self):
+        return [tf.math.atan(self.vars[0])]
+
+    def execute_atanh(self):
+        return [tf.math.atanh(self.vars[0])]
+
+    def execute_ceil(self):
+        return [tf.math.ceil(self.vars[0])]
+
+    def execute_count_nonzero(self):
+        return [tf.math.count_nonzero(self.vars[0], axis=self.op["axis"])]
+
+    def execute_count_zero(self):
+        return [tf.math.count_zero(self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+
+    def execute_cumprod(self):
+        return [tf.math.cumprod(self.vars[0], axis=self.op["axis"])]
+
+    def execute_cumsum(self):
+        return [tf.math.cumsum(self.vars[0], axis=self.op["axis"])]
+
+    def execute_equal(self):
+        return [tf.math.equal(self.vars[0], self.vars[1])]
+
+    def execute_exp(self):
+        return [tf.math.exp(self.vars[0])]
+
+    def execute_floor(self):
+        return [tf.math.floor(self.vars[0])]
+
+    def execute_floordiv(self):
+        return [tf.math.floordiv(self.vars[0], self.vars[1])]
+
+    def execute_log(self):
+        return [tf.math.log(self.vars[0])]
+
+    def execute_log_sigmoid(self):
+        return [tf.math.log_sigmoid(self.vars[0])]
+
+    def execute_negative(self):
+        return [tf.math.negative(self.vars[0])]
+
+    def execute_reciprocal(self):
+        return [tf.math.reciprocal(self.vars[0])]
+
+    def execute_sign(self):
+        return [tf.math.sign(self.vars[0])]
+
+    def execute_softplus(self):
+        return [tf.math.softplus(self.vars[0])]
+
+    def execute_sqrt(self):
+        return [tf.math.sqrt(self.vars[0])]
+
+    def execute_square(self):
+        return [tf.math.square(self.vars[0])]
+
+    def execute_rsqrt(self):
+        return [tf.math.rsqrt(self.vars[0])]
+
+    def execute_greater(self):
+        return [tf.math.greater(self.vars[0], self.vars[1])]
+
+    def execute_greater_equal(self):
+        return [tf.math.greater_equal(self.vars[0], self.vars[1])]
+
+    def execute_less(self):
+        return [tf.math.less(self.vars[0], self.vars[1])]
+
+    def execute_less_equal(self):
+        return [tf.math.less_equal(self.vars[0], self.vars[1])]
+
+    def execute_not_equal(self):
+        return [tf.math.not_equal(self.vars[0], self.vars[1])]
+
+    def execute_truediv(self):
+        return [tf.math.truediv(self.vars[0], self.vars[1])]
+
+    def execute_zero_fraction(self):
+        return [tf.math.zero_fraction(self.vars[0])]
+
+    def execute_round(self):
+        return [tf.math.round(self.vars[0])]
+
+    def execute_maximum(self):
+        return [tf.math.maximum(self.vars[0], self.vars[1])]
+
+    def execute_minimum(self):
+        return [tf.math.minimum(self.vars[0], self.vars[1])]
+
+    def execute_pow(self):
+        return [tf.math.pow(self.vars[0], self.vars[1])]

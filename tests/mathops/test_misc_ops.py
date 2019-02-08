@@ -1325,6 +1325,140 @@ def test_mathtransform():
         # {"opName": "cast", "outName": "emptyArrayTests/cast/rank2_shape2-0", "varShapes":[[2,0]], "varTypes":["float32"], "varInit":["empty", "empty"], "dtype":tf.int32},
         # {"opName": "cast", "outName": "emptyArrayTests/cast/rank1_shape0", "varShapes":[[0]], "varTypes":["int32"], "varInit":["empty", "empty"], "dtype":tf.int64},
 
+
+        # {"opName": "abs", "outName": "emptyArrayTests/abs/rank1", "varShapes":[[0]], "varTypes":["int32"], "varInit":["empty"], "dtype":tf.int32},
+        # {"opName": "abs", "outName": "emptyArrayTests/abs/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "dtype":tf.float64},
+        #
+        # {"opName": "accumulate_n", "outName": "emptyArrayTests/accumulate_n/rank1_1", "varShapes":[[0]], "varTypes":["int64"], "varInit":["empty"], "dtype":tf.int64},
+        # {"opName": "accumulate_n", "outName": "emptyArrayTests/accumulate_n/rank1_3", "varShapes":[[0], [0], [0]], "varTypes":["int64", "int64", "int64"], "varInit":["empty","empty","empty"], "dtype":tf.int64},
+        # {"opName": "accumulate_n", "outName": "emptyArrayTests/accumulate_n/rank2_1", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "dtype":tf.float64},
+        # {"opName": "accumulate_n", "outName": "emptyArrayTests/accumulate_n/rank2_2", "varShapes":[[0,2], [0,2], [0,2]], "varTypes":["float64", "float64", "float64"], "varInit":["empty", "empty", "empty"], "dtype":tf.float64},
+
+        # {"opName": "add", "outName": "emptyArrayTests/add/rank1", "varShapes":[[0], [0]], "varTypes":["int64", "int64"], "varInit":["empty","empty"], "dtype":tf.int64},
+        # {"opName": "add", "outName": "emptyArrayTests/add/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
+        # {"opName": "sub", "outName": "emptyArrayTests/sub/rank1", "varShapes":[[0], [0]], "varTypes":["int64", "int64"], "varInit":["empty","empty"], "dtype":tf.int64},
+        # {"opName": "sub", "outName": "emptyArrayTests/sub/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
+        # {"opName": "mul", "outName": "emptyArrayTests/mul/rank1", "varShapes":[[0], [0]], "varTypes":["int64", "int64"], "varInit":["empty","empty"], "dtype":tf.int64},
+        # {"opName": "mul", "outName": "emptyArrayTests/mul/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
+        # TODO: Div just gives "TypeError: unsupported operand type(s) for /: 'list' and 'list'" event through other ops work :/
+        # {"opName": "div", "outName": "emptyArrayTests/div/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty","empty"], "dtype":tf.float32},
+        # {"opName": "div", "outName": "emptyArrayTests/div/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
+
+        # {"opName": "add_n", "outName": "emptyArrayTests/add_n/rank1", "varShapes":[[0], [0]], "varTypes":["int64", "int64"], "varInit":["empty","empty"], "dtype":tf.int64},
+        # {"opName": "add_n", "outName": "emptyArrayTests/add_n/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
+
+        # {"opName": "cos", "outName": "emptyArrayTests/cos/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "cos", "outName": "emptyArrayTests/cos/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "sin", "outName": "emptyArrayTests/sin/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "sin", "outName": "emptyArrayTests/sin/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "tan", "outName": "emptyArrayTests/tan/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "tan", "outName": "emptyArrayTests/tan/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "cosh", "outName": "emptyArrayTests/cosh/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "cosh", "outName": "emptyArrayTests/cosh/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "acos", "outName": "emptyArrayTests/acos/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "acos", "outName": "emptyArrayTests/acos/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "acosh", "outName": "emptyArrayTests/acosh/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "acosh", "outName": "emptyArrayTests/acosh/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "asin", "outName": "emptyArrayTests/asin/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "asin", "outName": "emptyArrayTests/asin/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "asinh", "outName": "emptyArrayTests/asinh/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "asinh", "outName": "emptyArrayTests/asinh/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "atan", "outName": "emptyArrayTests/atan/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "atan", "outName": "emptyArrayTests/atan/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "atanh", "outName": "emptyArrayTests/atanh/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "atanh", "outName": "emptyArrayTests/atanh/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "ceil", "outName": "emptyArrayTests/ceil/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "ceil", "outName": "emptyArrayTests/ceil/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+
+        # {"opName": "count_nonzero", "outName": "emptyArrayTests/count_nonzero/rank1_axisNone", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "axis":None, "keep_dims":False},
+        # {"opName": "count_nonzero", "outName": "emptyArrayTests/count_nonzero/rank2_axis0", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":0, "keep_dims":False},
+        # {"opName": "count_nonzero", "outName": "emptyArrayTests/count_nonzero/rank2_axis1", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":1, "keep_dims":False},
+        # {"opName": "count_nonzero", "outName": "emptyArrayTests/count_nonzero/rank2_axis1_keep", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":1, "keep_dims":True},
+
+        # {"opName": "cumprod", "outName": "emptyArrayTests/cumprod/rank1_axis0", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "axis":0},
+        # {"opName": "cumprod", "outName": "emptyArrayTests/cumprod/rank2_axis0", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":0},
+        # {"opName": "cumprod", "outName": "emptyArrayTests/cumprod/rank2_axis1", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":1},
+        # {"opName": "cumsum", "outName": "emptyArrayTests/cumsum/rank1_axis0", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"], "axis":0},
+        # {"opName": "cumsum", "outName": "emptyArrayTests/cumsum/rank2_axis0", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":0},
+        # {"opName": "cumsum", "outName": "emptyArrayTests/cumsum/rank2_axis1", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"], "axis":1},
+
+        # {"opName": "equal", "outName": "emptyArrayTests/equal/rank1", "varShapes":[[0], [0]], "varTypes":["int64", "int64"], "varInit":["empty","empty"], "dtype":tf.int64},
+        # {"opName": "equal", "outName": "emptyArrayTests/equal/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "equal", "outName": "emptyArrayTests/equal/rank2bc", "varShapes":[[1,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+
+        # {"opName": "exp", "outName": "emptyArrayTests/exp/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "exp", "outName": "emptyArrayTests/exp/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "floor", "outName": "emptyArrayTests/floor/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "floor", "outName": "emptyArrayTests/floor/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "floordiv", "outName": "emptyArrayTests/floordiv/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "floordiv", "outName": "emptyArrayTests/floordiv/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "floordiv", "outName": "emptyArrayTests/floordiv/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "floordiv", "outName": "emptyArrayTests/floordiv/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+
+        # {"opName": "log", "outName": "emptyArrayTests/log/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "log", "outName": "emptyArrayTests/log/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "log_sigmoid", "outName": "emptyArrayTests/log_sigmoid/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "log_sigmoid", "outName": "emptyArrayTests/log_sigmoid/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "negative", "outName": "emptyArrayTests/negative/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "negative", "outName": "emptyArrayTests/negative/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "reciprocal", "outName": "emptyArrayTests/reciprocal/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "reciprocal", "outName": "emptyArrayTests/reciprocal/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "sign", "outName": "emptyArrayTests/sign/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "sign", "outName": "emptyArrayTests/sign/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "softplus", "outName": "emptyArrayTests/softplus/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "softplus", "outName": "emptyArrayTests/softplus/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "sqrt", "outName": "emptyArrayTests/sqrt/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "sqrt", "outName": "emptyArrayTests/sqrt/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "square", "outName": "emptyArrayTests/square/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "square", "outName": "emptyArrayTests/square/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "rsqrt", "outName": "emptyArrayTests/rsqrt/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "rsqrt", "outName": "emptyArrayTests/rsqrt/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+        # {"opName": "round", "outName": "emptyArrayTests/round/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "round", "outName": "emptyArrayTests/round/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+
+        # {"opName": "greater", "outName": "emptyArrayTests/greater/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "greater", "outName": "emptyArrayTests/greater/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "greater", "outName": "emptyArrayTests/greater/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "greater", "outName": "emptyArrayTests/greater/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "greater_equal", "outName": "emptyArrayTests/greater_equal/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "greater_equal", "outName": "emptyArrayTests/greater_equal/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "greater_equal", "outName": "emptyArrayTests/greater_equal/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "greater_equal", "outName": "emptyArrayTests/greater_equal/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "less", "outName": "emptyArrayTests/less/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "less", "outName": "emptyArrayTests/less/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "less", "outName": "emptyArrayTests/less/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "less", "outName": "emptyArrayTests/less/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "less_equal", "outName": "emptyArrayTests/less_equal/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "less_equal", "outName": "emptyArrayTests/less_equal/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "less_equal", "outName": "emptyArrayTests/less_equal/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "less_equal", "outName": "emptyArrayTests/less_equal/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "not_equal", "outName": "emptyArrayTests/not_equal/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "not_equal", "outName": "emptyArrayTests/not_equal/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "not_equal", "outName": "emptyArrayTests/not_equal/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "not_equal", "outName": "emptyArrayTests/not_equal/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+
+        # {"opName": "truediv", "outName": "emptyArrayTests/truediv/rank1", "varShapes":[[0], [0]], "varTypes":["int32", "int32"], "varInit":["empty", "empty"]},
+        # {"opName": "truediv", "outName": "emptyArrayTests/truediv/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["int64", "int64"], "varInit":["empty", "empty"]},
+        # {"opName": "truediv", "outName": "emptyArrayTests/truediv/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "truediv", "outName": "emptyArrayTests/truediv/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["int32", "int32"], "varInit":["empty", "empty"]},
+
+        # {"opName": "zero_fraction", "outName": "emptyArrayTests/zero_fraction/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
+        # {"opName": "zero_fraction", "outName": "emptyArrayTests/zero_fraction/rank2", "varShapes":[[0,2]], "varTypes":["float64"], "varInit":["empty"]},
+
+        # {"opName": "maximum", "outName": "emptyArrayTests/maximum/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "maximum", "outName": "emptyArrayTests/maximum/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "maximum", "outName": "emptyArrayTests/maximum/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "maximum", "outName": "emptyArrayTests/maximum/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+
+        # {"opName": "pow", "outName": "emptyArrayTests/pow/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "pow", "outName": "emptyArrayTests/pow/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
+        # {"opName": "pow", "outName": "emptyArrayTests/pow/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
+        # {"opName": "pow", "outName": "emptyArrayTests/pow/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+
            ]
 
     '''
@@ -1344,7 +1478,6 @@ def test_mathtransform():
     edit_distance
     eye
     floormod
-    floor_div
     gather_nd
     meshgrid
     norm
@@ -1354,7 +1487,7 @@ def test_mathtransform():
     parallel_stack
     reverse_sequence
     roll
-    *scatter_* (add, div, max, min, mul, nd, nd_add, nd_sub, nd_update)
+    *scatter_* (nd, nd_add, nd_sub, nd_update)
     sequence_mask
     *split (doesn't support num_or_size_splits=0?)
     tile
@@ -1371,72 +1504,25 @@ def test_mathtransform():
     trace
     
     tf.math:
-    *abs
-    *accumulate_n
-    acos
-    acosh
-    *add
-    *add_n
     angle
     argmax
     argmin
-    asin
-    asinh
-    atan
     atan2
-    atanh
     bincount
-    ceil
-    *cos
-    *cosh
-    *count_nonzero
-    *cumprod
-    *cumsum
-    *divide
-    *equal
     erf
-    *exp
-    *floor
-    *floordiv
-    *greater
-    *greater_equal
     *invert_permutation
     in_top_k
     l2_normalize
-    *less
-    *less_equal
-    *log
     *logical_* (and, not, or, xor)
-    *log_sigmoid
-    *maximum
-    *minimum
-    *multiply
-    *negative
-    *not_equal
     *pow
-    *reciprocal
     *reduce_* (any, all, logsumexp, max, mean, min, prod, sum)
-    *round
-    *rsqrt
     *scalar_mul
     *segment_* (max, mean, min, prod, sum)
     *sigmoid
-    *sign
-    *sin
-    *sinh
-    *softplus
-    *sqrt
-    *square
-    *squared_difference
-    *subtract
-    *tan
-    *tanh
     *top_k
-    *truediv
     *unsorted_segment_* (max, mean, min, prod, sqrt_n, sum)
     xdivy
     xlogy
-    *zero_fraction
     zeta
     '''
 
