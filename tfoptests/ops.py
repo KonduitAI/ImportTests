@@ -24,7 +24,7 @@ class OpCreator:
             return method()
 
     def execute_reduce_sum(self):
-        return [tf.reduce_sum(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_sum" + str(self.node_num))]
+        return [tf.reduce_sum(self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_segment_max(self):
         return [tf.segment_max(data=self.vars[0], segment_ids=self.vars[1])]
@@ -459,16 +459,28 @@ class OpCreator:
         return tf.split(value=self.vars[0], num_or_size_splits=num_or_size_splits, axis=self.op["axis"])
 
     def execute_reduce_logsumexp(self):
-        return [tf.reduce_logsumexp(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+        return [tf.reduce_logsumexp(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_nth_element(self):
         return [tf.contrib.nn.nth_element(input=self.vars[0], n=self.vars[1], reverse=self.op["reverse"])]
 
     def execute_reduce_any(self):
-        return [tf.reduce_any(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+        return [tf.reduce_any(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_reduce_all(self):
-        return [tf.reduce_all(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+        return [tf.reduce_all(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_max(self):
+        return [tf.reduce_max(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_min(self):
+        return [tf.reduce_min(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_mean(self):
+        return [tf.reduce_mean(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_prod(self):
+        return [tf.reduce_prod(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_boolean_mask(self):
         return [tf.boolean_mask(tensor=self.vars[0], mask=self.vars[1])]
@@ -1115,6 +1127,9 @@ class OpCreator:
     def execute_log_sigmoid(self):
         return [tf.math.log_sigmoid(self.vars[0])]
 
+    def execute_sigmoid(self):
+        return [tf.math.sigmoid(self.vars[0])]
+
     def execute_negative(self):
         return [tf.math.negative(self.vars[0])]
 
@@ -1168,3 +1183,19 @@ class OpCreator:
 
     def execute_pow(self):
         return [tf.math.pow(self.vars[0], self.vars[1])]
+
+    def execute_logical_and(self):
+        return [tf.math.logical_and(self.vars[0], self.vars[1])]
+
+    def execute_logical_or(self):
+        return [tf.math.logical_or(self.vars[0], self.vars[1])]
+
+    def execute_logical_xor(self):
+        return [tf.math.logical_xor(self.vars[0], self.vars[1])]
+
+    def execute_logical_not(self):
+        return [tf.math.logical_not(self.vars[0])]
+
+    def execute_diag_part(self):
+        return [tf.diag_part(self.vars[0])]
+
