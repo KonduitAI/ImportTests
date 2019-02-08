@@ -24,7 +24,7 @@ class OpCreator:
             return method()
 
     def execute_reduce_sum(self):
-        return [tf.reduce_sum(self.vars[0], axis=self.axis, keepdims=self.extra.get("keepdims", False), name="reduce_sum" + str(self.node_num))]
+        return [tf.reduce_sum(self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_segment_max(self):
         return [tf.segment_max(data=self.vars[0], segment_ids=self.vars[1])]
@@ -107,6 +107,9 @@ class OpCreator:
 
     def execute_matrix_set_diag(self):
         return [tf.matrix_set_diag(input=self.vars[0], diagonal=self.vars[1])]
+
+    def execute_identity(self):
+        return [tf.identity(self.vars[0])]
 
     def execute_identity_n(self):
         return tf.identity_n(self.vars)
@@ -426,6 +429,27 @@ class OpCreator:
         intermediate = tf.assign(intermediate, self.vars[0])
         return [tf.scatter_nd_update(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
 
+    def execute_scatter_add(self):
+        return [tf.scatter_add(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_div(self):
+        return [tf.scatter_div(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_max(self):
+        return [tf.scatter_max(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_min(self):
+        return [tf.scatter_min(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_mul(self):
+        return [tf.scatter_mul(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_sub(self):
+        return [tf.scatter_sub(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
+    def execute_scatter_update(self):
+        return [tf.scatter_update(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]
+
     def execute_sufficient_statistics(self):
         temp = tf.add(self.vars[0], 1.0)
         return tf.nn.sufficient_statistics(x=self.vars[0], axes=self.op["axes"], shift=self.op["shift"], keep_dims=self.op["keep_dims"])
@@ -435,16 +459,28 @@ class OpCreator:
         return tf.split(value=self.vars[0], num_or_size_splits=num_or_size_splits, axis=self.op["axis"])
 
     def execute_reduce_logsumexp(self):
-        return [tf.reduce_logsumexp(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+        return [tf.reduce_logsumexp(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_nth_element(self):
         return [tf.contrib.nn.nth_element(input=self.vars[0], n=self.vars[1], reverse=self.op["reverse"])]
 
     def execute_reduce_any(self):
-        return [tf.reduce_any(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+        return [tf.reduce_any(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_reduce_all(self):
-        return [tf.reduce_all(input_tensor=self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+        return [tf.reduce_all(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_max(self):
+        return [tf.reduce_max(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_min(self):
+        return [tf.reduce_min(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_mean(self):
+        return [tf.reduce_mean(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
+
+    def execute_reduce_prod(self):
+        return [tf.reduce_prod(input_tensor=self.vars[0], axis=self.op["axis"], keepdims=self.op["keepdims"])]
 
     def execute_boolean_mask(self):
         return [tf.boolean_mask(tensor=self.vars[0], mask=self.vars[1])]
@@ -940,4 +976,226 @@ class OpCreator:
         concatStatesFwd = tf.concat(statesFwd, axis=0)
         concatStatesBwd = tf.concat(statesBwd, axis=0)
         return [concatOutputs, concatStatesFwd, concatStatesBwd]
+
+    def execute_cast(self):
+        out = [tf.cast(self.vars[0], dtype=self.op["dtype"])]
+        return out
+
+    def execute_reshape(self):
+        return [tf.reshape(self.vars[0], shape=self.op["shape"])]
+
+    def execute_arg_max(self):
+        return [tf.arg_max(input=self.vars[0], dimension=self.op["dimension"])]
+
+    def execute_arg_min(self):
+        return [tf.arg_min(input=self.vars[0], dimension=self.op["dimension"])]
+
+    def execute_assign(self):
+        return [tf.assign(ref=self.vars[0], value=self.vars[1])]
+
+    def execute_concat(self):
+        return [tf.concat(values=self.vars, axis=self.op["axis"])]
+
+    def execute_expand_dims(self):
+        return [tf.expand_dims(input=self.vars[0], axis=self.op["axis"])]
+
+    def execute_fill(self):
+        return [tf.fill(dims=self.vars[0], value=self.vars[1])]
+
+    def execute_gather(self):
+        return [tf.gather(params=self.vars[0], indices=self.vars[1], axis=self.op["axis"])]
+
+    def execute_ones(self):
+        return [tf.ones(shape=self.vars[0], dtype=self.op["dtype"])]
+
+    def execute_ones_like(self):
+        return [tf.ones_like(tensor=self.vars[0])]
+
+    def execute_zeros(self):
+        return [tf.zeros(shape=self.vars[0], dtype=self.op["dtype"])]
+
+    def execute_zeros_like(self):
+        return [tf.zeros_like(tensor=self.vars[0])]
+
+    def execute_range(self):
+        return [tf.range(start=self.vars[0], limit=self.vars[1], delta=self.vars[2])]
+
+    def execute_rank(self):
+        return [tf.rank(self.vars[0])]
+
+    def execute_realdiv(self):
+        return [tf.realdiv(self.vars[0], self.vars[1])]
+
+    def execute_reverse(self):
+        return [tf.reverse(tensor=self.vars[0], axis=self.op["axis"])]
+
+    def execute_slice(self):
+        return [tf.slice(self.vars[0], begin=self.vars[1], size=self.vars[1])]
+
+    def execute_squeeze(self):
+        print("Squeeze shape: ", self.vars[0])
+        return [tf.squeeze(input=self.vars[0], axis=self.op["axis"])]
+
+    def execute_strided_slice(self):
+        return [tf.strided_slice(self.vars[0], begin=self.op["begin"], end=self.op["end"], strides=self.op["strides"], begin_mask=self.op["begin_mask"], end_mask=self.op["end_mask"])]
+
+    def execute_transpose(self):
+        return [tf.transpose(self.vars[0], perm=self.op["perm"])]
+
+    def execute_unstack(self):
+        self.vars[0] = tf.reshape(self.vars[0], self.op["varShapes"][0])
+        return tf.unstack(value=self.vars[0], num=self.op["num"], axis=self.op["axis"])
+
+    def execute_abs(self):
+        return [tf.math.abs(self.vars[0])]
+
+    def execute_add(self):
+        return [tf.math.add(self.vars[0], self.vars[1])]
+
+    def execute_sub(self):
+        return [tf.math.subtract(self.vars[0], self.vars[1])]
+
+    def execute_mul(self):
+        return [tf.math.multiply(self.vars[0], self.vars[1])]
+
+    def execute_div(self):
+        return [tf.math.divide(self.vars[0], self.vars[1])]
+
+    def execute_add_n(self):
+        return [tf.math.add_n(self.vars)]
+
+    def execute_cos(self):
+        return [tf.math.cos(self.vars[0])]
+
+    def execute_sin(self):
+        return [tf.math.sin(self.vars[0])]
+
+    def execute_tan(self):
+        return [tf.math.tan(self.vars[0])]
+
+    def execute_cosh(self):
+        return [tf.math.cosh(self.vars[0])]
+
+    def execute_acos(self):
+        return [tf.math.acos(self.vars[0])]
+
+    def execute_acosh(self):
+        return [tf.math.acosh(self.vars[0])]
+
+    def execute_asin(self):
+        return [tf.math.asin(self.vars[0])]
+
+    def execute_asinh(self):
+        return [tf.math.asinh(self.vars[0])]
+
+    def execute_atan(self):
+        return [tf.math.atan(self.vars[0])]
+
+    def execute_atanh(self):
+        return [tf.math.atanh(self.vars[0])]
+
+    def execute_ceil(self):
+        return [tf.math.ceil(self.vars[0])]
+
+    def execute_count_nonzero(self):
+        return [tf.math.count_nonzero(self.vars[0], axis=self.op["axis"])]
+
+    def execute_count_zero(self):
+        return [tf.math.count_zero(self.vars[0], axis=self.op["axis"], keep_dims=self.op["keep_dims"])]
+
+    def execute_cumprod(self):
+        return [tf.math.cumprod(self.vars[0], axis=self.op["axis"])]
+
+    def execute_cumsum(self):
+        return [tf.math.cumsum(self.vars[0], axis=self.op["axis"])]
+
+    def execute_equal(self):
+        return [tf.math.equal(self.vars[0], self.vars[1])]
+
+    def execute_exp(self):
+        return [tf.math.exp(self.vars[0])]
+
+    def execute_floor(self):
+        return [tf.math.floor(self.vars[0])]
+
+    def execute_floordiv(self):
+        return [tf.math.floordiv(self.vars[0], self.vars[1])]
+
+    def execute_log(self):
+        return [tf.math.log(self.vars[0])]
+
+    def execute_log_sigmoid(self):
+        return [tf.math.log_sigmoid(self.vars[0])]
+
+    def execute_sigmoid(self):
+        return [tf.math.sigmoid(self.vars[0])]
+
+    def execute_negative(self):
+        return [tf.math.negative(self.vars[0])]
+
+    def execute_reciprocal(self):
+        return [tf.math.reciprocal(self.vars[0])]
+
+    def execute_sign(self):
+        return [tf.math.sign(self.vars[0])]
+
+    def execute_softplus(self):
+        return [tf.math.softplus(self.vars[0])]
+
+    def execute_sqrt(self):
+        return [tf.math.sqrt(self.vars[0])]
+
+    def execute_square(self):
+        return [tf.math.square(self.vars[0])]
+
+    def execute_rsqrt(self):
+        return [tf.math.rsqrt(self.vars[0])]
+
+    def execute_greater(self):
+        return [tf.math.greater(self.vars[0], self.vars[1])]
+
+    def execute_greater_equal(self):
+        return [tf.math.greater_equal(self.vars[0], self.vars[1])]
+
+    def execute_less(self):
+        return [tf.math.less(self.vars[0], self.vars[1])]
+
+    def execute_less_equal(self):
+        return [tf.math.less_equal(self.vars[0], self.vars[1])]
+
+    def execute_not_equal(self):
+        return [tf.math.not_equal(self.vars[0], self.vars[1])]
+
+    def execute_truediv(self):
+        return [tf.math.truediv(self.vars[0], self.vars[1])]
+
+    def execute_zero_fraction(self):
+        return [tf.math.zero_fraction(self.vars[0])]
+
+    def execute_round(self):
+        return [tf.math.round(self.vars[0])]
+
+    def execute_maximum(self):
+        return [tf.math.maximum(self.vars[0], self.vars[1])]
+
+    def execute_minimum(self):
+        return [tf.math.minimum(self.vars[0], self.vars[1])]
+
+    def execute_pow(self):
+        return [tf.math.pow(self.vars[0], self.vars[1])]
+
+    def execute_logical_and(self):
+        return [tf.math.logical_and(self.vars[0], self.vars[1])]
+
+    def execute_logical_or(self):
+        return [tf.math.logical_or(self.vars[0], self.vars[1])]
+
+    def execute_logical_xor(self):
+        return [tf.math.logical_xor(self.vars[0], self.vars[1])]
+
+    def execute_logical_not(self):
+        return [tf.math.logical_not(self.vars[0])]
+
+    def execute_diag_part(self):
+        return [tf.diag_part(self.vars[0])]
 
