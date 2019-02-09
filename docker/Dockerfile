@@ -7,5 +7,5 @@ ENV DL4J_TEST_RESOURCES=/dl4j-test-resources
 #docker run -v C:\DL4J\Git\TFOpTests:/TFOpTests -v C:/DL4J/Git/dl4j-test-resources:/dl4j-test-resources -v C:/Temp/TF_Graphs/:/TF_Graphs/ -it tfops:latest
 #cd TFOpTests
 #python setup.py develop
-#python tests/mathops/test_misc_ops.py
+#python tests/test_ops.py
 #python model_zoo/util/zoo_evaluation.py
