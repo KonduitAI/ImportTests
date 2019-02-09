@@ -261,14 +261,14 @@ if __name__ == '__main__':
     # "Some ResNet models represent 1000 categories, and some represent all 1001, with the 0th category being "background". The models provided are of the latter type."
     # Runs "imagenet_preprocessing" on the images - https://github.com/tensorflow/models/blob/master/official/resnet/imagenet_preprocessing.py
     # Which seems to be merely scaling, no normalization
-    z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
-    z.graphFile("/TF_Graphs/resnetv2_imagenet_frozen_graph.pb") \
-        .inputName("input_tensor:0") \
-        .outputNames(["softmax_tensor:0"]) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(224, 224, 3) \
-        .preprocessingType("resize_only")
-    z.write()
+    # z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
+    # z.graphFile("/TF_Graphs/resnetv2_imagenet_frozen_graph.pb") \
+    #     .inputName("input_tensor:0") \
+    #     .outputNames(["softmax_tensor:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(224, 224, 3) \
+    #     .preprocessingType("resize_only")
+    # z.write()
 
 
     # # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz
