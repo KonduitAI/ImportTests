@@ -58,11 +58,10 @@ class Tokenizer:
                 #Load network from original model:
                 # graph = Tokenizer.load_graph("/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/bert_model.ckpt")
 
-                print(graph)
-                # tf.global_variables_initializer()
+                # print(graph)
 
-                for op in graph.get_operations():
-                    print(op.name)
+                # for op in graph.get_operations():
+                #     print(op.name)
 
                 # TODO - not 100% sure on the order here... the BERT code doesn't contain the text "Placeholder" anywhere to help distinguish
                 # All 6 possible orders give exactly the same zeros output...

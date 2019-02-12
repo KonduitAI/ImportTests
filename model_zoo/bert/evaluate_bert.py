@@ -10,7 +10,7 @@ class Tokenizer:
         bert_tokens = []
         bert_tokens.append("[CLS]")
         out = tokenizer.tokenize(str)
-        print(out)
+        # print(out)
         for t in out:
             bert_tokens.append(t)
         bert_tokens.append("[SEP]")
@@ -86,11 +86,11 @@ if __name__ == '__main__':
     #Load network from original model:
     # graph = Tokenizer.load_graph("/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/bert_model.ckpt")
 
-    print(graph)
+    # print(graph)
     # tf.global_variables_initializer()
 
-    for op in graph.get_operations():
-        print(op.name)
+    # for op in graph.get_operations():
+    #     print(op.name)
 
     # TODO - not 100% sure on the order here... the BERT code doesn't contain the text "Placeholder" anywhere...
     feed_dict = {
@@ -103,9 +103,7 @@ if __name__ == '__main__':
     # outputNames = ["bert/encoder/Reshape_13", "bert/pooler/dense/Tanh", "bert/encoder/layer_0/output/LayerNorm/batchnorm/add_1", "bert/embeddings/add"]
     outputNames = ["bert/pooler/dense/Tanh"]
 
-    # with tf.Session(graph=graph) as sess:
-        #sess.run(tf.global_variables_initializer()) #For non-frozen model: "failed to get matching files" :/ But without it: "Attempting to use uninitialized value"
-        # outputs = sess.run(outputNames,feed_dict=feed_dict)
-        # print("OUTPUTS: ", outputs)
-    outputs = tf.get_default_session().run(outputNames,feed_dict=feed_dict)
-    print("OUTPUTS: ", outputs)
+    with tf.Session(graph=graph) as sess:
+        sess.run(tf.global_variables_initializer()) #For non-frozen model: "failed to get matching files" :/ But without it: "Attempting to use uninitialized value"
+        outputs = sess.run(outputNames,feed_dict=feed_dict)
+        print("OUTPUTS: ", outputs)
