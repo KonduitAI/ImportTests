@@ -1067,12 +1067,16 @@ def test_mathtransform():
         #     "num_units":3, "dtype":tf.float32},
 
         #GRUBlockCellV2 - dynamic
+        # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/dynamic_b1_n3-2_ts1_noIS_noTM", "varShapes":[[1,1,3]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":1,
+        #      "num_units":2, "dtype":tf.float32, "time_major":False},
         # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/dynamic_b1_n5-3_ts4_noIS_noTM", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
         #      "num_units":3, "dtype":tf.float32, "time_major":False},
         # {"opName":"grublockcellv2", "outName":"rnn/grublockcellv2/dynamic_b1_n5-3_ts4_noIS_withTM", "varShapes":[[4,1,5]], "varTypes":["float32"], "varInit":["uniform"], "static":False, "timeSteps":4,
         #  "num_units":3, "dtype":tf.float32, "time_major":True},
 
         #LSTMBlockCell - Static. Note: float32 and float16 only
+        # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/static_batch1_n3-2_tsLength1_noPH_noClip_fBias1_noIS", "varShapes":[[1,1,3]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":1,
+        #      "num_units":2, "use_peepholes":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
         # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/static_batch1_n5-3_tsLength4_noPH_noClip_fBias1_noIS", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
         #     "num_units":3, "use_peepholes":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
         # {"opName":"lstmblockcell", "outName":"rnn/lstmblockcell/static_batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[2,4,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
@@ -1103,6 +1107,8 @@ def test_mathtransform():
         #  "num_units":3, "dtype":tf.float32, "time_major":True, "activation":tf.nn.elu},
 
         #LSTMBlockFusedCell. Note: these don't use rnn static/dynamic, the whole RNN is one op. Also note they expect [time,batch,inSize] inputs only (not configurable)
+        # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n3-2_tsLength1_noPH_noClip_fBias1_noIS", "varShapes":[[3,1,1]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":1,
+        #     "num_units":2, "use_peephole":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
         # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_noClip_fBias1_noIS", "varShapes":[[5,1,4]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
         #     "num_units":3, "use_peephole":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
         # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[4,2,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
