@@ -138,7 +138,7 @@ INFO:tensorflow:label: 0 (id = 0)
 
 ## Step 5: Freeze Graph
 
-
+After training and inference has been completed, run ```model_zoo/```
 
 
 ## Step 6: Import Graph
