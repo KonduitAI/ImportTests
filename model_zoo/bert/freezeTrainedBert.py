@@ -18,7 +18,7 @@ def load_graph(checkpoint_path):
             # transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
             # graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
 
-            tf.graph_util.remove_training_nodes(input_graph=graph2.as_graph_def())
+            graph2 = tf.graph_util.remove_training_nodes(input_graph=graph2.as_graph_def())
 
             # for op in graph2.get_operations():
             #     print(op.name)
