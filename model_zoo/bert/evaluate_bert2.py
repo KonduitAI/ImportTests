@@ -1,9 +1,14 @@
 import tensorflow as tf
 import tokenization
 import numpy as np
+import bert
+from bert import run_classifier
+from bert import optimization
+from bert import tokenization
+import tensorflow_hub as hub
 
 
-class Tokenizer:
+class EvalBert:
     def tokenize(str):
         vocabFile = "/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/vocab.txt"
         tokenizer = tokenization.FullTokenizer(vocab_file=vocabFile, do_lower_case=True)
@@ -23,7 +28,7 @@ class Tokenizer:
         # print(idxs)
         return idxs
 
-    def load_graph(checkpoint_path):
+    def evaluate(checkpoint_path):
         init_all_op = tf.initialize_all_variables()
         graph = tf.Graph()
         with graph.as_default():
@@ -37,7 +42,7 @@ class Tokenizer:
                 # for op in graph2.get_operations():
                 #     print(op.name)
 
-
+                '''
                 vocabFile = "/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/vocab.txt"
                 str = "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer"
                 idxs = Tokenizer.tokenize(str)
@@ -54,6 +59,27 @@ class Tokenizer:
 
                 # segmentArr = np.zeros([1,128], dtype=np.int64)
                 segmentArr = np.zeros([1,128], dtype=np.int32)
+                '''
+
+                MAX_SEQ_LENGTH=128
+                label_list = [0, 1]
+                do_lower_case = True
+                vocab_file = "/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/vocab.txt"
+                tokenizer = bert.tokenization.FullTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
+
+                in_sentences = ["To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer"]
+                labels = ["Negative", "Positive"]
+                input_examples = [run_classifier.InputExample(guid="", text_a = x, text_b = None, label = 0) for x in in_sentences] # here, "" is just a dummy label
+                input_features = run_classifier.convert_examples_to_features(input_examples, label_list, MAX_SEQ_LENGTH, tokenizer)
+
+                print("input_examples: ", input_examples)
+                print("input_features: ", input_features)
+                # print("Features: ", features)
+
+                # predict_input_fn = run_classifier.input_fn_builder(features=input_features, seq_length=MAX_SEQ_LENGTH, is_training=False, drop_remainder=False)
+                # predictions = estimator.predict(predict_input_fn)
+                # out = [(sentence, prediction['probabilities'], labels[prediction['labels']]) for sentence, prediction in zip(in_sentences, predictions)]
+                # print("OUTPUT: ", out)
 
                 #Load network from original model:
                 # graph = Tokenizer.load_graph("/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/bert_model.ckpt")
@@ -79,4 +105,4 @@ class Tokenizer:
                 print("OUTPUTS: ", outputs)
 
 if __name__ == '__main__':
-    graph = Tokenizer.load_graph("/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/bert_model.ckpt")
+    graph = EvalBert.evaluate("/TF_Graphs/BERT_multi_cased_L-12_H-768_A-12/bert_model.ckpt")
