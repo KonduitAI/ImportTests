@@ -138,7 +138,8 @@ INFO:tensorflow:label: 0 (id = 0)
 
 ## Step 5: Freeze Graph
 
-After training and inference has been completed, run ```model_zoo/```
+After training and inference has been completed, run ```python model_zoo/bert/freezeTrainedBert.py```
+If you have changed paths in any of the previous steps, you will need to change them here also.
 
 
 ## Step 6: Import Graph

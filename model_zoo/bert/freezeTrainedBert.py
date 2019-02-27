@@ -13,12 +13,43 @@ def load_graph(checkpoint_path):
             saver.restore(sess, checkpoint_path)
             print("Restored params...")
 
+            '''
             # input_names = ["IteratorGetNext"]
-            # output_names = ["loss/LogSoftmax"]
-            # transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
-            # graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
+            input_names = ["IteratorGetNext:0", "IteratorGetNext:1", "IteratorGetNext:4"]
+            output_names = ["loss/LogSoftmax"]
+            transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
+            graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
+            # graph2 = TransformGraph(graph2, input_names, output_names, transforms)
 
-            graph2 = tf.graph_util.remove_training_nodes(input_graph=graph2.as_graph_def())
+            # graph2 = tf.graph_util.remove_training_nodes(input_graph=graph2.as_graph_def())
+            graph2 = tf.graph_util.remove_training_nodes(input_graph=graph2)
+            '''
+
+            '''
+            input_names = ["IteratorGetNext:0", "IteratorGetNext:1", "IteratorGetNext:4"]
+            output_names = ["loss/LogSoftmax"]
+            transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
+            # graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
+            graph2 = TransformGraph(graph2.as_graph_def(), inputs=input_names, outputs=output_names, transforms=transforms)
+            '''
+
+            '''
+            #2019-02-27 00:36:31.079753: I tensorflow/tools/graph_transforms/transform_graph.cc:317] Applying strip_unused_nodes
+            # terminate called after throwing an instance of 'std::out_of_range'
+            # what():  map::at
+            # Aborted
+            input_names = ["IteratorV2"]    #Same result with "IteratorV2:0"
+            output_names = ["loss/LogSoftmax"]
+            transforms = ['strip_unused_nodes(type=resource)']
+            graph2 = TransformGraph(graph2.as_graph_def(), inputs=input_names, outputs=output_names, transforms=transforms)
+            '''
+
+            # input_names = ["IteratorGetNext", "IteratorGetNext:1", "IteratorGetNext:4"]
+            input_names = []
+            output_names = ["loss/LogSoftmax"]
+            transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
+            # graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
+            graph2 = TransformGraph(graph2.as_graph_def(), inputs=input_names, outputs=output_names, transforms=transforms)
 
             # for op in graph2.get_operations():
             #     print(op.name)
