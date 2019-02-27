@@ -46,7 +46,8 @@ def load_graph(checkpoint_path):
 
             # input_names = ["IteratorGetNext", "IteratorGetNext:1", "IteratorGetNext:4"]
             input_names = []
-            output_names = ["loss/LogSoftmax"]
+            # output_names = ["loss/LogSoftmax"]
+            output_names = ["loss/Softmax"]
             transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
             # graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
             graph2 = TransformGraph(graph2.as_graph_def(), inputs=input_names, outputs=output_names, transforms=transforms)
@@ -71,7 +72,8 @@ freeze_graph.freeze_graph(
     input_saver="",
     output_graph=output_graph,
     input_binary=False,
-    output_node_names="loss/LogSoftmax",     #This is log(prob(x))
+    # output_node_names="loss/LogSoftmax",     #This is log(prob(x))
+    output_node_names="loss/Softmax",     #This is log(prob(x))
     restore_op_name="save/restore_all",
     filename_tensor_name="save/Const:0",
     clear_devices=True,
