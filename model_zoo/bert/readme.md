@@ -20,7 +20,7 @@ Execute using the following commands: (customize data directory if required)
 python /TFOpTests/model_zoo/bert/download_glue_data.py --data_dir /TF_Graphs/glue --path_to_mrpc /TF_Graphs/glue/MSRParaphraseCorpus --tasks MRPC
 ```
 
-## Step 2: Dowload pretrained model
+## Step 2: Download pretrained model
 
 These are available here: https://github.com/google-research/bert#pre-trained-models
 Download BERT-Base, Uncased: https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip
@@ -156,3 +156,6 @@ If you have changed paths in any of the previous steps, you will need to change 
 
 
 ## Step 6: Import Graph
+
+The test for importing this graph can be found here:
+https://github.com/deeplearning4j/deeplearning4j/blob/master/nd4j/nd4j-backends/nd4j-tests/src/test/java/org/nd4j/imports/TFGraphs/BERTGraphTest.java
