@@ -1184,8 +1184,8 @@ def test_mathtransform():
         # {"opName": "gather", "outName": "gather/gather_4-4_1_axis1", "varShapes":[[4,4], [0]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int3"], "axis":1},
         # {"opName": "gather", "outName": "gather/gather_2-2-3_3_axis-1", "varShapes":[[2,2,3], [3]], "varTypes":["float32", "int32"], "varInit":["uniform", "uniform_int3"], "axis":-1},
 
-        # {"opName": "ones", "outName": "ones/ones_rank0", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "dtype":tf.int64},
-        # {"opName": "ones", "outName": "ones/ones_rank2", "varShapes":[[2]], "varTypes":["int32"], "varInit":["fixed_2_1"], "dtype":tf.float64},
+        # {"opName": "one", "outName": "ones/ones_rank0", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "dtype":tf.int64},
+        # {"opName": "one", "outName": "ones/ones_rank2", "varShapes":[[2]], "varTypes":["int32"], "varInit":["fixed_2_1"], "dtype":tf.float64},
 
         # {"opName": "ones_like", "outName": "ones_like/rank0", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
         # {"opName": "ones_like", "outName": "ones_like/rank2", "varShapes":[[2,2]], "varTypes":["float64"], "varInit":["uniform"]},
@@ -1240,9 +1240,9 @@ def test_mathtransform():
         # {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank2", "varShapes":[[2,0], [0,3]], "varTypes":["int32", "int32"], "varInit":["empty", "empty"]},
         # {"opName": "identity_n", "outName": "emptyArrayTests/identity_n/rank3", "varShapes":[[0,1,0], [0,0,2]], "varTypes":["int64", "int64"], "varInit":["empty", "empty"]},
 
-        # {"opName": "ones", "outName": "emptyArrayTests/ones/ones_rank1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["zero"], "dtype":tf.int32},
-        # {"opName": "ones", "outName": "emptyArrayTests/ones/ones_rank2", "varShapes":[[2]], "varTypes":["int32"], "varInit":["fixed_2_0"], "dtype":tf.float32},
-        # {"opName": "ones", "outName": "emptyArrayTests/ones/ones_rank3", "varShapes":[[3]], "varTypes":["int32"], "varInit":["fixed_0_0_3"], "dtype":tf.int64},
+        # {"opName": "one", "outName": "emptyArrayTests/ones/ones_rank1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["zero"], "dtype":tf.int32},
+        # {"opName": "one", "outName": "emptyArrayTests/ones/ones_rank2", "varShapes":[[2]], "varTypes":["int32"], "varInit":["fixed_2_0"], "dtype":tf.float32},
+        # {"opName": "one", "outName": "emptyArrayTests/ones/ones_rank3", "varShapes":[[3]], "varTypes":["int32"], "varInit":["fixed_0_0_3"], "dtype":tf.int64},
 
         # {"opName": "ones_like", "outName": "emptyArrayTests/ones_like/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
         # {"opName": "ones_like", "outName": "emptyArrayTests/ones_like/rank2", "varShapes":[[2,0]], "varTypes":["float64"], "varInit":["empty"]},
@@ -1542,6 +1542,54 @@ def test_mathtransform():
         #Not possible?
         # {"opName": "diag_part", "outName": "emptyArrayTests/diag_part/rank2", "varShapes":[[0,0]], "varTypes":["float32"], "varInit":["empty"]},
         # {"opName": "diag_part", "outName": "emptyArrayTests/diag_part/rank3", "varShapes":[[2,2,0]], "varTypes":["float32"], "varInit":["empty"]},
+
+
+        # TODO BOOL
+
+        # {"opName": "add", "outName": "dtype_tests/add/bfloat16_rank0_1", "varShapes":[[], [1]], "varTypes":["bfloat16", "bfloat16"], "varInit":["one","one"], "dtype":tf.bfloat16},
+        # {"opName": "add", "outName": "dtype_tests/add/bfloat16_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["bfloat16", "bfloat16"], "varInit":["one","one"], "dtype":tf.bfloat16},
+        # {"opName": "add", "outName": "dtype_tests/add/double_rank0_1", "varShapes":[[], [1]], "varTypes":["double", "double"], "varInit":["one","one"], "dtype":tf.double},
+        # {"opName": "add", "outName": "dtype_tests/add/double_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["double", "double"], "varInit":["one","one"], "dtype":tf.double},
+        # {"opName": "add", "outName": "dtype_tests/add/float16_rank0_1", "varShapes":[[], [1]], "varTypes":["float16", "float16"], "varInit":["one","one"], "dtype":tf.float16},
+        # {"opName": "add", "outName": "dtype_tests/add/float16_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["float16", "float16"], "varInit":["one","one"], "dtype":tf.float16},
+        # {"opName": "add", "outName": "dtype_tests/add/float32_rank0_1", "varShapes":[[], [1]], "varTypes":["float32", "float32"], "varInit":["one","one"], "dtype":tf.float32},
+        # {"opName": "add", "outName": "dtype_tests/add/float32_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["float32", "float32"], "varInit":["one","one"], "dtype":tf.float32},
+        # {"opName": "add", "outName": "dtype_tests/add/float64_rank0_1", "varShapes":[[], [1]], "varTypes":["float64", "float64"], "varInit":["one","one"], "dtype":tf.float64},
+        # {"opName": "add", "outName": "dtype_tests/add/float64_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["float64", "float64"], "varInit":["one","one"], "dtype":tf.float64},
+        # {"opName": "add", "outName": "dtype_tests/add/half_rank0_1", "varShapes":[[], [1]], "varTypes":["half", "half"], "varInit":["one","one"], "dtype":tf.half},
+        # {"opName": "add", "outName": "dtype_tests/add/half_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["half", "half"], "varInit":["one","one"], "dtype":tf.half},
+        # {"opName": "add", "outName": "dtype_tests/add/int16_rank0_1", "varShapes":[[], [1]], "varTypes":["int16", "int16"], "varInit":["one","one"], "dtype":tf.int16},
+        # {"opName": "add", "outName": "dtype_tests/add/int16_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["int16", "int16"], "varInit":["one","one"], "dtype":tf.int16},
+        # {"opName": "add", "outName": "dtype_tests/add/int32_rank0_1", "varShapes":[[], [1]], "varTypes":["int32", "int32"], "varInit":["one","one"], "dtype":tf.int32},
+        # {"opName": "add", "outName": "dtype_tests/add/int32_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["int32", "int32"], "varInit":["one","one"], "dtype":tf.int32},
+        # {"opName": "add", "outName": "dtype_tests/add/int64_rank0_1", "varShapes":[[], [1]], "varTypes":["int64", "int64"], "varInit":["one","one"], "dtype":tf.int64},
+        # {"opName": "add", "outName": "dtype_tests/add/int64_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["int64", "int64"], "varInit":["one","one"], "dtype":tf.int64},
+        # {"opName": "add", "outName": "dtype_tests/add/int8_rank0_1", "varShapes":[[], [1]], "varTypes":["int8", "int8"], "varInit":["one","one"], "dtype":tf.int8},
+        # {"opName": "add", "outName": "dtype_tests/add/int8_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["int8", "int8"], "varInit":["one","one"], "dtype":tf.int8},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint16_rank1", "varShapes":[[2], [1]], "varTypes":["uint16", "uint16"], "varInit":["one","one"], "dtype":tf.uint16, "axis":0},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint16_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["uint16", "uint16"], "varInit":["one","one"], "dtype":tf.uint16, "axis":0},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint8_rank1", "varShapes":[[2], [1]], "varTypes":["uint8", "uint8"], "varInit":["one","one"], "dtype":tf.uint8, "axis":0},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint8_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["uint8", "uint8"], "varInit":["one","one"], "dtype":tf.uint8, "axis":0},
+        #UINT32 and 64 don't support concat for some reason :/
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint32_rank1", "varShapes":[[2], [1]], "varTypes":["uint32", "uint32"], "varInit":["one","one"], "dtype":tf.uint32, "axis":0},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint32_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["uint32", "uint32"], "varInit":["one","one"], "dtype":tf.uint32, "axis":0},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint64_rank1", "varShapes":[[2], [1]], "varTypes":["uint64", "uint64"], "varInit":["one","one"], "dtype":tf.uint64, "axis":0},
+        # {"opName": "concat", "outName": "dtype_tests/concat/uint64_rank2", "varShapes":[[2,3], [2,3]], "varTypes":["uint64", "uint64"], "varInit":["one","one"], "dtype":tf.uint64, "axis":0},
+
+        # This doesn't work either... :/
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint32_rank1", "varShapes":[[4]], "varTypes":["uint32", "uint32"], "varInit":["one"], "dtype":tf.uint32, "dimension":0},
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint32_rank2", "varShapes":[[3,4]], "varTypes":["uint32", "uint32"], "varInit":["one"], "dtype":tf.uint32, "dimension":0},
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint64_rank1", "varShapes":[[4]], "varTypes":["uint64", "uint64"], "varInit":["one"], "dtype":tf.uint64, "dimension":0},
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint64_rank2", "varShapes":[[3,4]], "varTypes":["uint64", "uint64"], "varInit":["one"], "dtype":tf.uint64, "dimension":0},
+
+        #Also doesn't work: zero, range, four, uniform10, etc inits - always fail with "No OpKernel was registered to support Op 'Assign'"
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint32_rank1", "varShapes":[[3]], "varTypes":["uint32", "uint32"], "varInit":["fixed_2_2_4"], "dtype":tf.uint32, "dimension":0},
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint32_rank2", "varShapes":[[3,4]], "varTypes":["uint32", "uint32"], "varInit":["one"], "dtype":tf.uint32, "dimension":0},
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint64_rank1", "varShapes":[[4]], "varTypes":["uint64", "uint64"], "varInit":["one"], "dtype":tf.uint64, "dimension":0},
+        # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint64_rank2", "varShapes":[[3,4]], "varTypes":["uint64", "uint64"], "varInit":["one"], "dtype":tf.uint64, "dimension":0},
+
+        # {"opName": "cast", "outName": "dtype_tests/cast/uint32_rank1", "varShapes":[[4]], "varTypes":["int32"], "varInit":["uniform10"], "dtype":tf.int32, "dtype":tf.uint32},
+        {"opName": "cast", "outName": "dtype_tests/cast/uint64_rank1", "varShapes":[[4]], "varTypes":["int32"], "varInit":["uniform10"], "dtype":tf.int32, "dtype":tf.uint64},
            ]
 
     '''
