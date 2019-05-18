@@ -20,7 +20,7 @@ def load_graph(frozen_graph_filename):
 
 
 if __name__ == '__main__':
-    file = "C:\Temp\TF_Graphs\deeplabv3_mnv2_dm05_pascal_trainaug\\frozen_inference_graph.pb"
+    # file = "C:\Temp\TF_Graphs\deeplabv3_mnv2_dm05_pascal_trainaug\\frozen_inference_graph.pb"
     base_dir = "C:\\DL4J\\Git\\dl4j-test-resources\\src\\main\\resources\\tf_graphs\\zoo_models"
     graph = load_graph(file)
 
@@ -54,7 +54,8 @@ if __name__ == '__main__':
             feed_dict={INPUT_TENSOR_NAME: [input]})
         seg_map = batch_seg_map[0]
         tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplab_mobilenetv2_dm05_coco_voc_trainaug")
-        tfp._save_input(input, "graph/ImageTensor")
+        input4d = np.reshape(input, [1, input.shape[0], input.shape[1], input.shape[2]])
+        tfp._save_input(input4d, "graph/ImageTensor")   #TF is weird here: placeholder is [1, -1, -1, 3] but it adds extra dimension if you pass 4d in :/
         tfp._save_predictions({"graph/SemanticPredictions":seg_map})
 
         #Save type info

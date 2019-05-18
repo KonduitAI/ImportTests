@@ -1589,7 +1589,7 @@ def test_mathtransform():
         # {"opName": "arg_max", "outName": "dtype_tests/argmax/uint64_rank2", "varShapes":[[3,4]], "varTypes":["uint64", "uint64"], "varInit":["one"], "dtype":tf.uint64, "dimension":0},
 
         # {"opName": "cast", "outName": "dtype_tests/cast/uint32_rank1", "varShapes":[[4]], "varTypes":["int32"], "varInit":["uniform10"], "dtype":tf.int32, "dtype":tf.uint32},
-        {"opName": "cast", "outName": "dtype_tests/cast/uint64_rank1", "varShapes":[[4]], "varTypes":["int32"], "varInit":["uniform10"], "dtype":tf.int32, "dtype":tf.uint64},
+        # {"opName": "cast", "outName": "dtype_tests/cast/uint64_rank1", "varShapes":[[4]], "varTypes":["int32"], "varInit":["uniform10"], "dtype":tf.int32, "dtype":tf.uint64},
            ]
 
     '''

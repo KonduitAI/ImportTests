@@ -62,9 +62,10 @@ if __name__ == '__main__':
         batch_seg_map = sess.run(
             OUTPUT_TENSOR_NAME,
             feed_dict={INPUT_TENSOR_NAME: [input]})
-        seg_map = batch_seg_map[0]
+        seg_map = batch_seg_map
         tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplab_mobilenetv2_coco_voc_trainval")
-        tfp._save_input(input, "ImageTensor")
+        input4d = np.reshape(input, [1, input.shape[0], input.shape[1], input.shape[2]])
+        tfp._save_input(input4d, "ImageTensor")  #TF is weird here: placeholder is [1, -1, -1, 3] but it adds extra dimension if you pass 4d in :/
         tfp._save_predictions({"SemanticPredictions":seg_map})
 
         #Save type info
