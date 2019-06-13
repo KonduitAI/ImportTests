@@ -297,6 +297,19 @@ if __name__ == '__main__':
     #     .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
     # z.write()
 
+    # http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz
+    # https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
+    # Runtimes are reported for this model on 600x600 images, so use that as it's definitely supported
+    # z = ZooEvaluation(name="faster_rcnn_resnet101_coco_2018_01_28",prefix="")
+    # # z.graphFile("C:\\Temp\\TF_Graphs\\faster_rcnn_resnet101_coco_2018_01_28\\frozen_inference_graph.pb") \
+    # z.graphFile("/TF_Graphs/faster_rcnn_resnet101_coco_2018_01_28/frozen_inference_graph.pb") \
+    #     .inputName("image_tensor:0") \
+    #     .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(600, 600, 3) \
+    #     .preprocessingType("resize_only")     #Should be this, given it has a crop and resize op internally? Not 100% sure on normalization
+    # z.write()
+
     # graph = z.loadGraph()
     # for op in graph.get_operations():
     #     print(op.name)
