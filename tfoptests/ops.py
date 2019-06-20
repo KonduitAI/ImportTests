@@ -898,6 +898,7 @@ class OpCreator:
         outputs, states = rnn(inputs=self.vars[0], initial_state=initState, dtype=self.op["dtype"])
 
         concatStates = tf.concat(states, axis=0)
+        # print("NAME: ", outputs.name)
         return [outputs, concatStates]
 
     def execute_bidirectional_basicrnncell(self):

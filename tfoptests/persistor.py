@@ -149,7 +149,8 @@ class TensorFlowPersistor:
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
         with graph.as_default():
-            tf.import_graph_def(graph_def)
+            # tf.import_graph_def(graph_def, name=None)
+            tf.import_graph_def(graph_def, name="")
         return graph
 
     def _save_intermediate_nodes(self, input_dict):
