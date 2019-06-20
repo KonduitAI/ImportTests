@@ -1113,8 +1113,8 @@ def test_mathtransform():
         #     "num_units":3, "use_peephole":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
         # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[4,2,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
         #  "num_units":3, "use_peephole":True, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
-        # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_withIS", "varShapes":[[5,1,4], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
-        #  "num_units":3, "use_peephole":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
+        {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_withIS", "varShapes":[[5,1,4], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
+         "num_units":3, "use_peephole":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
 
         # Bidirectional dynamic RNN + BasicRNNCell
         # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/static_b1_nIn5_nOut3_ts4_tanh_noIS_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,

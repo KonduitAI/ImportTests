@@ -63,7 +63,7 @@ if __name__ == '__main__':
         tfp = TensorFlowPersistor(base_dir=base_dir, save_dir="deeplabv3_pascal_train_aug_2018_01_04")
         input4d = np.reshape(input, [1, input.shape[0], input.shape[1], input.shape[2]])
         tfp._save_input(input4d, "ImageTensor")     #TF is weird here: placeholder is [1, -1, -1, 3] but it adds extra dimension if you pass 4d in :/
-        tfp._save_predictions({"SemanticPredictions":seg_map})
+        tfp._save_predictions({"graph/SemanticPredictions":seg_map})
 
         #Save type info
         print("Saving datatype info...")
