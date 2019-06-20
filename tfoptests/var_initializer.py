@@ -34,6 +34,9 @@ class VarInitializer:
     def var_four(self, shape, dtype, n):
         return tf.Variable(tf.cast(tf.fill(dims=shape, value=4), dtype=dtype), name=n)
 
+    def var_five(self, shape, dtype, n):
+        return tf.Variable(tf.cast(tf.fill(dims=shape, value=5), dtype=dtype), name=n)
+
     def var_ten(self, shape, dtype, n):
         return tf.Variable(tf.ones(shape=shape, dtype=dtype) * 10, name=n)
 
@@ -168,20 +171,8 @@ class VarInitializer:
         var = tf.constant([], shape=shape, dtype=dtype)
         return [var]
 
-    # def var_empty(self, shape, dtype, n):
-    #     foundZero = False
-    #     for v in shape:
-    #         if(v == 0):
-    #             foundZero = True
-    #
-    #     if(foundZero == False):
-    #         raise ValueError("At least one entry in empty array must be 0")
-    #
-    #     fill = tf.fill(shape, value=0)
-    #     print("Fille shape: ", fill.shape)
-    #     var = tf.Variable(tf.cast(fill, dtype=dtype))
-    #     print("Var shape: ", var.shape)
-    #     return [var]
+    def var_string_scalar(self, shape,  dtype, n):
+        return tf.constant(u"This is a test string")
 
     def var_boolean(self, shape, dtype, n):
         print(dtype)

@@ -1200,3 +1200,14 @@ class OpCreator:
     def execute_diag_part(self):
         return [tf.diag_part(self.vars[0])]
 
+    def execute_fake_quant_with_min_max_vars(self):
+        return [tf.quantization.fake_quant_with_min_max_vars(inputs=self.vars[0], min=self.vars[1], max=self.vars[2], num_bits=self.op["num_bits"], narrow_range=self.op["narrow_range"])]
+
+    def execute_fake_quant_with_min_max_args(self):
+        return [tf.quantization.fake_quant_with_min_max_args(inputs=self.vars[0], min=self.op["min"], max=self.op["max"], num_bits=self.op["num_bits"], narrow_range=self.op["narrow_range"])]
+
+    def execute_fake_quant_with_min_max_vars_per_channel(self):
+        return [tf.quantization.fake_quant_with_min_max_vars_per_channel(inputs=self.vars[0], min=self.vars[1], max=self.vars[2], num_bits=self.op["num_bits"], narrow_range=self.op["narrow_range"])]
+
+    def execute_check_numerics(self):
+        return [tf.debugging.check_numerics(tensor=self.vars[0], message=self.op["message"])]

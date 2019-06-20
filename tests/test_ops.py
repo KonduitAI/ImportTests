@@ -1113,8 +1113,8 @@ def test_mathtransform():
         #     "num_units":3, "use_peephole":False, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
         # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch2_n2-3_tsLength4_withPH_noClip_fBias1_noIS", "varShapes":[[4,2,2]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
         #  "num_units":3, "use_peephole":True, "cell_clip":None, "forget_bias":1.0, "dtype":tf.float32},
-        {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_withIS", "varShapes":[[5,1,4], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
-         "num_units":3, "use_peephole":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
+        # {"opName":"lstmblockfusedcell", "outName":"rnn/lstmblockfusedcell/batch1_n5-3_tsLength4_noPH_clip-0.3_fBias2_withIS", "varShapes":[[5,1,4], [1,3], [1,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"], "static":True, "timeSteps":4,
+        #  "num_units":3, "use_peephole":False, "cell_clip":0.3, "forget_bias":2.0, "dtype":tf.float32},
 
         # Bidirectional dynamic RNN + BasicRNNCell
         # {"opName":"bidirectional_basicrnncell", "outName":"rnn/bidir_basic/static_b1_nIn5_nOut3_ts4_tanh_noIS_float", "varShapes":[[1,4,5]], "varTypes":["float32"], "varInit":["uniform"], "static":True, "timeSteps":4,
@@ -1194,6 +1194,31 @@ def test_mathtransform():
         # {"opName": "reverse", "outName": "reverse/rank2_axis0", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"], "axis":[0]},
         # {"opName": "reverse", "outName": "reverse/rank2_axis1", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"], "axis":[1]},
         # {"opName": "reverse", "outName": "reverse/rank3_axis0-2", "varShapes":[[2,3,4]], "varTypes":["float32"], "varInit":["uniform"], "axis":[0,2]},
+
+
+        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_8bit", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":8, "narrow_range":False},
+        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_8bit_narrow", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":8, "narrow_range":True},
+        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_4bit", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":4, "narrow_range":False},
+        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank2_0_2_8bit", "varShapes":[[4,5],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "two"], "num_bits":8, "narrow_range":False},
+        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_1_5_4bit_narrow", "varShapes":[[5,5],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform10", "one", "five"], "num_bits":4, "narrow_range":True},
+        #
+        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_8bit", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":1.0},
+        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_8bit_narrow", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":True, "min":0.0, "max":1.0},
+        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_4bit", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":4, "narrow_range":False, "min":0.0, "max":1.0},
+        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank2_0_2_8bit", "varShapes":[[4,5]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":2.0},
+        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_1_5_4bit_narrow", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform10"], "num_bits":4, "narrow_range":True, "min":1.0, "max":5.0},
+
+        {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank1_8bit", "varShapes":[[5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":False},
+        {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank2_8bit_narrow", "varShapes":[[3, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":True},
+        {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank4_6bit", "varShapes":[[3, 2, 2, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":6, "narrow_range":False},
+
+
+        # {"opName": "check_numerics", "outName": "check_numerics/rank1_float16", "varShapes":[[5]], "varTypes":["float16", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
+        # {"opName": "check_numerics", "outName": "check_numerics/rank1_float32", "varShapes":[[5]], "varTypes":["float32", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
+        # {"opName": "check_numerics", "outName": "check_numerics/rank2_float64", "varShapes":[[5]], "varTypes":["float64", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
+        # {"opName": "check_numerics", "outName": "check_numerics/rank4_bfloat16", "varShapes":[[5]], "varTypes":["bfloat16", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."}
+
+
 
         #####################################################################################################################################
         # Empty array tests
