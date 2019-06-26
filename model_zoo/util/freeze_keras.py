@@ -56,6 +56,6 @@ if __name__ == '__main__':
     freeze_keras_file(
         "C:\\Users\\jimne\\Desktop\\NN Server\\generator_model.h5",
         "C:\\Temp\\TF_Graphs\\" + "cifar10_gan_85")
-    # freeze_keras_file(
-    #     "C:\\Users\\jimne\\Downloads\\text-gen.h5",
-    #     "C:\\Temp\\TF_Graphs\\" + "text_gen_81")
+    freeze_keras_file(
+        "C:\\Users\\jimne\\Desktop\\NN Server\\text-predict.h5",
+        "C:\\Temp\\TF_Graphs\\" + "text_gen_81")

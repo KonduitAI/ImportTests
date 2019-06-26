@@ -1,19 +1,34 @@
+import hashlib
+import os
+import shutil
 from io import BytesIO
+from shutil import copyfile
+
 import tensorflow as tf
 import numpy as np
+import typing
 from six.moves import urllib
-from PIL import Image   #pip install Pillow
+from PIL import Image  # pip install Pillow
+
 from tfoptests.persistor import TensorFlowPersistor
-import vgg_preprocessing
-import inception_preprocessing
+from model_zoo.util import vgg_preprocessing
+from model_zoo.util import inception_preprocessing
+from model_zoo.util import hub_processing
+
 
 class ZooEvaluation(object):
 
-    def __init__(self, name, baseDir="/dl4j-test-resources/src/main/resources/tf_graphs/zoo_models", prefix="graph"):
+    def __init__(self, name,
+                 baseDir="/dl4j-test-resources/src/main/resources/tf_graphs"
+                         "/zoo_models",
+                 prefix="graph"):
         tf.reset_default_graph()
         self.name = name
         self.baseDir = baseDir
         self.prefix = prefix
+        self.image_url = None
+        self.save_graph = False
+        self.is_image = False
 
     def graphFile(self, graphFile):
         self.graphFile = graphFile
@@ -24,18 +39,27 @@ class ZooEvaluation(object):
         return self
 
     def imageUrl(self, imageUrl):
-        self.imageUrl = imageUrl
+        self.image_url = imageUrl
+        self.is_image = True
         return self
 
     def inputDims(self, h, w, c):
         self.inputH = h
         self.inputW = w
         self.inputC = c
+        self.is_image = True
+        return self
+
+    def saveGraph(self):
+        self.save_graph = True
+        return self
+
+    def inputNames(self, inputNames):
+        self.input_names = inputNames
         return self
 
     def inputName(self, inputName):
-        self.inputName = inputName
-        return self
+        return self.inputNames(inputName)
 
     def outputNames(self, outputNames):
         self.outputNames = outputNames
@@ -45,42 +69,55 @@ class ZooEvaluation(object):
         self.preprocessingType = preprocessingType
         return self
 
+    def setData(self, data):
+        self.data = data
+        return self
+
     def getImage(self, expandDim):
-        if( self.inputH is None ):
+        if (self.inputH is None):
             raise ValueError("input height not set")
-        if( self.inputC is not 3):
+        if (self.inputC is not 3):
             raise ValueError("Only ch=3 implemented so far")
-        if( self.imageUrl is None):
+        if (self.image_url is None):
             raise ValueError("Image URL is not set")
-        if( self.inputH != self.inputW):
+        if (self.inputH != self.inputW):
             raise ValueError("Non-square inputs not yet implemented")
 
         try:
-            f = urllib.request.urlopen(self.imageUrl)
+            f = urllib.request.urlopen(self.image_url)
             jpeg_str = f.read()
             image = Image.open(BytesIO(jpeg_str))
         except IOError:
-            raise ValueError('Cannot retrieve image. Please check url: ' + self.imageUrl)
+            raise ValueError(
+                'Cannot retrieve image. Please check url: ' + self.image_url)
 
         image = np.asarray(image.convert('RGB'))
         print("image shape: ", image.shape)
         m = min(image.shape[0], image.shape[1])
         print("min: ", m)
-        if(self.preprocessingType == "vgg"):
-            image = vgg_preprocessing.preprocess_for_eval(image, self.inputH, self.inputW, m)
-        elif(self.preprocessingType == "inception"):
+        if (self.preprocessingType == "vgg"):
+            image = vgg_preprocessing.preprocess_for_eval(image, self.inputH,
+                                                          self.inputW, m)
+        elif (self.preprocessingType == "inception"):
             # image = image.astype("float32")
             # with tf.Session() as sess:
             #     image = image.eval(session=sess)
             image = tf.convert_to_tensor(image)
-            image = inception_preprocessing.preprocess_for_eval(image, height=self.inputH, width=self.inputW)
-        elif(self.preprocessingType == "resize_only"):
+            image = inception_preprocessing.preprocess_for_eval(image,
+                                                                height=self.inputH,
+                                                                width=self.inputW)
+        elif (self.preprocessingType == "resize_only"):
             image = np.expand_dims(image, 0)
-            image = tf.image.resize_bilinear(image, [self.inputH, self.inputW], align_corners=False)
+            image = tf.image.resize_bilinear(image, [self.inputH, self.inputW],
+                                             align_corners=False)
             image = tf.squeeze(image, axis=0)
             # image = tf.convert_to_tensor(image)
+        elif (self.preprocessingType == "hub"):
+            image = hub_processing.preprocess_for_eval(image, self.inputH,
+                                                       self.inputW)
         else:
-            raise ValueError("Unknown preprocessing type: ", self.preprocessingType)
+            raise ValueError("Unknown preprocessing type: ",
+                             self.preprocessingType)
         # image = tf.expand_dims(image, 0)
         print("new shape: ", image.shape)
         print("new type: ", type(image))
@@ -90,7 +127,7 @@ class ZooEvaluation(object):
         # print("new shape2: ", image.shape)
         # print("new type2: ", type(image))
 
-        if(len(image.shape) == 3 and expandDim):
+        if (len(image.shape) == 3 and expandDim):
             image = np.expand_dims(image, 0)
 
         print("new shape3: ", image.shape)
@@ -104,31 +141,52 @@ class ZooEvaluation(object):
         # #target_size = (int(resize_ratio * width), int(resize_ratio * height))
         # target_size = [self.inputH, self.inputW]
         # # print("Target size: ", target_size)
-        # resized_image = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
+        # resized_image = image.convert('RGB').resize(target_size,
+        # Image.ANTIALIAS)
         # input = np.asarray(resized_image)
         # return input
 
     def write(self):
-        if( self.inputName is None or self.outputNames is None ):
-            raise ValueError("inputName or outputName not set")
+        if (self.input_names is None or self.outputNames is None):
+            raise ValueError("inputNames or outputNames not set")
 
         graph = self.loadGraph()
-        image = self.getImage(False)
 
-        if(image is None):
-            raise ValueError("Null image")
+        if self.is_image:
+            image = self.getImage(False)
+        else:
+            image = self.data
 
-        print("Input name: ", self.inputName)
+        if isinstance(image, dict):
+            if not isinstance(self.input_names, list):
+                if len(image) != 1:
+                    raise ValueError("Given multiple input datas for one input")
+                else:
+                    image = image[list(image.keys())[0]]
+            else:
+                if set(image.keys()) != set(self.input_names):
+                    raise ValueError("Input names and given inputs don't match")
+
+        if (image is None):
+            raise ValueError("Null input data")
+
+        print("Input names: ", self.input_names)
         print("Output names: ", self.outputNames)
         print("Input shape: ", image.shape)
         with tf.Session(graph=graph) as sess:
+
+            if isinstance(image, dict):
+                feed_dict = {k: [v] for k, v in image.items()}
+            else:
+                feed_dict = {self.input_names: [image]}
+
             outputs = sess.run(
                 # self.outputName,
                 self.outputNames,
-                feed_dict={self.inputName: [image]})
+                feed_dict=feed_dict)
             print(outputs)
 
-        print("Outputs: ",outputs)
+        print("Outputs: ", outputs)
 
         toSave = {}
         toSave_dtype_dict = {}
@@ -138,18 +196,44 @@ class ZooEvaluation(object):
             print("Dtype: ", outputs[i].dtype)
             toSave_dtype_dict[self.outputNames[i]] = str(outputs[i].dtype)
 
-        #print("Values to save: ", toSave)
-        tfp = TensorFlowPersistor(base_dir=self.baseDir, save_dir=self.name, verbose=False)
-        tfp._save_input(self.getImage(True), self.inputName)
+        # print("Values to save: ", toSave)
+
+        # remove old files
+        if os.path.exists(self.baseDir + "/" + self.name + "/"):
+            shutil.rmtree(self.baseDir + "/" + self.name + "/")
+
+        tfp = TensorFlowPersistor(base_dir=self.baseDir, save_dir=self.name,
+                                  verbose=False)
+
+        if self.save_graph:
+            copyfile(self.graphFile, self.baseDir + "/" + self.name + "/tf_model.pb")
+            with open(self.baseDir + "/" + self.name + "/tf_model.pb",'rb') as f:
+                md5 = hashlib.md5(f.read()).hexdigest()
+            with open(self.baseDir + "/" + self.name + "/tf_model.txt", 'w+') as f:
+                f.write("tf_model.pb\n" + md5)
+
+        if self.is_image:
+            tfp._save_input(self.getImage(True), self.input_names)
+        else:
+            if isinstance(self.data, dict):
+                for k, v in self.data.items():
+                    tfp._save_input(v, k)
+            else:
+                tfp._save_input(image, self.input_names)
+
         dtype_dict = {}
-        dtype_dict[self.inputName] = str(image.dtype)
+        if isinstance(image, dict):
+            for k, v in image:
+                dtype_dict[k] = str(v.dtype)
+        else:
+            dtype_dict[self.input_names] = str(image.dtype)
+
         tfp._save_node_dtypes(dtype_dict)
         # tfp._save_predictions({self.outputName:outputs})
         tfp._save_predictions(toSave)
         tfp._save_node_dtypes(toSave_dtype_dict)
 
-
-        #Also save intermediate nodes:
+        # Also save intermediate nodes:
         # dict = {self.inputName:image}
         # dict = {self.inputName:self.getImage(True)}
         # print("DICTIONARY: ", dict)
@@ -158,9 +242,8 @@ class ZooEvaluation(object):
         # tfp.set_verbose(True)
         # tfp._save_intermediate_nodes2(input_dict=dict, graph=graph)
 
-
     def loadGraph(self):
-        if( self.graphFile is None ):
+        if (self.graphFile is None):
             raise ValueError("Graph file location not set")
 
         with tf.gfile.GFile(self.graphFile, "rb") as f:
@@ -172,147 +255,247 @@ class ZooEvaluation(object):
             tf.import_graph_def(graph_def, name=self.prefix)
         return graph
 
+
 if __name__ == '__main__':
+    # How to run this?
+    # 1. Download the required models, links below
+    # 2. For many models, just implement using the ZooEvaluation class.
+    # 3. Some models need special treatment - see eval_data directory for
+    # these cases
+    # 4. Run with: python model_zoo/util/zoo_evaluation.py
+    # See also: https://gist.github.com/eraly/7d48807ed2c69233072ed06c12bf9b0a
 
-
-    #How to run this?
-    #1. Download the required models, links below
-    #2. For many models, just implement using the ZooEvaluation class.
-    #3. Some models need special treatment - see eval_data directory for these cases
-    #4. Run with: python model_zoo/util/zoo_evaluation.py
-    #See also: https://gist.github.com/eraly/7d48807ed2c69233072ed06c12bf9b0a
-
-
-
-    #DenseNet - uses vgg preprocessing according to readme
-    # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/densenet_2018_04_27.tgz
+    # DenseNet - uses vgg preprocessing according to readme
+    # https://storage.googleapis.com/download.tensorflow.org/models/tflite
+    # /model_zoo/upload_20180427/densenet_2018_04_27.tgz
     # z = ZooEvaluation(name="densenet_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\densenet_2018_04_27\\densenet.pb")\
     #     .inputName("Placeholder:0")\
     #     .outputNames(["ArgMax:0", "softmax_tensor:0"])\
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true")\
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true")\
     #     .inputDims(224, 224, 3)\
     #     .preprocessingType("vgg")
     # z.write()
     # # SqueezeNet: also vgg preprocessing
-    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/squeezenet_2018_04_27.tgz
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite
+    # /model_zoo/upload_20180427/squeezenet_2018_04_27.tgz
     # z = ZooEvaluation(name="squeezenet_2018_04_27",prefix="")
     # z.graphFile("C:\\Temp\\TF_Graphs\\squeezenet_2018_04_27\\squeezenet.pb")\
     #     .inputName("Placeholder:0") \
     #     .outputNames(["ArgMax:0", "softmax_tensor:0"])\
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true")\
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true")\
     #     .inputDims(224, 224, 3)\
     #     .preprocessingType("vgg")
     # z.write()
     #
-    # nasnet_mobile: no preprocessing specified, going to assume inception preprocessing
-    # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/nasnet_mobile_2018_04_27.tgz
+    # nasnet_mobile: no preprocessing specified, going to assume inception
+    # preprocessing
+    # https://storage.googleapis.com/download.tensorflow.org/models/tflite
+    # /model_zoo/upload_20180427/nasnet_mobile_2018_04_27.tgz
     # z = ZooEvaluation(name="nasnet_mobile_2018_04_27",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\nasnet_mobile_2018_04_27\\nasnet_mobile.pb") \
+    # z.graphFile("C:\\Temp\\TF_Graphs\\nasnet_mobile_2018_04_27
+    # \\nasnet_mobile.pb") \
     #     .inputName("input:0") \
     #     .outputNames(["final_layer/predictions:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(224, 224, 3) \
     #     .preprocessingType("inception")
     # z.write()
     #
-    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/inception_v4_2018_04_27.tgz
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite
+    # /model_zoo/upload_20180427/inception_v4_2018_04_27.tgz
     # z = ZooEvaluation(name="inception_v4_2018_04_27",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\inception_v4_2018_04_27\\inception_v4.pb") \
+    # z.graphFile("C:\\Temp\\TF_Graphs\\inception_v4_2018_04_27\\inception_v4
+    # .pb") \
     #     .inputName("input:0") \
     #     .outputNames(["InceptionV4/Logits/Predictions:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(299, 299, 3) \
     #     .preprocessingType("inception")
     # z.write()
     #
-    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite/model_zoo/upload_20180427/inception_resnet_v2_2018_04_27.tgz
+    # # https://storage.googleapis.com/download.tensorflow.org/models/tflite
+    # /model_zoo/upload_20180427/inception_resnet_v2_2018_04_27.tgz
     # z = ZooEvaluation(name="inception_resnet_v2_2018_04_27",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\inception_resnet_v2_2018_04_27\\inception_resnet_v2.pb") \
+    # z.graphFile("C:\\Temp\\TF_Graphs\\inception_resnet_v2_2018_04_27
+    # \\inception_resnet_v2.pb") \
     #     .inputName("input:0") \
     #     .outputNames(["InceptionResnetV2/AuxLogits/Logits/BiasAdd:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(299, 299, 3) \
     #     .preprocessingType("inception")
     # z.write()
     #
-    # # http://download.tensorflow.org/models/mobilenet_v1_2018_02_22/mobilenet_v1_0.5_128.tgz
-    # z = ZooEvaluation(name="mobilenet_v1_0.5_128",prefix="")   #None)  #"mobilenet_v1_0.5")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v1_0.5_128\\mobilenet_v1_0.5_128_frozen.pb") \
+    # # http://download.tensorflow.org/models/mobilenet_v1_2018_02_22
+    # /mobilenet_v1_0.5_128.tgz
+    # z = ZooEvaluation(name="mobilenet_v1_0.5_128",prefix="")   #None)
+    # #"mobilenet_v1_0.5")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v1_0.5_128\\mobilenet_v1_0
+    # .5_128_frozen.pb") \
     # .inputName("input:0") \
     # .outputNames(["MobilenetV1/Predictions/Reshape_1:0"]) \
-    # .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    # .imageUrl("https://github.com/tensorflow/models/blob/master/research
+    # /deeplab/g3doc/img/image2.jpg?raw=true") \
     # .inputDims(128, 128, 3) \
-    # .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+    # .preprocessingType("inception")     #Not 100% sure on this, but more
+    # likely it's inception than vgg preprocessing...
     # z.write()
     #
-    # # http://download.tensorflow.org/models/tflite_11_05_08/mobilenet_v2_1.0_224.tgz
+    # # http://download.tensorflow.org/models/tflite_11_05_08/mobilenet_v2_1
+    # .0_224.tgz
     # z = ZooEvaluation(name="mobilenet_v2_1.0_224",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v2_1.0_224\\mobilenet_v2_1.0_224_frozen.pb") \
+    # z.graphFile("C:\\Temp\\TF_Graphs\\mobilenet_v2_1.0_224\\mobilenet_v2_1
+    # .0_224_frozen.pb") \
     #     .inputName("input:0") \
     #     .outputNames(["MobilenetV2/Predictions/Reshape_1:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(224, 224, 3) \
-    #     .preprocessingType("inception")     #Not 100% sure on this, but more likely it's inception than vgg preprocessing...
+    #     .preprocessingType("inception")     #Not 100% sure on this,
+    #     but more likely it's inception than vgg preprocessing...
     # z.write()
     #
-    # http://download.tensorflow.org/models/official/resnetv2_imagenet_frozen_graph.pb
-    # https://github.com/tensorflow/models/blob/master/research/tensorrt/README.md
-    # "Some ResNet models represent 1000 categories, and some represent all 1001, with the 0th category being "background". The models provided are of the latter type."
-    # Runs "imagenet_preprocessing" on the images - https://github.com/tensorflow/models/blob/master/official/resnet/imagenet_preprocessing.py
+    # http://download.tensorflow.org/models/official
+    # /resnetv2_imagenet_frozen_graph.pb
+    # https://github.com/tensorflow/models/blob/master/research/tensorrt
+    # /README.md
+    # "Some ResNet models represent 1000 categories, and some represent all
+    # 1001, with the 0th category being "background". The models provided are
+    # of the latter type."
+    # Runs "imagenet_preprocessing" on the images -
+    # https://github.com/tensorflow/models/blob/master/official/resnet
+    # /imagenet_preprocessing.py
     # Which seems to be merely scaling, no normalization
     # z = ZooEvaluation(name="resnetv2_imagenet_frozen_graph",prefix="")
     # z.graphFile("/TF_Graphs/resnetv2_imagenet_frozen_graph.pb") \
     #     .inputName("input_tensor:0") \
     #     .outputNames(["softmax_tensor:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(224, 224, 3) \
     #     .preprocessingType("resize_only")
     # z.write()
 
-
-    # # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_coco_2018_01_28.tar.gz
-    # # https://github.com/tensorflow/models/blob/master/research/object_detection/object_detection_tutorial.ipynb
-    # # Seems like this can be use on (nearly) any image size??? Docs and notebook are very vague on this point
+    # # http://download.tensorflow.org/models/object_detection
+    # /ssd_mobilenet_v1_coco_2018_01_28.tar.gz
+    # # https://github.com/tensorflow/models/blob/master/research
+    # /object_detection/object_detection_tutorial.ipynb
+    # # Seems like this can be use on (nearly) any image size??? Docs and
+    # notebook are very vague on this point
     # # 320x320 input is arbitrary, not based on anything
-    # # Outputs: detection_boxes, detection_scores, num_detections, detection_classes
-    # # Preprocessing: unclear from docs, but it does have some preprocessing built into the network
+    # # Outputs: detection_boxes, detection_scores, num_detections,
+    # detection_classes
+    # # Preprocessing: unclear from docs, but it does have some preprocessing
+    # built into the network
     # z = ZooEvaluation(name="ssd_mobilenet_v1_coco_2018_01_28",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_coco_2018_01_28\\frozen_inference_graph.pb") \
+    # z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_coco_2018_01_28
+    # \\frozen_inference_graph.pb") \
     #     .inputName("image_tensor:0") \
-    #     .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .outputNames(["detection_boxes:0", "detection_scores:0",
+    #     "num_detections:0", "detection_classes:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(320, 320, 3) \
-    #     .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
+    #     .preprocessingType("resize_only")     #Not 100% sure on this,
+    #     but seems most likely
     # z.write()
 
-    # http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03.tar.gz
+    # http://download.tensorflow.org/models/object_detection
+    # /ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03.tar.gz
     # As above, for ssd_mobilenet_v1_coco_2018_01_28
-    # z = ZooEvaluation(name="ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03",prefix="")
-    # z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03\\frozen_inference_graph.pb") \
+    # z = ZooEvaluation(
+    # name="ssd_mobilenet_v1_0.75_depth_300x300_coco14_sync_2018_07_03",
+    # prefix="")
+    # z.graphFile("C:\\Temp\\TF_Graphs\\ssd_mobilenet_v1_0
+    # .75_depth_300x300_coco14_sync_2018_07_03\\frozen_inference_graph.pb") \
     #     .inputName("image_tensor:0") \
-    #     .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .outputNames(["detection_boxes:0", "detection_scores:0",
+    #     "num_detections:0", "detection_classes:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master
+    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(300, 300, 3) \
-    #     .preprocessingType("resize_only")     #Not 100% sure on this, but seems most likely
+    #     .preprocessingType("resize_only")     #Not 100% sure on this,
+    #     but seems most likely
     # z.write()
 
-    # http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz
-    # https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md
-    # Runtimes are reported for this model on 600x600 images, so use that as it's definitely supported
-    # z = ZooEvaluation(name="faster_rcnn_resnet101_coco_2018_01_28",prefix="")
-    # # z.graphFile("C:\\Temp\\TF_Graphs\\faster_rcnn_resnet101_coco_2018_01_28\\frozen_inference_graph.pb") \
-    # z.graphFile("/TF_Graphs/faster_rcnn_resnet101_coco_2018_01_28/frozen_inference_graph.pb") \
+    # # http://download.tensorflow.org/models/object_detection
+    # # /faster_rcnn_resnet101_coco_2018_01_28.tar.gz
+    # # https://github.com/tensorflow/models/blob/master/research
+    # # /object_detection/g3doc/detection_model_zoo.md
+    # # Runtimes are reported for this model on 600x600 images, so use that as
+    # # it's definitely supported
+    # z = ZooEvaluation(name="faster_rcnn_resnet101_coco_2018_01_28", prefix="")
+    # # z.graphFile("C:\\Temp\\TF_Graphs\\faster_rcnn_resnet101_coco_2018_01_28
+    # # \\frozen_inference_graph.pb") \
+    # z.graphFile(
+    #     "/TF_Graphs/faster_rcnn_resnet101_coco_2018_01_28"
+    #     "/frozen_inference_graph.pb") \
     #     .inputName("image_tensor:0") \
-    #     .outputNames(["detection_boxes:0", "detection_scores:0", "num_detections:0", "detection_classes:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .outputNames(
+    #     ["detection_boxes:0", "detection_scores:0", "num_detections:0",
+    #      "detection_classes:0"]) \
+    #     .imageUrl(
+    #     "https://github.com/tensorflow/models/blob/master/research/deeplab"
+    #     "/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(600, 600, 3) \
-    #     .preprocessingType("resize_only")     #Should be this, given it has a crop and resize op internally? Not 100% sure on normalization
+    #     .preprocessingType("resize_only")  # Should be this, given it has a
+    # # crop and resize op internally? Not 100% sure on normalization
+    # z.write()
+    
+    # # Author prediction RNN I had laying around
+    # z = ZooEvaluation(name="PorV-RNN", prefix="")
+    # z.graphFile("/TF_Graphs/PorVRNN/tf_model.pb") \
+    #     .inputName("input_1:0") \
+    #     .outputNames(["dense_2/Sigmoid:0"]) \
+    #     .setData(np.array([0, 0, 0, 0, 0, 3, 39, 9, 342, 8519, 1, 2768, 6022, 1777, 1, 155, 8, 490, 1, 202, 4, 1, 2768, 23, 34, 1, 2768, 8520, 2518, 58, 1, 6022, 3101, 13, 3, 1, 155, 8, 46, 2161]))\
+    #     .saveGraph()
+    #
+    # z.write()
+
+
+    # Text generation RNN
+    # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.1-text-generation-with-lstm.ipynb
+
+    # seed text: this was a
+    start = np.zeros((60,59))
+    start[0, 46] = 1
+    start[1, 34] = 1
+    start[2, 35] = 1
+    start[3, 45] = 1
+    start[4, 1] = 1
+    start[5, 49] = 1
+    start[6, 27] = 1
+    start[7, 45] = 1
+    start[8, 1] = 1
+    start[9, 27] = 1
+
+
+    z = ZooEvaluation(name="text_gen_81", prefix="")
+    z.graphFile("/TF_Graphs/text_gen_81/tf_model.pb") \
+        .inputName("lstm_1_input:0") \
+        .outputNames(["dense_1_1/Softmax:0"]) \
+        .setData(start) \
+        .saveGraph()
+
+    z.write()
+
+    # CIFAR-10 DCGAN (just the generator)
+    # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.5-introduction-to-gans.ipynb
+    # z = ZooEvaluation(name="cifar10_gan_85", prefix="")
+    # z.graphFile("/TF_Graphs/cifar10_gan_85/tf_model.pb") \
+    #     .inputName("input_1:0") \
+    #     .outputNames(['conv2d_4/Tanh:0']) \
+    #     .setData(np.random.normal(size=(32,))) \
+    #     .saveGraph()
+
     # z.write()
 
     # graph = z.loadGraph()
+    #
     # for op in graph.get_operations():
     #     print(op.name)
-
-
-
