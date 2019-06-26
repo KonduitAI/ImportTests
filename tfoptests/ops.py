@@ -1216,3 +1216,13 @@ class OpCreator:
     def execute_quantize(self):
         return tf.quantization.quantize(input=self.vars[0], min_range=self.op["min_range"], max_range=self.op["max_range"],
                                         T=self.op["T"], mode=self.op["mode"], round_mode=self.op["round_mode"])
+
+
+    def execute_dequantize(self):
+        quant = tf.quantization.quantize(input=self.vars[0], min_range=self.op["min_range"], max_range=self.op["max_range"],
+                                        T=self.op["T"], mode=self.op["mode"], round_mode="HALF_AWAY_FROM_ZERO")
+        qint = quant[0]
+        min_range = quant[1]
+        max_range = quant[2]
+
+        return [tf.quantization.dequantize(input=qint, min_range=min_range, max_range=max_range, mode=self.op["mode"])]
