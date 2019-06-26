@@ -1226,3 +1226,8 @@ class OpCreator:
         max_range = quant[2]
 
         return [tf.quantization.dequantize(input=qint, min_range=min_range, max_range=max_range, mode=self.op["mode"])]
+
+    def execute_quantized_concat(self):
+        concat1 = tf.quantization.quantize(input=self.vars[0], min_range=self.op["min_range"][0], max_range=self.op["max_range"][0], T=self.op["T"])
+        concat2 = tf.quantization.quantize(input=self.vars[1], min_range=self.op["min_range"][1], max_range=self.op["max_range"][1], T=self.op["T"])
+        return tf.quantization.quantized_concat(concat_dim=self.op["axis"], values=[concat1[0], concat2[0]], input_mins=[concat1[1], concat2[1]], input_maxes=[concat1[2], concat2[2]])
