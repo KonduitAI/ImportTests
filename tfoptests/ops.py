@@ -1211,3 +1211,8 @@ class OpCreator:
 
     def execute_check_numerics(self):
         return [tf.debugging.check_numerics(tensor=self.vars[0], message=self.op["message"])]
+
+
+    def execute_quantize(self):
+        return tf.quantization.quantize(input=self.vars[0], min_range=self.op["min_range"], max_range=self.op["max_range"],
+                                        T=self.op["T"], mode=self.op["mode"], round_mode=self.op["round_mode"])

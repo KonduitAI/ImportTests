@@ -49,6 +49,10 @@ class VarInitializer:
     def var_range(self, shape, dtype, n):
         return tf.Variable(tf.reshape(tf.range(start=0, limit=np.prod(shape), delta=1, dtype=dtype), shape), name=n)
 
+    def var_range_01(self, shape, dtype, n):
+        length = np.prod(shape)
+        return tf.Variable(tf.reshape(tf.range(start=0, limit=1.0, delta=1.0/length, dtype=dtype), shape), name=n)
+
     def var_stdnormal(self, shape, dtype, n):
         return tf.Variable(tf.random_normal(shape=shape, mean=0.0, stddev=1.0, dtype=dtype), dtype=dtype, name=n)
 
