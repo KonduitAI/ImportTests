@@ -36,15 +36,16 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
         return frozen_graph
 
 def freeze_keras_model(model: Model, base_dir, frozen_file):
+    tf.train.write_graph(K.get_session().graph, base_dir, frozen_file + ".txt", as_text=True)
     frozen_graph = freeze_session(K.get_session(),
                                   output_names=[out.op.name for out in
                                                 model.outputs])
     tf.train.write_graph(frozen_graph, base_dir, frozen_file, as_text=False)
-    tf.train.write_graph(frozen_graph, base_dir, frozen_file + ".txt", as_text=True)
 
 def freeze_keras_file(keras_file, tf_dir, tf_file = "tf_model.pb"):
     model = load_model(keras_file)
-
+    model.summary()
+    print()
     print("Inputs:", model.inputs)
     print("Outputs:", model.outputs)
 
@@ -56,6 +57,23 @@ if __name__ == '__main__':
     freeze_keras_file(
         "C:\\Users\\jimne\\Desktop\\NN Server\\generator_model.h5",
         "C:\\Temp\\TF_Graphs\\" + "cifar10_gan_85")
-    freeze_keras_file(
-        "C:\\Users\\jimne\\Desktop\\NN Server\\text-predict.h5",
-        "C:\\Temp\\TF_Graphs\\" + "text_gen_81")
+    # freeze_keras_file(
+    #     "C:\\Users\\jimne\\Desktop\\NN Server\\text-predict.h5",
+    #     "C:\\Temp\\TF_Graphs\\" + "text_gen_81")
+
+
+    # freeze_keras_file(
+    #     "C:\\Users\\jimne\\Desktop\\NN Server\\bidirectional_gru.h5",
+    #     "C:\\Temp\\TF_Graphs\\" + "temperature_bidirectional_63")
+    #
+    #
+    # freeze_keras_file(
+    #     "C:\\Users\\jimne\\Desktop\\NN Server\\stacked_grus.h5",
+    #     "C:\\Temp\\TF_Graphs\\" + "temperature_stacked_63")
+
+
+    # freeze_keras_file(
+    #     "C:\\Users\\jimne\\Desktop\\NN Server\\1dcnn_to_gru.h5",
+    #     "C:\\Temp\\TF_Graphs\\" + "temperature_1dcnn_to_gru_64")
+
+

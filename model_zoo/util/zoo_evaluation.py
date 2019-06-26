@@ -17,6 +17,7 @@ from model_zoo.util import hub_processing
 
 key = os.getenv("AZURE_KEY", "<key>")
 
+
 class ZooEvaluation(object):
 
     def __init__(self, name,
@@ -72,6 +73,10 @@ class ZooEvaluation(object):
 
     def setData(self, data):
         self.data = data
+        return self
+
+    def setSingleBatchData(self, data):
+        self.setData(np.expand_dims(data, 0))
         return self
 
     def getImage(self, expandDim):
@@ -154,40 +159,40 @@ class ZooEvaluation(object):
         graph = self.loadGraph()
 
         if self.is_image:
-            image = self.getImage(False)
+            data = self.getImage(False)
         else:
-            image = self.data
+            data = self.data
 
-        if isinstance(image, dict):
+        if isinstance(data, dict):
             if not isinstance(self.input_names, list):
-                if len(image) != 1:
+                if len(data) != 1:
                     raise ValueError("Given multiple input datas for one input")
                 else:
-                    image = image[list(image.keys())[0]]
+                    data = data[list(data.keys())[0]]
             else:
-                if set(image.keys()) != set(self.input_names):
+                if set(data.keys()) != set(self.input_names):
                     raise ValueError("Input names and given inputs don't match")
 
-        if (image is None):
+        if (data is None):
             raise ValueError("Null input data")
 
         print("Input names: ", self.input_names)
         print("Output names: ", self.outputNames)
-        print("Input shape: ", image.shape)
+        print("Input data shape: ", data.shape)
         with tf.Session(graph=graph) as sess:
 
-            if isinstance(image, dict):
-                feed_dict = {k: [v] for k, v in image.items()}
+            if isinstance(data, dict):
+                feed_dict = {k: [v] for k, v in data.items()}
             else:
-                feed_dict = {self.input_names: [image]}
+                feed_dict = {self.input_names: data}
 
             outputs = sess.run(
                 # self.outputName,
                 self.outputNames,
                 feed_dict=feed_dict)
-            #print(outputs)
+            # print(outputs)
 
-        print("Outputs: ", outputs)
+        # print("Outputs: ", outputs)
 
         toSave = {}
         toSave_dtype_dict = {}
@@ -198,6 +203,7 @@ class ZooEvaluation(object):
             toSave_dtype_dict[self.outputNames[i]] = str(outputs[i].dtype)
 
         # print("Values to save: ", toSave)
+        filename = self.name + "_frozenmodel.pb"
 
         # remove old files
         if os.path.exists(self.baseDir + "/" + self.name + "/"):
@@ -207,19 +213,24 @@ class ZooEvaluation(object):
                                   verbose=False)
 
         if self.save_graph:
-            filename = self.name + "_frozenmodel.pb"
-            copyfile(self.graphFile, self.baseDir + "/" + self.name + "/" + filename)
+            copyfile(self.graphFile,
+                     self.baseDir + "/" + self.name + "/" + filename)
 
-            command = f"az storage blob upload --file {filename} --account-name deeplearning4jblob " +\
-                      f"--account-key {key} " +\
+            command = f"az storage blob upload --file {filename} " \
+                      f"--account-name deeplearning4jblob " + \
+                      f"--account-key {key} " + \
                       f"--container-name testresources --name {filename}"
 
             print(command)
 
-            with open(self.baseDir + "/" + self.name + "/" + filename,'rb') as f:
+            with open(self.baseDir + "/" + self.name + "/" + filename,
+                      'rb') as f:
                 md5 = hashlib.md5(f.read()).hexdigest()
-            with open(self.baseDir + "/" + self.name + "/tf_model.txt", 'w+') as f:
-                f.write(f"https://deeplearning4jblob.blob.core.windows.net/testresources/{filename}\n" + md5 + "\n" + filename)
+            with open(self.baseDir + "/" + self.name + "/tf_model.txt",
+                      'w+') as f:
+                f.write(
+                    f"https://deeplearning4jblob.blob.core.windows.net"
+                    f"/testresources/{filename}\n" + md5 + "\n" + filename)
 
         if self.is_image:
             tfp._save_input(self.getImage(True), self.input_names)
@@ -228,14 +239,14 @@ class ZooEvaluation(object):
                 for k, v in self.data.items():
                     tfp._save_input(v, k)
             else:
-                tfp._save_input(image, self.input_names)
+                tfp._save_input(data, self.input_names)
 
         dtype_dict = {}
-        if isinstance(image, dict):
-            for k, v in image:
+        if isinstance(data, dict):
+            for k, v in data:
                 dtype_dict[k] = str(v.dtype)
         else:
-            dtype_dict[self.input_names] = str(image.dtype)
+            dtype_dict[self.input_names] = str(data.dtype)
 
         tfp._save_node_dtypes(dtype_dict)
         # tfp._save_predictions({self.outputName:outputs})
@@ -455,54 +466,119 @@ if __name__ == '__main__':
     #     .preprocessingType("resize_only")  # Should be this, given it has a
     # # crop and resize op internally? Not 100% sure on normalization
     # z.write()
-    
+
     # Author prediction RNN I had laying around
     z = ZooEvaluation(name="PorV-RNN", prefix="")
     z.graphFile("/TF_Graphs/PorVRNN/tf_model.pb") \
         .inputName("input_1:0") \
         .outputNames(["dense_2/Sigmoid:0"]) \
-        .setData(np.array([0, 0, 0, 0, 0, 3, 39, 9, 342, 8519, 1, 2768, 6022, 1777, 1, 155, 8, 490, 1, 202, 4, 1, 2768, 23, 34, 1, 2768, 8520, 2518, 58, 1, 6022, 3101, 13, 3, 1, 155, 8, 46, 2161]))\
+        .setSingleBatchData(np.array(
+        [0, 0, 0, 0, 0, 3, 39, 9, 342, 8519, 1, 2768, 6022, 1777, 1, 155, 8,
+         490, 1, 202, 4, 1, 2768, 23, 34, 1, 2768, 8520, 2518, 58, 1, 6022,
+         3101, 13, 3, 1, 155, 8, 46, 2161])) \
         .saveGraph()
 
     z.write()
 
+    # Text generation RNN
+    # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.1-text-generation-with-lstm.ipynb
 
-    # # Text generation RNN
-    # # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.1-text-generation-with-lstm.ipynb
-    #
-    # # seed text: this was a
-    # start = np.zeros((60,59))
-    # start[0, 46] = 1
-    # start[1, 34] = 1
-    # start[2, 35] = 1
-    # start[3, 45] = 1
-    # start[4, 1] = 1
-    # start[5, 49] = 1
-    # start[6, 27] = 1
-    # start[7, 45] = 1
-    # start[8, 1] = 1
-    # start[9, 27] = 1
-    #
-    #
-    # z = ZooEvaluation(name="text_gen_81", prefix="")
-    # z.graphFile("/TF_Graphs/text_gen_81/tf_model.pb") \
-    #     .inputName("lstm_1_input:0") \
-    #     .outputNames(["dense_1_1/Softmax:0"]) \
-    #     .setData(start) \
-    #     .saveGraph()
-    #
-    # z.write()
+    # seed text: this was a
+    start = np.zeros((60,59))
+    start[0, 46] = 1
+    start[1, 34] = 1
+    start[2, 35] = 1
+    start[3, 45] = 1
+    start[4, 1] = 1
+    start[5, 49] = 1
+    start[6, 27] = 1
+    start[7, 45] = 1
+    start[8, 1] = 1
+    start[9, 27] = 1
 
-    # # CIFAR-10 DCGAN (just the generator)
-    # # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.5-introduction-to-gans.ipynb
+
+    z = ZooEvaluation(name="text_gen_81", prefix="")
+    z.graphFile("/TF_Graphs/text_gen_81/tf_model.pb") \
+        .inputName("lstm_1_input:0") \
+        .outputNames(["dense_1_1/Softmax:0"]) \
+        .setSingleBatchData(start) \
+        .saveGraph()
+
+    z.write()
+
+    # CIFAR-10 DCGAN (just the generator)
+    # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.5-introduction-to-gans.ipynb
     # z = ZooEvaluation(name="cifar10_gan_85", prefix="")
     # z.graphFile("/TF_Graphs/cifar10_gan_85/tf_model.pb") \
     #     .inputName("input_1:0") \
     #     .outputNames(['conv2d_4/Tanh:0']) \
-    #     .setData(np.random.normal(size=(32,))) \
+    #     .setSingleBatchData(np.random.normal(size=(32,))) \
     #     .saveGraph()
     #
     # z.write()
+
+    # tempData = np.array([[1.4307807, -1.08526969, -1.18351695, -0.79942328, 1.15056955,
+    #                -0.97578531, -0.89015785, -0.77802672, -0.90604984,
+    #                -0.906668,
+    #                1.38567444, -0.54078408, -0.3473285, 0.06561315],
+    #               [1.36356716, -1.20839876, -1.29967599, -0.92083247,
+    #                1.24024323,
+    #                -1.0356099, -0.97352926, -0.80075238, -0.9848299,
+    #                -0.98662918,
+    #                1.49276138, -0.57332209, -0.77638912, 0.22840583],
+    #               [1.27041155, -1.31684272, -1.40131515, -1.02549556,
+    #                1.33589515,
+    #                -1.08372968, -1.04022639, -0.81934609, -1.05235566,
+    #                -1.05247956,
+    #                1.57984306, 0.06442285, -0.12421698, 0.12795928],
+    #               [1.19966045, -1.31006497, -1.3890291, -1.01014497, 1.35382989,
+    #                -1.08112861, -1.03069823, -0.82347803, -1.04110137,
+    #                -1.04307236,
+    #                1.55465998, -0.35206364, -0.3473285, 0.20300555],
+    #               [1.12655099, -1.26826886, -1.3410018, -0.96967524, 1.31796042,
+    #                -1.06162059, -1.00449578, -0.81521416, -1.01484135,
+    #                -1.01485077,
+    #                1.49229067, 0.16203687, 0.01737303, 0.0448311]])
+
+    # # Temperature prediction w/ stacked GRUs
+    # # https://github.com/fchollet/deep-learning-with-python-notebooks/blob
+    # # /master/6.3-advanced-usage-of-recurrent-neural-networks.ipynb
+    # z = ZooEvaluation(name="temperature_stacked_63", prefix="")
+    # z.graphFile("/TF_Graphs/temperature_stacked_63/tf_model.pb") \
+    #     .inputName("gru_1_input:0") \
+    #     .outputNames(['dense_1_1/BiasAdd:0']) \
+    #     .setSingleBatchData(tempData) \
+    #     .saveGraph()
+    #
+    # z.write()
+
+
+    # # Temperature prediction w/ bidirectional GRU
+    # # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/6.3-advanced-usage-of-recurrent-neural-networks.ipynb
+    # z = ZooEvaluation(name="temperature_bidirectional_63", prefix="")
+    # z.graphFile("/TF_Graphs/temperature_bidirectional_63/tf_model.pb") \
+    #     .inputName("bidirectional_1_input:0") \
+    #     .outputNames(['dense_1/BiasAdd:0']) \
+    #     .setSingleBatchData(tempData) \
+    #     .saveGraph()
+    #
+    # z.write()
+
+
+
+    #TODO does not work, see https://github.com/keras-team/keras/issues/12588
+
+    # Temperature prediction w/ 1D CNN and a GRU
+    # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/6.3-advanced-usage-of-recurrent-neural-networks.ipynb
+    # z = ZooEvaluation(name="temperature_1dcnn_to_gru_64", prefix="")
+    # z.graphFile("/TF_Graphs/temperature_1dcnn_to_gru_64/tf_model.pb") \
+    #     .inputName("conv1d_1_input:0") \
+    #     .outputNames(['dense_1/BiasAdd:0']) \
+    #     .setSingleBatchData(tempData) \
+    #     .saveGraph()
+    #
+    # z.write()
+
 
     # graph = z.loadGraph()
     #
