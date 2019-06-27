@@ -395,8 +395,7 @@ if __name__ == '__main__':
     # z.graphFile("/TF_Graphs/resnetv2_imagenet_frozen_graph.pb") \
     #     .inputName("input_tensor:0") \
     #     .outputNames(["softmax_tensor:0"]) \
-    #     .imageUrl("https://github.com/tensorflow/models/blob/master
-    #     /research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(224, 224, 3) \
     #     .preprocessingType("resize_only")
     # z.write()

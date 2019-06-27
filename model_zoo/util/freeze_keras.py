@@ -52,11 +52,15 @@ def freeze_keras_file(keras_file, tf_dir, tf_file = "tf_model.pb"):
     freeze_keras_model(model, tf_dir, tf_file)
 
 if __name__ == '__main__':
+
+    # all models are in model_zoo/keras_models now, same names
+
     # freeze_keras_file("C:\\Users\\jimne\\Google Drive\\Poly Stuff\\CSC 490\\Lab 4\\PorV.h5",
     #                   "C:\\Temp\\TF_Graphs\\" + "PorVRNN")
     freeze_keras_file(
         "C:\\Users\\jimne\\Desktop\\NN Server\\generator_model.h5",
         "C:\\Temp\\TF_Graphs\\" + "cifar10_gan_85")
+
     # freeze_keras_file(
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\text-predict.h5",
     #     "C:\\Temp\\TF_Graphs\\" + "text_gen_81")
@@ -71,9 +75,5 @@ if __name__ == '__main__':
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\stacked_grus.h5",
     #     "C:\\Temp\\TF_Graphs\\" + "temperature_stacked_63")
 
-
-    # freeze_keras_file(
-    #     "C:\\Users\\jimne\\Desktop\\NN Server\\1dcnn_to_gru.h5",
-    #     "C:\\Temp\\TF_Graphs\\" + "temperature_1dcnn_to_gru_64")
 
 
