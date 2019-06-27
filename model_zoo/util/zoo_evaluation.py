@@ -184,7 +184,10 @@ class ZooEvaluation(object):
             if isinstance(data, dict):
                 feed_dict = {k: [v] for k, v in data.items()}
             else:
-                feed_dict = {self.input_names: data}
+                if self.is_image:
+                    feed_dict = {self.input_names: [data]}
+                else:
+                    feed_dict = {self.input_names: data}
 
             outputs = sess.run(
                 # self.outputName,
@@ -467,43 +470,43 @@ if __name__ == '__main__':
     # z.write()
 
     # Author prediction RNN I had laying around
-    z = ZooEvaluation(name="PorV-RNN", prefix="")
-    z.graphFile("/TF_Graphs/PorVRNN/tf_model.pb") \
-        .inputName("input_1:0") \
-        .outputNames(["dense_2/Sigmoid:0"]) \
-        .setSingleBatchData(np.array(
-        [0, 0, 0, 0, 0, 3, 39, 9, 342, 8519, 1, 2768, 6022, 1777, 1, 155, 8,
-         490, 1, 202, 4, 1, 2768, 23, 34, 1, 2768, 8520, 2518, 58, 1, 6022,
-         3101, 13, 3, 1, 155, 8, 46, 2161])) \
-        .saveGraph()
-
-    z.write()
+    # z = ZooEvaluation(name="PorV-RNN", prefix="")
+    # z.graphFile("/TF_Graphs/PorVRNN/tf_model.pb") \
+    #     .inputName("input_1:0") \
+    #     .outputNames(["dense_2/Sigmoid:0"]) \
+    #     .setSingleBatchData(np.array(
+    #     [0, 0, 0, 0, 0, 3, 39, 9, 342, 8519, 1, 2768, 6022, 1777, 1, 155, 8,
+    #      490, 1, 202, 4, 1, 2768, 23, 34, 1, 2768, 8520, 2518, 58, 1, 6022,
+    #      3101, 13, 3, 1, 155, 8, 46, 2161])) \
+    #     .saveGraph()
+    #
+    # z.write()
 
     # Text generation RNN
     # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.1-text-generation-with-lstm.ipynb
 
     # seed text: this was a
-    start = np.zeros((60,59))
-    start[0, 46] = 1
-    start[1, 34] = 1
-    start[2, 35] = 1
-    start[3, 45] = 1
-    start[4, 1] = 1
-    start[5, 49] = 1
-    start[6, 27] = 1
-    start[7, 45] = 1
-    start[8, 1] = 1
-    start[9, 27] = 1
+    # start = np.zeros((60,59))
+    # start[0, 46] = 1
+    # start[1, 34] = 1
+    # start[2, 35] = 1
+    # start[3, 45] = 1
+    # start[4, 1] = 1
+    # start[5, 49] = 1
+    # start[6, 27] = 1
+    # start[7, 45] = 1
+    # start[8, 1] = 1
+    # start[9, 27] = 1
 
 
-    z = ZooEvaluation(name="text_gen_81", prefix="")
-    z.graphFile("/TF_Graphs/text_gen_81/tf_model.pb") \
-        .inputName("lstm_1_input:0") \
-        .outputNames(["dense_1_1/Softmax:0"]) \
-        .setSingleBatchData(start) \
-        .saveGraph()
-
-    z.write()
+    # z = ZooEvaluation(name="text_gen_81", prefix="")
+    # z.graphFile("/TF_Graphs/text_gen_81/tf_model.pb") \
+    #     .inputName("lstm_1_input:0") \
+    #     .outputNames(["dense_1_1/Softmax:0"]) \
+    #     .setSingleBatchData(start) \
+    #     .saveGraph()
+    #
+    # z.write()
 
     # CIFAR-10 DCGAN (just the generator)
     # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.5-introduction-to-gans.ipynb
