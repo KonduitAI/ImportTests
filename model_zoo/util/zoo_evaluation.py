@@ -3,6 +3,7 @@ import os
 import shutil
 import traceback
 from io import BytesIO
+from pathlib import Path
 from shutil import copyfile
 
 import tensorflow as tf
@@ -190,17 +191,18 @@ class ZooEvaluation(object):
 
     # for use with org.nd4j.imports.listeners.ImportModelDebugger
     def write_intermediates(self, dest):
+
+        if not isinstance(dest, Path):
+            dest = Path(dest)
+
         feed_dict, data = self.get_feed_dict()
-        path_sep = "\\"  # Change this for Linux to "/" (or comment out 
-        # path.replace below)
-        
+
           # Save input
         for inName in feed_dict:
-            inPath = dest + "__placeholders" + path_sep + inName.replace(":",
-                                                                               "__") + ".npy"
-            parent_dir = os.path.dirname(inPath)
-            os.makedirs(parent_dir, exist_ok=True)
-            np.save(inPath, feed_dict[inName])
+            inPath = dest / "__placeholders" / (inName.replace(":", "__") + ".npy")
+            inPath = inPath.absolute()
+            inPath.parent.mkdir(parents=True, exist_ok=True)
+            np.save(str(inPath), feed_dict[inName])
         
 
         graph = self.loadGraph()
@@ -215,11 +217,16 @@ class ZooEvaluation(object):
                 for i in range(nOuts):
                     try:
                         out = sess.run([op.name + ":" + str(i)], feed_dict=feed_dict)
-                        path = dest + op.name + "__" + str(i) + ".npy"
-                        path = path.replace("/", path_sep)
-                        parent_dir = os.path.dirname(path)
-                        os.makedirs(parent_dir, exist_ok=True)
-                        np.save(path, out[0])
+
+                        path = dest
+                        for p in op.name.split("/")[:-1]:
+                            path = path / p
+
+                        path: Path = path / (op.name.split("/")[-1] + "__" + str(i) + ".npy")
+                        path = path.absolute()
+                        path.parent.mkdir(parents=True, exist_ok=True)
+
+                        np.save(str(path), out[0])
                     except Exception:
                         print("Error saving " + op.name + ":" + str(i))
                         traceback.print_exc()
@@ -574,7 +581,7 @@ if __name__ == '__main__':
         .saveGraph()
 
     # z.write()
-    z.write_intermediates("C:\\Temp\\TF_Graphs\\cifar10_gan_85")
+    z.write_intermediates("/TF_Graphs/cifar10_gan_85/")
 
     # tempData = np.array([[1.4307807, -1.08526969, -1.18351695, -0.79942328, 1.15056955,
     #                -0.97578531, -0.89015785, -0.77802672, -0.90604984,
