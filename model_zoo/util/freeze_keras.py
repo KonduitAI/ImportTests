@@ -57,9 +57,9 @@ if __name__ == '__main__':
 
     # freeze_keras_file("C:\\Users\\jimne\\Google Drive\\Poly Stuff\\CSC 490\\Lab 4\\PorV.h5",
     #                   "C:\\Temp\\TF_Graphs\\" + "PorVRNN")
-    freeze_keras_file(
-        "C:\\Users\\jimne\\Desktop\\NN Server\\generator_model.h5",
-        "C:\\Temp\\TF_Graphs\\" + "cifar10_gan_85")
+    # freeze_keras_file(
+    #     "C:\\Users\\jimne\\Desktop\\NN Server\\generator_model.h5",
+    #     "C:\\Temp\\TF_Graphs\\" + "cifar10_gan_85")
 
     # freeze_keras_file(
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\text-predict.h5",
