@@ -1,8 +1,9 @@
 import tensorflow as tf
 from tensorflow.python.tools import freeze_graph
 from tensorflow.tools.graph_transforms import TransformGraph
+import argparse
 
-def load_graph(checkpoint_path):
+def load_graph(checkpoint_path, mb, seq_len):
     init_all_op = tf.initialize_all_variables()
     graph2 = tf.Graph()
     with graph2.as_default():
@@ -48,7 +49,7 @@ def load_graph(checkpoint_path):
             input_names = []
             # output_names = ["loss/LogSoftmax"]
             output_names = ["loss/Softmax"]
-            transforms = ['strip_unused_nodes(type=int32, shape="4,128")']
+            transforms = ['strip_unused_nodes(type=int32, shape="' + str(mb) + ',' + str(seq_len) + '")']
             # graph2 = TransformGraph(graph2.as_graph_def(), input_names, output_names, transforms)
             graph2 = TransformGraph(graph2.as_graph_def(), inputs=input_names, outputs=output_names, transforms=transforms)
 
@@ -57,14 +58,31 @@ def load_graph(checkpoint_path):
             return graph2
 
 
-dirIn = "/TF_Graphs/mrpc_output/"
-dirOut = dirIn + "frozen/"
-ckpt = "model.ckpt-2751"
-graph = load_graph(dirIn + ckpt)
-txtPath = dirOut + "bert_export.pb.txt"
-tf.train.write_graph(graph, dirOut, "bert_export.pb.txt", True)
+parser = argparse.ArgumentParser(description='Freeze BERT model')
+parser.add_argument('--minibatch', help='Minibatch size', default=4)
+parser.add_argument('--seq_length', help='Sequence length', default=128)
+parser.add_argument('--input_dir', help='Input directory for model', default="/TF_Graphs/mrpc_output/")
+parser.add_argument('--ckpt', help='Checkpoint filename in input dir', default="model.ckpt-2751")
 
-output_graph = dirOut + "bert_mrpc_frozen.pb"
+args = parser.parse_args()
+mb = int(args.minibatch)
+seq_len = int(args.seq_length)
+
+print("minibatch: ", mb)
+print("seq_length: ", seq_len)
+print("input_dir: ", args.input_dir)
+print("checkpoint: ", args.ckpt)
+
+dirIn = args.input_dir
+dirOut = dirIn + "frozen/"
+ckpt = args.ckpt
+graph = load_graph(dirIn + ckpt, mb, seq_len)
+txtName = "bert_export_mb" + str(mb) + "_len" + str(seq_len) + ".pb.txt"
+txtPath = dirOut + txtName
+tf.train.write_graph(graph, dirOut, txtName, True)
+
+
+output_graph = dirOut + "bert_frozen_mb" + str(mb) + "_len" + str(seq_len) + ".pb"
 print("Freezing Graph...")
 freeze_graph.freeze_graph(
     input_graph=txtPath,
