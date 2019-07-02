@@ -3,9 +3,12 @@ from sys import argv
 from keras import backend as K, Model
 import tensorflow as tf
 from keras.engine.saving import load_model
+from keras.layers import BatchNormalization
+from tensorflow import Operation
 
 
-def freeze_session(session, keep_var_names=None, output_names=None, clear_devices=True):
+def freeze_session(session, keep_var_names=None, output_names=None,
+                   clear_devices=True):
     """
     Freezes the state of a session into a pruned computation graph.
 
@@ -17,13 +20,26 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
     @param keep_var_names A list of variable names that should not be frozen,
                           or None to freeze all the variables in the graph.
     @param output_names Names of the relevant graph outputs.
-    @param clear_devices Remove the device directives from the graph for better portability.
+    @param clear_devices Remove the device directives from the graph for
+    better portability.
     @return The frozen graph definition.
     """
-    from tensorflow.python.framework.graph_util import convert_variables_to_constants
+    from tensorflow.python.framework.graph_util import \
+        convert_variables_to_constants
     graph = session.graph
+
+    op: Operation = graph.get_operation_by_name("batch_normalization_1/Const_5")
+    print("batch_normalization_1/Const_5:")
+    print(op.get_attr("value"))
+
     with graph.as_default():
-        freeze_var_names = list(set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
+        session.run(tf.global_variables_initializer())
+        tf.graph_util.remove_training_nodes(graph.as_graph_def())
+
+        freeze_var_names = list(
+            set(v.op.name for v in tf.global_variables()).difference(
+                keep_var_names or []))
+
         output_names = output_names or []
         output_names += [v.op.name for v in tf.global_variables()]
         # Graph -> GraphDef ProtoBuf
@@ -32,30 +48,47 @@ def freeze_session(session, keep_var_names=None, output_names=None, clear_device
             for node in input_graph_def.node:
                 node.device = ""
         frozen_graph = convert_variables_to_constants(session, input_graph_def,
-                                                      output_names, freeze_var_names)
+                                                      output_names,
+                                                      freeze_var_names)
         return frozen_graph
 
-def freeze_keras_model(model: Model, base_dir, frozen_file):
-    tf.train.write_graph(K.get_session().graph, base_dir, frozen_file + ".txt", as_text=True)
-    frozen_graph = freeze_session(K.get_session(),
-                                  output_names=[out.op.name for out in
-                                                model.outputs])
-    tf.train.write_graph(frozen_graph, base_dir, frozen_file, as_text=False)
 
-def freeze_keras_file(keras_file, tf_dir, tf_file = "tf_model.pb"):
-    model = load_model(keras_file)
+def freeze_keras_model(model: Model, base_dir, frozen_file="tf_model.pb"):
+
+    model.trainable = False
+    K.set_learning_phase(0)
+
+    for layer in model.layers:
+        layer.trainable = False
+        if isinstance(layer, BatchNormalization):
+            layer: BatchNormalization
+            layer.trainable = False
+            layer.training = False
+            layer._per_input_updates = {}
+
     model.summary()
     print()
     print("Inputs:", model.inputs)
     print("Outputs:", model.outputs)
+    frozen_graph = freeze_session(K.get_session(),
+                                  output_names=[out.op.name for out in
+                                                model.outputs])
+    tf.train.write_graph(K.get_session().graph, base_dir, frozen_file + ".txt",
+                         as_text=True)
+    tf.train.write_graph(frozen_graph, base_dir, frozen_file, as_text=False)
+
+
+def freeze_keras_file(keras_file, tf_dir, tf_file="tf_model.pb"):
+    model = load_model(keras_file)
 
     freeze_keras_model(model, tf_dir, tf_file)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     # all models are in model_zoo/keras_models now, same names
 
-    # freeze_keras_file("C:\\Users\\jimne\\Google Drive\\Poly Stuff\\CSC 490\\Lab 4\\PorV.h5",
+    # freeze_keras_file("C:\\Users\\jimne\\Google Drive\\Poly Stuff\\CSC
+    # 490\\Lab 4\\PorV.h5",
     #                   "C:\\Temp\\TF_Graphs\\" + "PorVRNN")
     # freeze_keras_file(
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\generator_model.h5",
@@ -65,7 +98,6 @@ if __name__ == '__main__':
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\text-predict.h5",
     #     "C:\\Temp\\TF_Graphs\\" + "text_gen_81")
 
-
     # freeze_keras_file(
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\bidirectional_gru.h5",
     #     "C:\\Temp\\TF_Graphs\\" + "temperature_bidirectional_63")
@@ -74,6 +106,4 @@ if __name__ == '__main__':
     # freeze_keras_file(
     #     "C:\\Users\\jimne\\Desktop\\NN Server\\stacked_grus.h5",
     #     "C:\\Temp\\TF_Graphs\\" + "temperature_stacked_63")
-
-
-
+    pass

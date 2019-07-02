@@ -142,7 +142,7 @@ class VarInitializer:
 
     def var_bernoulli(self, shape, dtype, n):
         #Random 0 or 1
-        return tf.cast((tf.random_uniform(shape) < 0.5), dtype=dtype)
+        return tf.Variable(tf.cast((tf.random_uniform(shape) < 0.5), dtype=dtype), dtype=dtype, name=n)
 
     def var_onehot(self, shape, dtype, n):
         if(len(shape) is not 2):
