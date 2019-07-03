@@ -65,6 +65,9 @@ class ZooEvaluation(object):
     def inputName(self, inputName):
         return self.inputNames(inputName)
 
+    def noInput(self):
+        return self.inputNames([])
+
     def outputNames(self, outputNames):
         self.outputNames = outputNames
         return self
@@ -157,6 +160,9 @@ class ZooEvaluation(object):
     def get_feed_dict(self):
         if (self.input_names is None or self.outputNames is None):
             raise ValueError("inputNames or outputNames not set")
+
+        if len(self.input_names) == 0:
+            return {}, np.array([])
 
         if self.is_image:
             data = self.getImage(False)
@@ -294,14 +300,18 @@ class ZooEvaluation(object):
         if self.is_image:
             tfp._save_input(self.getImage(True), self.input_names)
         else:
-            if isinstance(self.data, dict):
+            if len(self.input_names) == 0:
+                pass
+            elif isinstance(self.data, dict):
                 for k, v in self.data.items():
                     tfp._save_input(v, k)
             else:
                 tfp._save_input(data, self.input_names)
 
         dtype_dict = {}
-        if isinstance(data, dict):
+        if len(self.input_names) == 0:
+            pass
+        elif isinstance(data, dict):
             for k, v in data:
                 dtype_dict[k] = str(v.dtype)
         else:
@@ -683,6 +693,31 @@ if __name__ == '__main__':
     #     "/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(227, 227, 3) \
     #     .preprocessingType("resize_only")
+    #
+    # z.write()
+
+    # # # XLnet
+    # # # https://github.com/zihangdai/xlnet
+    # z = ZooEvaluation(name="xlnet_cased_L-24_H-1024_A-16", prefix="")
+    # z.graphFile("/TF_Graphs/xlnet_cased_L-24_H-1024_A-16/tf_model.pb") \
+    #     .inputName("Placeholder:0") \
+    #     .outputNames(["Softmax:0"]) \
+    #     .imageUrl(
+    #     "https://github.com/tensorflow/models/blob/master/research/deeplab"
+    #     "/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(227, 227, 3) \
+    #     .preprocessingType("resize_only")
+    #
+    # # z.write()
+
+    # # GPT-2
+    # # https://github.com/openai/gpt-2/
+    # # Note: uses a lot of RAM, if you keep seeing "Killed" in docker try
+    # # it outside
+    # z = ZooEvaluation(name="gpt-2_117M", prefix="")
+    # z.graphFile("C:/Temp/TF_Graphs/gpt-2/models/117M/tf_model.pb") \
+    #     .noInput() \
+    #     .outputNames(["strided_slice:0"])
     #
     # z.write()
 

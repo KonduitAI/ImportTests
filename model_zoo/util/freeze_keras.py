@@ -28,10 +28,6 @@ def freeze_session(session, keep_var_names=None, output_names=None,
         convert_variables_to_constants
     graph = session.graph
 
-    op: Operation = graph.get_operation_by_name("batch_normalization_1/Const_5")
-    print("batch_normalization_1/Const_5:")
-    print(op.get_attr("value"))
-
     with graph.as_default():
         session.run(tf.global_variables_initializer())
         tf.graph_util.remove_training_nodes(graph.as_graph_def())
