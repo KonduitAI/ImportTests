@@ -645,17 +645,47 @@ if __name__ == '__main__':
     #
     # z.write()
 
-    # Keras Applications InceptionResNetV2
-    z = ZooEvaluation(name="keras_InceptionResNetV2", prefix="")
-    z.graphFile("/TF_Graphs/keras_InceptionResNetV2/tf_model.pb") \
-        .inputName("input_1:0") \
-        .outputNames(['predictions/Softmax:0']) \
-        .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
-        .inputDims(299, 299, 3) \
-        .preprocessingType("inception") \
-        .saveGraph()
+    # Image compression done with a residual gru
+    #  https://github.com/tensorflow/models/tree/master/research/compression/image_encoder
+    # download.tensorflow.org\models\compression_residual_gru-2016-08-23.tar.gz
+    # z = ZooEvaluation(name="compression_residual_gru",prefix="")
+    # z.graphFile("/TF_Graphs/compression_residual_gru/residual_gru.pb") \
+    #     .inputName("Placeholder:0") \
+    #     .outputNames(["GruBinarizer/SignBinarizer/Sign:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(320, 320, 3) \
+    #     .preprocessingType("resize_only")
+    #
+    # z.write()
 
-    z.write()
+
+    # # Image semantic segmentation
+    # # https://github.com/tensorflow/models/tree/master/research/deeplab
+    # # download.tensorflow.org\models\deeplabv3_xception_ade20k_train_2018_05_29.tar.gz
+    # z = ZooEvaluation(name="deeplabv3_xception_ade20k_train",prefix="")
+    # z.graphFile("/TF_Graphs/deeplabv3_xception_ade20k_train/frozen_inference_graph.pb") \
+    #     .inputName("ImageTensor:0") \
+    #     .outputNames(["SemanticPredictions:0"]) \
+    #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(300, 300, 3) \
+    #     .preprocessingType("resize_only")
+    #
+    # z.write()
+
+    # # Alexnet
+    # # jaina.cs.ucdavis.edu\datasets\adv\imagenet\alexnet_frozen.pb
+    # z = ZooEvaluation(name="alexnet", prefix="")
+    # z.graphFile("/TF_Graphs/alexnet/alexnet_frozen.pb") \
+    #     .inputName("Placeholder:0") \
+    #     .outputNames(["Softmax:0"]) \
+    #     .imageUrl(
+    #     "https://github.com/tensorflow/models/blob/master/research/deeplab"
+    #     "/g3doc/img/image2.jpg?raw=true") \
+    #     .inputDims(227, 227, 3) \
+    #     .preprocessingType("resize_only")
+    #
+    # z.write()
+
 
     # graph = z.loadGraph()
     #
