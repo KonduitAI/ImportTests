@@ -655,15 +655,16 @@ if __name__ == '__main__':
     #
     # z.write()
 
-    # Image compression done with a residual gru
-    #  https://github.com/tensorflow/models/tree/master/research/compression/image_encoder
-    # download.tensorflow.org\models\compression_residual_gru-2016-08-23.tar.gz
+    # # Image compression done with a residual gru
+    # #  https://github.com/tensorflow/models/tree/master/research/compression/image_encoder
+    # # download.tensorflow.org\models\compression_residual_gru-2016-08-23.tar.gz
     # z = ZooEvaluation(name="compression_residual_gru",prefix="")
     # z.graphFile("/TF_Graphs/compression_residual_gru/residual_gru.pb") \
     #     .inputName("Placeholder:0") \
     #     .outputNames(["GruBinarizer/SignBinarizer/Sign:0"]) \
     #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(320, 320, 3) \
+    #     .saveGraph() \
     #     .preprocessingType("resize_only")
     #
     # z.write()
@@ -678,6 +679,7 @@ if __name__ == '__main__':
     #     .outputNames(["SemanticPredictions:0"]) \
     #     .imageUrl("https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(300, 300, 3) \
+    #     .saveGraph() \
     #     .preprocessingType("resize_only")
     #
     # z.write()
@@ -692,6 +694,7 @@ if __name__ == '__main__':
     #     "https://github.com/tensorflow/models/blob/master/research/deeplab"
     #     "/g3doc/img/image2.jpg?raw=true") \
     #     .inputDims(227, 227, 3) \
+    #     .saveGraph() \
     #     .preprocessingType("resize_only")
     #
     # z.write()
@@ -715,8 +718,9 @@ if __name__ == '__main__':
     # # Note: uses a lot of RAM, if you keep seeing "Killed" in docker try
     # # it outside
     # z = ZooEvaluation(name="gpt-2_117M", prefix="")
-    # z.graphFile("C:/Temp/TF_Graphs/gpt-2/models/117M/tf_model.pb") \
+    # z.graphFile("/TF_Graphs/gpt-2/models/117M/tf_model.pb") \
     #     .noInput() \
+    #     .saveGraph() \
     #     .outputNames(["strided_slice:0"])
     #
     # z.write()
