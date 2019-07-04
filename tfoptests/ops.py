@@ -1211,3 +1211,9 @@ class OpCreator:
 
     def execute_check_numerics(self):
         return [tf.debugging.check_numerics(tensor=self.vars[0], message=self.op["message"])]
+
+    def execute_multinormal(self):
+        return [tf.distributions.Multinomial(total_count=self.op["total_count"], logits=self.vars[0]).sample(self.op["sample_shape"])]
+
+    def execute_multinormal_with_p(self):
+        return [tf.distributions.Multinomial(total_count=self.op["total_count"], probs=self.vars[0]).sample(self.op["sample_shape"])]
