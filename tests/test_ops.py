@@ -1680,10 +1680,10 @@ def test_mathtransform():
         # {"opName": "reduce_max", "outName": "emptyReduceAxisTests/reduce_max/rank2", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":False},
         # {"opName": "reduce_max", "outName": "emptyReduceAxisTests/reduce_max/rank2_keep", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":True},
 
-        {"opName": "multinormal", "outName": "multinormal/logits/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
-        {"opName": "multinormal", "outName": "multinormal/logits/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
-        {"opName": "multinormal_with_p", "outName": "multinormal/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
-        {"opName": "multinormal_with_p", "outName": "multinormal/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
+        {"opName": "multinomial", "outName": "multinomial/logits/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
+        {"opName": "multinomial", "outName": "multinomial/logits/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
+        {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
+        {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
 
            ]
 
