@@ -8,7 +8,7 @@ from tensorflow import Operation
 
 
 def freeze_session(session, keep_var_names=None, output_names=None,
-                   clear_devices=True):
+                   clear_devices=True, graph=None):
     """
     Freezes the state of a session into a pruned computation graph.
 
@@ -26,7 +26,12 @@ def freeze_session(session, keep_var_names=None, output_names=None,
     """
     from tensorflow.python.framework.graph_util import \
         convert_variables_to_constants
-    graph = session.graph
+
+    if graph is not None:
+        session = tf.Session(graph=graph)
+
+    if graph is None:
+        graph = session.graph
 
     with graph.as_default():
         session.run(tf.global_variables_initializer())

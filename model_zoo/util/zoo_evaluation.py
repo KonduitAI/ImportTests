@@ -11,6 +11,7 @@ import numpy as np
 import typing
 from six.moves import urllib
 from PIL import Image  # pip install Pillow
+from tensorflow import Graph
 
 from tfoptests.persistor import TensorFlowPersistor
 from model_zoo.util import vgg_preprocessing
@@ -23,7 +24,7 @@ key = os.getenv("AZURE_KEY", None)
 class ZooEvaluation(object):
 
     def __init__(self, name,
-                 baseDir="/dl4j-test-resources/src/main/resources/tf_graphs"
+                 baseDir="C:/Skymind/dl4j-test-resources/src/main/resources/tf_graphs"
                          "/zoo_models",
                  prefix="graph"):
         tf.reset_default_graph()
@@ -81,7 +82,10 @@ class ZooEvaluation(object):
         return self
 
     def setSingleBatchData(self, data):
-        self.setData(np.expand_dims(data, 0))
+        if isinstance(data, dict):
+            self.setData({k: np.expand_dims(v, 0) for k, v in data.items()})
+        else:
+            self.setData(np.expand_dims(data, 0))
         return self
 
     def getImage(self, expandDim):
@@ -184,10 +188,11 @@ class ZooEvaluation(object):
 
         print("Input names: ", self.input_names)
         print("Output names: ", self.outputNames)
-        print("Input data shape: ", data.shape)
         if isinstance(data, dict):
-            feed_dict = {k: [v] for k, v in data.items()}
+            print("Input data shape: ", {k: v.shape for k, v in data.items()})
+            feed_dict = {k: v for k, v in data.items()}
         else:
+            print("Input data shape: ", data.shape)
             if self.is_image:
                 feed_dict = {self.input_names: [data]}
             else:
@@ -312,7 +317,7 @@ class ZooEvaluation(object):
         if len(self.input_names) == 0:
             pass
         elif isinstance(data, dict):
-            for k, v in data:
+            for k, v in data.items():
                 dtype_dict[k] = str(v.dtype)
         else:
             dtype_dict[self.input_names] = str(data.dtype)
@@ -725,8 +730,26 @@ if __name__ == '__main__':
     #
     # z.write()
 
+    # # XLNet
+    # # https://github.com/zihangdai/xlnet
+    # # Note: uses a lot of RAM, if you keep seeing "Killed" in docker try
+    # # it outside
+    # z = ZooEvaluation(name="xlnet_cased_L-24_H-1024_A-16", prefix="")
+    # z.graphFile("C:/Temp/TF_Graphs/xlnet_cased_L-24_H-1024_A-16/tf_model.pb") \
+    #     .noInput() \
+    #     .inputNames(["input:0", "input_1:0", "input_2:0"]) \
+    #     .setData({"input:0": (np.random.randn(8, 128)*10).astype('int32'),
+    #                          "input_1:0": (np.random.randn(8, 128)*10).astype('int32'),
+    #                          "input_2:0": np.random.randn(8, 128)*10}) \
+    #     .saveGraph() \
+    #     .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
+    #
+    # z.write()
 
-    # graph = z.loadGraph()
+
+    # graph: Graph = z.loadGraph()
     #
     # for op in graph.get_operations():
     #     print(op.name)
+
+    pass
