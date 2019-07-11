@@ -203,6 +203,8 @@ class ZooEvaluation(object):
     # for use with org.nd4j.imports.listeners.ImportModelDebugger
     def write_intermediates(self, dest):
 
+
+
         if not isinstance(dest, Path):
             dest = Path(dest)
 
@@ -217,6 +219,8 @@ class ZooEvaluation(object):
         
 
         graph = self.loadGraph()
+
+        copyfile(self.graphFile, dest/"tf_model.pb")
 
           # now build the graph
         with graph.as_default() as graph:
@@ -579,24 +583,24 @@ if __name__ == '__main__':
     #
     # z.write()
 
-    # # CIFAR-10 DCGAN (just the generator)
-    # # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.5-introduction-to-gans.ipynb
-    # z = ZooEvaluation(name="cifar10_gan_85", prefix="")
-    # z.graphFile("/TF_Graphs/cifar10_gan_85/tf_model.pb") \
-    #     .inputName("input_1:0") \
-    #     .outputNames(['conv2d_4/Tanh:0']) \
-    #     .setSingleBatchData(
-    #     np.array([-0.66637576, -0.75804161, 0.70265126, 0.67644233, 1.70802486,
-    #               0.67723204, -0.95535933, 0.4106528, 0.15204615, 0.81687495,
-    #               0.07579885, -0.84215164, 1.4546437, 0.73752796, -0.68664101,
-    #               0.02874679, -0.26094784, -1.20962916, 0.38224013, -0.76390132,
-    #               0.9095366, 0.85208794, -0.80977076, 1.91582847, 2.87287804,
-    #               2.35497939, 0.34249151, -0.1988978, -0.07104926, 1.83731291,
-    #               0.70314201, 0.33953821])) \
-    #     .saveGraph()
+    # CIFAR-10 DCGAN (just the generator)
+    # https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/8.5-introduction-to-gans.ipynb
+    z = ZooEvaluation(name="cifar10_gan_85", prefix="")
+    z.graphFile("C:\\Users\\jimne\\Downloads\\cifar10_gan_85_frozenmodel.pb") \
+        .inputName("input_1:0") \
+        .outputNames(['conv2d_4/Tanh:0']) \
+        .setSingleBatchData(
+        np.array([-0.66637576, -0.75804161, 0.70265126, 0.67644233, 1.70802486,
+                  0.67723204, -0.95535933, 0.4106528, 0.15204615, 0.81687495,
+                  0.07579885, -0.84215164, 1.4546437, 0.73752796, -0.68664101,
+                  0.02874679, -0.26094784, -1.20962916, 0.38224013, -0.76390132,
+                  0.9095366, 0.85208794, -0.80977076, 1.91582847, 2.87287804,
+                  2.35497939, 0.34249151, -0.1988978, -0.07104926, 1.83731291,
+                  0.70314201, 0.33953821])) \
+        .saveGraph()
 
     # z.write()
-    # z.write_intermediates("/TF_Graphs/cifar10_gan_85/")
+    z.write_intermediates("C:/Temp/TF_Graphs/cifar10_gan_85/")
 
     # tempData = np.array([[1.4307807, -1.08526969, -1.18351695, -0.79942328, 1.15056955,
     #                -0.97578531, -0.89015785, -0.77802672, -0.90604984,
@@ -703,20 +707,6 @@ if __name__ == '__main__':
     #     .preprocessingType("resize_only")
     #
     # z.write()
-
-    # # # XLnet
-    # # # https://github.com/zihangdai/xlnet
-    # z = ZooEvaluation(name="xlnet_cased_L-24_H-1024_A-16", prefix="")
-    # z.graphFile("/TF_Graphs/xlnet_cased_L-24_H-1024_A-16/tf_model.pb") \
-    #     .inputName("Placeholder:0") \
-    #     .outputNames(["Softmax:0"]) \
-    #     .imageUrl(
-    #     "https://github.com/tensorflow/models/blob/master/research/deeplab"
-    #     "/g3doc/img/image2.jpg?raw=true") \
-    #     .inputDims(227, 227, 3) \
-    #     .preprocessingType("resize_only")
-    #
-    # # z.write()
 
     # # GPT-2
     # # https://github.com/openai/gpt-2/
