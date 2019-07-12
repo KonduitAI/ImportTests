@@ -216,7 +216,7 @@ class ZooEvaluation(object):
             inPath = inPath.absolute()
             inPath.parent.mkdir(parents=True, exist_ok=True)
             np.save(str(inPath), feed_dict[inName])
-        
+
 
         graph = self.loadGraph()
 
@@ -225,27 +225,36 @@ class ZooEvaluation(object):
 
           # now build the graph
         with graph.as_default() as graph:
-            for op in graph.get_operations():
-                print(op.name)
-                  # print("  ", op.outputs)
-                sess = tf.Session(graph=graph)
-                nOuts = len(op.outputs)
-                for i in range(nOuts):
-                    try:
-                        out = sess.run([op.name + ":" + str(i)], feed_dict=feed_dict)
+            graph: Graph
+            sess = tf.Session(graph=graph)
+            with sess.as_default():
+                feed_dict, data = self.get_feed_dict()
+                sess.run(
+                    # self.outputName,
+                    self.outputNames,
+                    feed_dict=feed_dict)
 
-                        path = dest
-                        for p in op.name.split("/")[:-1]:
-                            path = path / p
+                for op in graph.get_operations():
+                    print(op.name)
+                      # print("  ", op.outputs)
+                    sess = tf.Session(graph=graph)
+                    nOuts = len(op.outputs)
+                    for i in range(nOuts):
+                        try:
+                            out = graph.get_tensor_by_name(op.name + ":" + str(i)).eval()
 
-                        path: Path = path / (op.name.split("/")[-1] + "__" + str(i) + ".npy")
-                        path = path.absolute()
-                        path.parent.mkdir(parents=True, exist_ok=True)
+                            path = dest
+                            for p in op.name.split("/")[:-1]:
+                                path = path / p
 
-                        np.save(str(path), out[0])
-                    except Exception:
-                        print("Error saving " + op.name + ":" + str(i))
-                        traceback.print_exc()
+                            path: Path = path / (op.name.split("/")[-1] + "__" + str(i) + ".npy")
+                            path = path.absolute()
+                            path.parent.mkdir(parents=True, exist_ok=True)
+
+                            np.save(str(path), out)
+                        except Exception:
+                            print("Error saving " + op.name + ":" + str(i))
+                            traceback.print_exc()
                         print("-------------------------------------------------------------")
 
     def write(self):
@@ -257,7 +266,6 @@ class ZooEvaluation(object):
             feed_dict, data = self.get_feed_dict()
 
             outputs = sess.run(
-                # self.outputName,
                 self.outputNames,
                 feed_dict=feed_dict)
             # print(outputs)
@@ -735,8 +743,8 @@ if __name__ == '__main__':
         .saveGraph() \
         .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
 
-    z.write()
-    # z.write_intermediates("C:/Temp/TF_Graphs/xlnet_cased_L-24_H-1024_A-16")
+    # z.write()
+    z.write_intermediates("C:/Temp/TF_Graphs/xlnet_cased_L-24_H-1024_A-16")
 
 
     # graph: Graph = z.loadGraph()
