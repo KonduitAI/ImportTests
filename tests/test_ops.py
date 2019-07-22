@@ -219,6 +219,12 @@ def test_mathtransform():
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_noFull_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":False, "compute_uv":True},
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_full_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":True, "compute_uv":False},
 
+        {"opName": "pow", "outName": "pow/rank0", "varShapes": [[], []],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        {"opName": "pow", "outName": "pow/rank1", "varShapes":[[2], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        {"opName": "pow", "outName": "pow/rank2", "varShapes":[[3,2], [3,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        {"opName": "pow", "outName": "pow/rank2bc0", "varShapes":[[2,5], []], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        {"opName": "pow", "outName": "pow/rank2bc", "varShapes":[[2,5], [2, 1]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank0", "varShapes":[[],[]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank1", "varShapes":[[5],[5]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank2", "varShapes":[[3,4],[3,4]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
@@ -1208,9 +1214,9 @@ def test_mathtransform():
         # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank2_0_2_8bit", "varShapes":[[4,5]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":2.0},
         # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_1_5_4bit_narrow", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform10"], "num_bits":4, "narrow_range":True, "min":1.0, "max":5.0},
 
-        {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank1_8bit", "varShapes":[[5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":False},
-        {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank2_8bit_narrow", "varShapes":[[3, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":True},
-        {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank4_6bit", "varShapes":[[3, 2, 2, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":6, "narrow_range":False},
+        # {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank1_8bit", "varShapes":[[5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":False},
+        # {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank2_8bit_narrow", "varShapes":[[3, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":True},
+        # {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank4_6bit", "varShapes":[[3, 2, 2, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":6, "narrow_range":False},
 
 
         # {"opName": "check_numerics", "outName": "check_numerics/rank1_float16", "varShapes":[[5]], "varTypes":["float16", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
@@ -1679,6 +1685,11 @@ def test_mathtransform():
         # {"opName": "reduce_min", "outName": "emptyReduceAxisTests/reduce_min/rank1_keep", "varShapes":[[3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":True},
         # {"opName": "reduce_max", "outName": "emptyReduceAxisTests/reduce_max/rank2", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":False},
         # {"opName": "reduce_max", "outName": "emptyReduceAxisTests/reduce_max/rank2_keep", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":True},
+
+        # {"opName": "multinomial", "outName": "multinomial/logits/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
+        # {"opName": "multinomial", "outName": "multinomial/logits/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
+        # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
+        # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
 
            ]
 
