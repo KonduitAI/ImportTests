@@ -24,7 +24,7 @@ key = os.getenv("AZURE_KEY", None)
 class ZooEvaluation(object):
 
     def __init__(self, name,
-                 baseDir="C:/Skymind/dl4j-test-resources/src/main/resources/tf_graphs"
+                 baseDir="/dl4j-test-resources/src/main/resources/tf_graphs"
                          "/zoo_models",
                  prefix="graph"):
         tf.reset_default_graph()
@@ -745,7 +745,7 @@ if __name__ == '__main__':
         .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
 
     # z.write()
-    z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
+    #z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
 
 
     # graph: Graph = z.loadGraph()
