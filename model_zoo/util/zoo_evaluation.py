@@ -201,7 +201,7 @@ class ZooEvaluation(object):
         return feed_dict, data
 
     # for use with org.nd4j.imports.listeners.ImportModelDebugger
-    def write_intermediates(self, dest):
+    def write_intermediates(self, dest, force=True):
 
 
 
@@ -215,7 +215,8 @@ class ZooEvaluation(object):
             inPath = dest / "__placeholders" / (inName.replace(":", "__") + ".npy")
             inPath = inPath.absolute()
             inPath.parent.mkdir(parents=True, exist_ok=True)
-            np.save(str(inPath), feed_dict[inName])
+            if (not inPath.exists()) or force:
+                np.save(str(inPath), feed_dict[inName])
 
 
         graph = self.loadGraph()
@@ -241,8 +242,6 @@ class ZooEvaluation(object):
                     nOuts = len(op.outputs)
                     for i in range(nOuts):
                         try:
-                            out = graph.get_tensor_by_name(op.name + ":" + str(i)).eval()
-
                             path = dest
                             for p in op.name.split("/")[:-1]:
                                 path = path / p
@@ -251,7 +250,9 @@ class ZooEvaluation(object):
                             path = path.absolute()
                             path.parent.mkdir(parents=True, exist_ok=True)
 
-                            np.save(str(path), out)
+                            if (not path.exists()) or force:
+                                out = graph.get_tensor_by_name(op.name + ":" + str(i)).eval()
+                                np.save(str(path), out)
                         except Exception:
                             print("Error saving " + op.name + ":" + str(i))
                             traceback.print_exc()
@@ -744,7 +745,7 @@ if __name__ == '__main__':
         .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
 
     # z.write()
-    z.write_intermediates("C:/Temp/TF_Graphs/xlnet_cased_L-24_H-1024_A-16")
+    z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
 
 
     # graph: Graph = z.loadGraph()
