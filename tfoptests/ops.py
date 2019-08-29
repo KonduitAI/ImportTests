@@ -417,17 +417,17 @@ class OpCreator:
         # and hence we'll save the input post-modification, rather than pre-modification
         intermediate = tf.Variable(tf.zeros(self.op["varShapes"][0]), dtype=tf.float32)
         intermediate = tf.assign(intermediate, self.vars[0])
-        return [tf.scatter_nd_add(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
+        return [tf.scatter_nd_add(ref=intermediate, indices=self.vars[1], updates=self.vars[2], use_locking=self.op["use_locking"])]
 
     def execute_scatter_nd_sub(self):
         intermediate = tf.Variable(tf.zeros(self.op["varShapes"][0]), dtype=tf.float32)
         intermediate = tf.assign(intermediate, self.vars[0])
-        return [tf.scatter_nd_sub(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
+        return [tf.scatter_nd_sub(ref=intermediate, indices=self.vars[1], updates=self.vars[2], use_locking=self.op["use_locking"])]
 
     def execute_scatter_nd_update(self):
         intermediate = tf.Variable(tf.zeros(self.op["varShapes"][0]), dtype=tf.float32)
         intermediate = tf.assign(intermediate, self.vars[0])
-        return [tf.scatter_nd_update(ref=intermediate, indices=self.vars[1], updates=self.vars[2])]
+        return [tf.scatter_nd_update(ref=intermediate, indices=self.vars[1], updates=self.vars[2], use_locking=self.op["use_locking"])]
 
     def execute_scatter_add(self):
         return [tf.scatter_add(ref=self.vars[0], indices=self.vars[1], updates=self.vars[2])]

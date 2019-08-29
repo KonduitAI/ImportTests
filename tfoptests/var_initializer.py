@@ -1,11 +1,17 @@
 import tensorflow as tf
 import numpy as np
+import random
 
 
 class VarInitializer:
     #def __init__(self):
     #    self.node_num = 0
 
+    def prod(self, shape):
+        prod = 1
+        for v in shape:
+            prod = prod * v
+        return prod
 
     def newVar(self, initType, shape, dtype, name):
         method_name = "var_" + initType
@@ -126,6 +132,25 @@ class VarInitializer:
             raise ValueError("Shape must be exactly [3]")
         return tf.Variable([2,1,4], dtype=dtype, name=n)
 
+    def var_fixed_3_1_4_2(self, shape, dtype, n):
+        if(self.prod(shape) is not 4):
+            raise ValueError("Shape must be exactly [4]")
+        return tf.reshape(tf.Variable([3,1,2,4], dtype=dtype, name=n), shape)
+
+    def var_unique_rand_5(self, shape, dtype, n):
+        if(self.prod(shape) > 5):
+            raise ValueError("product(shape) must be <= 5, shape is " + str(shape))
+        prod = self.prod(shape)
+        values = random.sample(range(0, 5), prod)
+        return tf.reshape(tf.Variable(values, dtype=dtype, name=n), shape)
+
+    def var_unique_rand_10(self, shape, dtype, n):
+        if(self.prod(shape) > 10):
+            raise ValueError("product(shape) must be <= 10, shape is " + str(shape))
+        prod = self.prod(shape)
+        values = random.sample(range(0, 10), prod)
+        return tf.reshape(tf.Variable(values, dtype=dtype, name=n), shape)
+
     def var_segment3(self, shape, dtype, n):
         return self.var_segmentN(3, shape, dtype, n)
 
@@ -215,4 +240,3 @@ class VarInitializer:
     def placeholder_one(self, shape, dtype, n):
         return [tf.placeholder(dtype=dtype, shape=shape, name=n),
                 np.ones(shape, dtype.as_numpy_dtype())]
-
