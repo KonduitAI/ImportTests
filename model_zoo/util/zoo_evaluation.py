@@ -20,6 +20,7 @@ from model_zoo.util import hub_processing
 
 key = os.getenv("AZURE_KEY", None)
 
+EXEC_BACH = 5
 
 class ZooEvaluation(object):
 
@@ -235,28 +236,43 @@ class ZooEvaluation(object):
                     self.outputNames,
                     feed_dict=feed_dict)
 
+                needed = {}
+
                 for op in graph.get_operations():
-                    print(op.name)
-                      # print("  ", op.outputs)
-                    sess = tf.Session(graph=graph)
                     nOuts = len(op.outputs)
                     for i in range(nOuts):
-                        try:
-                            path = dest
-                            for p in op.name.split("/")[:-1]:
-                                path = path / p
+                        path = dest
+                        for p in op.name.split("/")[:-1]:
+                            path = path / p
 
-                            path: Path = path / (op.name.split("/")[-1] + "__" + str(i) + ".npy")
-                            path = path.absolute()
-                            path.parent.mkdir(parents=True, exist_ok=True)
+                        path: Path = path / (op.name.split("/")[-1] + "__" + str(i) + ".npy")
+                        path = path.absolute()
+                        path.parent.mkdir(parents=True, exist_ok=True)
 
-                            if (not path.exists()) or force:
-                                out = graph.get_tensor_by_name(op.name + ":" + str(i)).eval()
-                                np.save(str(path), out)
-                        except Exception:
-                            print("Error saving " + op.name + ":" + str(i))
-                            traceback.print_exc()
-                        print("-------------------------------------------------------------")
+                        if (not path.exists()) or force:
+                            needed[str(path)] = graph.get_tensor_by_name(op.name + ":" + str(i))
+                            print(op.name + ":" + str(i))
+
+                print("\n------------------------------------- Execing -------------------------------------\n")
+
+                saved = {}
+                for k, v in needed.items():
+                    if len(saved) >= EXEC_BACH:
+                        results = sess.run(saved, feed_dict=feed_dict)
+
+                        for file, arr in results.items():
+                            print(saved[file])
+                            np.save(file, arr)
+                        saved = {}
+                    else:
+                        saved[k] = v
+
+                if len(saved) > 0:
+                    results = sess.run(saved, feed_dict=feed_dict)
+
+                    for file, arr in results.items():
+                        print(saved[file])
+                        np.save(file, arr)
 
     def write(self):
 
@@ -745,7 +761,7 @@ if __name__ == '__main__':
         .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
 
     # z.write()
-    #z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
+    z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
 
 
     # graph: Graph = z.loadGraph()
