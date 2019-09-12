@@ -750,18 +750,18 @@ if __name__ == '__main__':
     # https://github.com/zihangdai/xlnet
     # Note: uses a lot of RAM, if you keep seeing "Killed" in docker try
     # it outside
-    z = ZooEvaluation(name="xlnet_cased_L-24_H-1024_A-16", prefix="")
-    z.graphFile("C:/Temp/TF_Graphs/xlnet_cased_L-24_H-1024_A-16/tf_model.pb") \
-        .noInput() \
-        .inputNames(["input:0", "input_1:0", "input_2:0"]) \
-        .setData({"input:0": np.load("C:\\Skymind\\TFOpTests\\model_zoo\\util\\data\\xlnet\\input.npy"),
-                             "input_1:0": np.load("C:\\Skymind\\TFOpTests\\model_zoo\\util\\data\\xlnet\\input_1.npy"),
-                             "input_2:0": np.load("C:\\Skymind\\TFOpTests\\model_zoo\\util\\data\\xlnet\\input_2.npy")}) \
-        .saveGraph() \
-        .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
+    # z = ZooEvaluation(name="xlnet_cased_L-24_H-1024_A-16", prefix="")
+    # z.graphFile("C:/Temp/TF_Graphs/xlnet_cased_L-24_H-1024_A-16/tf_model.pb") \
+    #     .noInput() \
+    #     .inputNames(["input:0", "input_1:0", "input_2:0"]) \
+    #     .setData({"input:0": np.load("C:\\Skymind\\TFOpTests\\model_zoo\\util\\data\\xlnet\\input.npy"),
+    #                          "input_1:0": np.load("C:\\Skymind\\TFOpTests\\model_zoo\\util\\data\\xlnet\\input_1.npy"),
+    #                          "input_2:0": np.load("C:\\Skymind\\TFOpTests\\model_zoo\\util\\data\\xlnet\\input_2.npy")}) \
+    #     .saveGraph() \
+    #     .outputNames(["model_2/classification_imdb/logit/BiasAdd:0"])
 
     # z.write()
-    z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
+    # z.write_intermediates("C:\\Temp\\TF_Graphs\\xlnet_cased_L-24_H-1024_A-16", False)
 
 
     # graph: Graph = z.loadGraph()
