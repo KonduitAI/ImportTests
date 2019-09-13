@@ -219,6 +219,12 @@ def test_mathtransform():
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_noFull_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":False, "compute_uv":True},
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_full_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":True, "compute_uv":False},
 
+        # {"opName": "pow", "outName": "pow/rank0", "varShapes": [[], []],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank1", "varShapes":[[2], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2", "varShapes":[[3,2], [3,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2bc0", "varShapes":[[2,5], []], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2bc", "varShapes":[[2,5], [2, 1]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank0", "varShapes":[[],[]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank1", "varShapes":[[5],[5]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank2", "varShapes":[[3,4],[3,4]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
@@ -651,39 +657,54 @@ def test_mathtransform():
 
         #Scatter ND: arrays are indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
             #This case: update has shape [4]+[] = 4
-        # {"opName":"scatter_nd", "outName":"scatter_nd/rank1shape_1indices", "varShapes":[[4,1],[4]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10]},
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank1shape_1indices", "varShapes":[[4,1],[4]], "varTypes":["int32", "float32"], "varInit":["fixed_3_1_4_2", "uniform"], "shape":[10]},
         #     #This case: 2 indices, 2 shape -> updates are individual elements
-        # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_2indices", "varShapes":[[4,2],[4]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,10]},
-        #     #This case: 1 indices, 2 shape -> updates are slices of shape [4]+[7]
-        # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_1indices", "varShapes":[[4,1],[4,7]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7]},
-        #     #This case: 2 indices, 3 shape -> updates are slices of shape [4]+[5] = [4,5]
-        # {"opName":"scatter_nd", "outName":"scatter_nd/rank3shape_2indices", "varShapes":[[4,2],[4,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7,5]},
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_2indices", "varShapes":[[4,2],[4]], "varTypes":["int32", "float32"], "varInit":["unique_rand_10", "uniform"], "shape":[10,10]},
+        #     #This case: 1 indices, 2 shape -> updates are slices from shape [4]+[7]=[4,7]
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank2shape_1indices", "varShapes":[[4,1],[4,7]], "varTypes":["int32", "float32"], "varInit":["unique_rand_10", "uniform"], "shape":[10,7]},
+        #     #This case: 2 indices, 3 shape -> updates are slices of shape [2]+[5] = [2,5]
+        # {"opName":"scatter_nd", "outName":"scatter_nd/rank3shape_2indices", "varShapes":[[2,2],[2,5]], "varTypes":["int32", "float32"], "varInit":["unique_rand_5", "uniform"], "shape":[10,7,5]},
         #     #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
         # {"opName":"scatter_nd", "outName":"scatter_nd/rank3shape_1indices", "varShapes":[[4,1],[4,7,5]], "varTypes":["int32", "float32"], "varInit":["uniform_int10", "uniform"], "shape":[10,7,5]},
 
         # #Scatter ND ADD: arrays are ref, indices, updates. Updates has shape indices.shape[:-1] + shape[indices.shape[-1]:]
         # #This case: update has shape [4]+[] = 4
-        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/locking/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/unique_idxs/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
         # #This case: 2 indices, 2 shape -> updates are individual elements
-        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/locking/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/unique_idxs/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
         # #This case: 1 indices, 2 shape -> updates are slices of shape [4]+[7]
-        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/locking/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/unique_idxs/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
         # # This case: 2 indices, 3 shape -> updates are slices of shape [4]+[5] = [4,5]
-        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/locking/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/unique_idxs/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
         # #This case: 1 indices, 3 shape -> updates are slices of shape [4]+[7,5] = [4,7,5]
-        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/locking/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_add", "outName":"scatter_nd_add/unique_idxs/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
         #
-        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
-        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/locking/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/locking/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/locking/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/locking/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/locking/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/unique_idxs/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/unique_idxs/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/unique_idxs/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/unique_idxs/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_sub", "outName":"scatter_nd_sub/unique_idxs/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
 
-        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"],},
-        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
-        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"]},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/locking/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/locking/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/locking/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/locking/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/locking/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "uniform_int10", "uniform"], "use_locking":True},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/unique_idxs/rank1shape_1indices", "varShapes":[[10], [4,1],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/unique_idxs/rank2shape_2indices", "varShapes":[[10,10], [4,2],[4]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/unique_idxs/rank2shape_1indices", "varShapes":[[10,7], [4,1],[4,7]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/unique_idxs/rank3shape_2indices", "varShapes":[[10,7,5], [4,2],[4,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
+        # {"opName":"scatter_nd_update", "outName":"scatter_nd_update/unique_idxs/rank3shape_1indices", "varShapes":[[10,7,5], [4,1],[4,7,5]], "varTypes":["float32", "int32", "float32"], "varInit":["one", "unique_rand_10", "uniform"], "use_locking":False},
 
         #Seems like shift=None is NOT supported: "TypeError: Fetch argument None has invalid type <class 'NoneType'>"
         # {"opName":"sufficient_statistics", "outName":"sufficient_statistics/rank1", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "axes":[0], "shift":0.0, "keep_dims":False},
@@ -1680,10 +1701,10 @@ def test_mathtransform():
         # {"opName": "reduce_max", "outName": "emptyReduceAxisTests/reduce_max/rank2", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":False},
         # {"opName": "reduce_max", "outName": "emptyReduceAxisTests/reduce_max/rank2_keep", "varShapes":[[2,3]], "varTypes":["float32"], "varInit":["uniform_int5"], "axis":(), "keepdims":True},
 
-        {"opName": "multinomial", "outName": "multinomial/logits/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
-        {"opName": "multinomial", "outName": "multinomial/logits/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
-        {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
-        {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
+        # {"opName": "multinomial", "outName": "multinomial/logits/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
+        # {"opName": "multinomial", "outName": "multinomial/logits/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
+        # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
+        # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
 
            ]
 
