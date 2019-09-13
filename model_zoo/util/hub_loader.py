@@ -2,6 +2,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 from tensorflow._api.v1 import graph_util
 
+# Loading from hub doesn't work, but most of what you would need is here.
 
 def freeze_graph(model_folder, output_nodes,
                  output_filename='frozen.pb',
