@@ -240,3 +240,11 @@ class VarInitializer:
     def placeholder_one(self, shape, dtype, n):
         return [tf.placeholder(dtype=dtype, shape=shape, name=n),
                 np.ones(shape, dtype.as_numpy_dtype())]
+
+    def var_ragged2d(self, shape, dtype, n):
+        values = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8], dtype=dtype, name=n)
+        out = tf.RaggedTensor.from_row_splits(values=values,row_splits=[0, 4, 4, 7, 8, 8])
+
+        if dtype is not out.values.dtype:
+            return tf.cast(out, dtype=dtype)
+        return out

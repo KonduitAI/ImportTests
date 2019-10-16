@@ -1053,6 +1053,9 @@ class OpCreator:
     def execute_add(self):
         return [tf.math.add(self.vars[0], self.vars[1])]
 
+    def execute_add_scalar(self):
+        return [self.vars[0] + self.op["scalar"]]
+
     def execute_sub(self):
         return [tf.math.subtract(self.vars[0], self.vars[1])]
 

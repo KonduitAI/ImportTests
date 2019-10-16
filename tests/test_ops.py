@@ -219,11 +219,11 @@ def test_mathtransform():
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_noFull_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":False, "compute_uv":True},
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_full_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":True, "compute_uv":False},
 
-        {"opName": "pow", "outName": "pow/rank0", "varShapes": [[], []],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank1", "varShapes":[[2], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank2", "varShapes":[[3,2], [3,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank2bc0", "varShapes":[[2,5], []], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank2bc", "varShapes":[[2,5], [2, 1]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank0", "varShapes": [[], []],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank1", "varShapes":[[2], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2", "varShapes":[[3,2], [3,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2bc0", "varShapes":[[2,5], []], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2bc", "varShapes":[[2,5], [2, 1]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
 
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank0", "varShapes":[[],[]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank1", "varShapes":[[5],[5]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
@@ -1706,6 +1706,11 @@ def test_mathtransform():
         # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
         # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
 
+        {"opName": "add", "outName": "ragged/add/2d", "varShapes":[[], []], "varTypes":["int32", "int32"], "varInit":["ragged2d", "one"]},
+        {"opName": "identity", "outName": "ragged/identity/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
+        {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a0", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":0, "keepdims":False},
+        {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a1", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":1, "keepdims":False},
+        {"opName": "sqrt", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
            ]
 
     '''
