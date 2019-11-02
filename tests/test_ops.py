@@ -219,11 +219,11 @@ def test_mathtransform():
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_noFull_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":False, "compute_uv":True},
         # {"opName": "svd", "outName": "svd/rank4_2,2,3,3_full_uv", "varShapes":[[2,2,3,3]], "varTypes":["float32"], "varInit":["uniform"], "full_matrices":True, "compute_uv":False},
 
-        {"opName": "pow", "outName": "pow/rank0", "varShapes": [[], []],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank1", "varShapes":[[2], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank2", "varShapes":[[3,2], [3,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank2bc0", "varShapes":[[2,5], []], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
-        {"opName": "pow", "outName": "pow/rank2bc", "varShapes":[[2,5], [2, 1]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank0", "varShapes": [[], []],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank1", "varShapes":[[2], [2]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2", "varShapes":[[3,2], [3,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2bc0", "varShapes":[[2,5], []], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
+        # {"opName": "pow", "outName": "pow/rank2bc", "varShapes":[[2,5], [2, 1]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"]},
 
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank0", "varShapes":[[],[]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
         # {"opName": "mean_squared_error", "outName": "losses/mse_rank1", "varShapes":[[5],[5]], "varTypes":["float32","float32"], "varInit":["uniform","uniform"]},
@@ -515,6 +515,28 @@ def test_mathtransform():
         # {"opName":"avg_pooling3d", "outName":"avg_pooling3d/channels_last_b2_k2_s1_VALID", "varShapes":[[2, 5, 5, 5, 2]], "varTypes":["float32"], "pooling_size":2, "stride":1, "padding":"VALID", "data_format":"channels_last"},
         # {"opName":"avg_pooling3d", "outName":"avg_pooling3d/channels_last_b1_k2_s2_SAME", "varShapes":[[1, 5, 5, 5, 2]], "varTypes":["float32"], "pooling_size":2, "stride":2, "padding":"SAME", "data_format":"channels_last"},
 
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b1_k2_s1_SAME", "varShapes":[[1, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":2, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"SAME", "data_format":"channels_last"},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NCDHW_b2_k2_s1_SAME_nobias", "varShapes":[[2, 2, 5, 5, 5]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"SAME", "data_format":"channels_first", "use_bias":False},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b2_k2_s1_VALID", "varShapes":[[2, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":2, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"VALID", "data_format":"channels_last"},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b1_k2_s2_SAME", "varShapes":[[1, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[2,2,2], "padding":"SAME", "data_format":"channels_last"},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b1_k2_s1_SAME_sigmoid", "varShapes":[[1, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"SAME", "data_format":"channels_last", "activation":tf.nn.relu},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NCDHW_b1_k2_s2_SAME_sigmoid", "varShapes":[[1, 2, 6, 6, 6,]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[2,2,2], "padding":"SAME", "data_format":"channels_first", "activation":tf.nn.sigmoid},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b1_k2_s1_SAME_elu", "varShapes":[[1, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"SAME", "data_format":"channels_first", "activation":tf.nn.elu},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NCDHW_b1_k3_s2_SAME_relu6", "varShapes":[[1, 2, 6, 6, 6]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[3,3,3], "strides":[2,2,2], "padding":"SAME", "data_format":"channels_last", "activation":tf.nn.relu6},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b1_k2_s1_SAME_selu_nobias", "varShapes":[[1, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"SAME", "data_format":"channels_last", "activation":tf.nn.selu, "use_bias":False},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NCDHW_b1_k2_s1_VALID_crelu", "varShapes":[[1, 2, 6, 6, 6]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"VALID", "data_format":"channels_first", "activation":tf.nn.crelu},
+        # {"opName":"conv3d_transpose_layers", "outName":"conv3d_transpose_layers/NDHWC_b2_k2_s1_SAME_regularizers", "varShapes":[[2, 5, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2,2], "strides":[1,1,1], "padding":"SAME", "data_format":"channels_last",
+        #  "kernel_regularizer":tf.contrib.layers.l2_regularizer(scale=0.1), "bias_regularizer":tf.contrib.layers.l1_regularizer(scale=0.2), "activity_regularizer":tf.contrib.layers.l1_l2_regularizer(scale_l1=0.1,scale_l2=0.2)},
+
+        # variables: value (NCDHW / NDHWC) and filter ([kD, kH, kW, oC, iC])
+        # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NDHWC_b1_k2_s1_d1_SAME", "varShapes":[[1, 3, 3, 3, 2], [2, 2, 2, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,3,3,3,3], "strides":[1,1,1,1,1], "padding":"SAME", "data_format":"NDHWC", "dilations":1},
+        # # Next 2: "Operation received an exception:Status: 3, message: could not create a convolution backward data descriptor, in file tensorflow/core/kernels/mkl_conv_grad_input_ops.cc:456"
+        # # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NCDHW_b2_k2_s2_d1_VALID_out8", "varShapes":[[2, 2, 4, 4, 4], [2, 2, 2, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,3,8,8,8], "strides":[1,1,2,2,2], "padding":"VALID", "data_format":"NCDHW", "dilations":1},
+        # # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NDHWC_b2_k2_s2_d1_VALID_out9", "varShapes":[[2, 4, 4, 4, 2], [2, 2, 2, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,9,9,9,3], "strides":[1,2,2,2,1], "padding":"VALID", "data_format":"NDHWC", "dilations":1},
+        # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NDHWC_b1_k2_s2_d1_SAME", "varShapes":[[1, 2, 2, 2, 2], [2, 2, 2, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,4,4,4,3], "strides":[1,2,2,2,1], "padding":"SAME", "data_format":"NDHWC", "dilations":[1,1,1,1,1]},
+        # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NCDHW_b1_k2_s2_d1_SAME_out6", "varShapes":[[1, 2, 3, 3, 3,], [2, 2, 2, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,3,6,6,6], "strides":[1,1,2,2,2], "padding":"SAME", "data_format":"NCDHW", "dilations":[1,1,1]},
+        # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NCDHW_b1_k2_s2_d1_SAME_out5", "varShapes":[[1, 2, 3, 3, 3,], [2, 2, 2, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,3,5,5,5], "strides":[1,1,2,2,2], "padding":"SAME", "data_format":"NCDHW", "dilations":[1,1,1]},
+        # {"opName":"conv3d_transpose_nn", "outName":"conv3d_transpose_nn/NCDHW_b1_k3_s3_d1_SAME", "varShapes":[[1, 2, 1, 1, 1], [3, 3, 3, 3, 2]], "varTypes":["float32","float32"], "output_shape":[1,3,3,3,3], "strides":[1,1,3,3,3], "padding":"SAME", "data_format":"NCDHW", "dilations":[1,1,1]},
 
         #Separable conv 2d - channels_last = NHWC
         # {"opName":"layers_sepconv2d", "outName":"sepconv2d_layers/channels_last_b1_k2_s1_d1_SAME_dm1", "varShapes":[[1, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":2, "strides":1, "padding":"SAME", "data_format":"channels_last", "dilation_rate":1, "depth_multiplier":1},
@@ -1705,6 +1727,14 @@ def test_mathtransform():
         # {"opName": "multinomial", "outName": "multinomial/logits/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
         # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
         # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
+
+        # {"opName": "add", "outName": "ragged/add/2d", "varShapes":[[], []], "varTypes":["int32", "int32"], "varInit":["ragged2d", "one"]},
+        # {"opName": "identity", "outName": "ragged/identity/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
+        # {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a0", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":0, "keepdims":False},
+        # {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a1", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":1, "keepdims":False},
+        # {"opName": "sqrt", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
+
+        {"opName": "strings_split", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["string"], "varInit":["string2"], "split":" "},
 
            ]
 

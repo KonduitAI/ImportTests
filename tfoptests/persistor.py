@@ -274,12 +274,21 @@ class TensorFlowPersistor:
                 for element_a_output in a_output:
                     if(hasattr(element_a_output, 'name')):
                         output_node_names.append(element_a_output.name.replace(":",'.'))
-                else:
-                    output_node_names.append(element_a_output.replace(":",'.'))
+                    elif(isinstance(a_output, tf.RaggedTensor)):
+                        output_node_names.append(a_output._values.name.replace(":",'.'))
+                        output_node_names.append(a_output._row_splits.name.replace(":",'.'))
+                    else:
+                        output_node_names.append(element_a_output.replace(":",'.'))
             else:
                 if(hasattr(a_output, 'name')):
                     output_node_names.append(a_output.name.replace(":",'.'))
+                elif(isinstance(a_output, tf.RaggedTensor)):
+                    output_node_names.append(a_output._values.name.replace(":",'.'))
+                    output_node_names.append(a_output._row_splits.name.replace(":",'.'))
                 else:
+                    print(type(a_output))
+                    #print(a_output.name)
+                    print(vars(a_output))
                     output_node_names.append(a_output.replace(":",'.'))
         return output_node_names
 
@@ -290,6 +299,9 @@ class TensorFlowPersistor:
             if isinstance(a_output,list):
                 for element_a_output in a_output:
                     output_node_names.add(element_a_output.name.split(":")[0])
+            elif(isinstance(a_output, tf.RaggedTensor)):
+                output_node_names.add(a_output._values.name.split(":")[0])
+                output_node_names.add(a_output._row_splits.name.split(":")[0])
             else:
                 output_node_names.add(a_output.name.split(":")[0])
         return output_node_names
@@ -311,16 +323,28 @@ class TensorFlowPersistor:
             self._save_graph(self._sess, all_saver)
             self._sess.close
         flattened_predictions = []
+        # print("OUTPUT TENSORS: ", self._output_tensors)
+        # print("PREDICTIONS: ", predictions)
         for a_prediction in predictions:
+            # print("Prediction: ", a_prediction)
+            # print("Row split: ", a_prediction.row_splits)
+            # print("Row split: ", type(a_prediction.row_splits))
             if isinstance(a_prediction,list):
                 for element_a_prediction in a_prediction:
                     flattened_predictions.append(element_a_prediction)
+            # elif isinstance(a_prediction,tf.RaggedTensor):
+            elif hasattr(a_prediction, 'row_splits'):  #ragged tensor case
+                print("### RAGGED")
+                flattened_predictions.append(a_prediction.values)
+                flattened_predictions.append(a_prediction.row_splits)
             else:
                 flattened_predictions.append(a_prediction)
         if len(self._list_output_node_names()) == len(flattened_predictions):
             first_pass_dict = dict(zip(self._list_output_node_names(), flattened_predictions))
         else:
-            raise RuntimeError('Multiple outputs in graphs not handled properly')
+            # print("Names: ", self._list_output_node_names())
+            # print("Number of predictions: ", len(flattened_predictions))
+            raise RuntimeError('Error during export - different number of outputs as names detected')
         if self.verbose:
             print("FIRST PASS DICT:")
             print(first_pass_dict)
@@ -332,7 +356,8 @@ class TensorFlowPersistor:
             dtypesToSave[inVar.name] = placeholder_feed_dict[inVar].dtype
         for i in range(0, len(self._list_output_node_names())):
             outName = self._list_output_node_names()[i]
-            outVal = predictions[i]
+            # outVal = predictions[i]
+            outVal = flattened_predictions[i]
             print("outName: ", outName)
             dtypesToSave[outName] = str(outVal.dtype)
         print("dtypesToSave: ", dtypesToSave)
