@@ -327,6 +327,18 @@ class OpCreator:
     def execute_avg_pooling3d(self):
         return [tf.layers.average_pooling3d(inputs=self.vars[0], pool_size=self.op["pooling_size"], strides=self.op["stride"], padding=self.op["padding"], data_format=self.op["data_format"])]
 
+    def execute_conv3d_transpose_layers(self):
+        return [tf.layers.conv3d_transpose(inputs=self.vars[0], filters=self.op["filters"], kernel_size=self.op["kernel_size"], strides=self.op["strides"],
+                                           padding=self.op["padding"], data_format=self.op["data_format"],
+                                           activation=self.op.get("activation",None), kernel_regularizer=self.op.get("kernel_regularizer",None),
+                                           bias_regularizer=self.op.get("bias_regularizer",None), activity_regularizer=self.op.get("activity_regularizer",None),
+                                           kernel_constraint=self.op.get("kernel_constraint",None), bias_constraint=self.op.get("bias_constraint",None))]
+
+    def execute_conv3d_transpose_nn(self):
+        # "TypeError: conv3d_transpose() got an unexpected keyword argument 'dilations'" :/
+        # return [tf.nn.conv3d_transpose(value=self.vars[0], filter=self.vars[1], strides=self.op["strides"],padding=self.op["padding"], data_format=self.op["data_format"], dilations=self.op["dilations"])]
+        return [tf.nn.conv3d_transpose(value=self.vars[0], filter=self.vars[1], output_shape=self.op["output_shape"], strides=self.op["strides"],padding=self.op["padding"], data_format=self.op["data_format"])]
+
     def execute_batchnorm(self):
         return [tf.layers.batch_normalization(inputs=self.vars[0], axis=self.op["axis"], momentum=self.op.get("momentum",0.99), epsilon=self.op.get("epsilon",0.001),
                                               center=self.op.get("center",True), scale=self.op.get("scale",True), fused=self.op["fused"])]
