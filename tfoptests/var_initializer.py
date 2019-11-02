@@ -248,3 +248,6 @@ class VarInitializer:
         if dtype is not out.values.dtype:
             return tf.cast(out, dtype=dtype)
         return out
+
+    def var_string2(self, shape, dtype, n):
+        return tf.Variable(["hello world", "a b c"], dtype=tf.string)

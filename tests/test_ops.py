@@ -1706,11 +1706,14 @@ def test_mathtransform():
         # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank1", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":4., "sample_shape": 5},
         # {"opName": "multinomial_with_p", "outName": "multinomial/prob/sample/rank2", "varShapes":[[2, 3]], "varTypes":["float32"], "varInit":["uniform_int5"], "total_count":[4., 2], "sample_shape": 5},
 
-        {"opName": "add", "outName": "ragged/add/2d", "varShapes":[[], []], "varTypes":["int32", "int32"], "varInit":["ragged2d", "one"]},
-        {"opName": "identity", "outName": "ragged/identity/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
-        {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a0", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":0, "keepdims":False},
-        {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a1", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":1, "keepdims":False},
-        {"opName": "sqrt", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
+        # {"opName": "add", "outName": "ragged/add/2d", "varShapes":[[], []], "varTypes":["int32", "int32"], "varInit":["ragged2d", "one"]},
+        # {"opName": "identity", "outName": "ragged/identity/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
+        # {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a0", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":0, "keepdims":False},
+        # {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a1", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":1, "keepdims":False},
+        # {"opName": "sqrt", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
+
+        {"opName": "strings_split", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["string"], "varInit":["string2"], "split":" "},
+
            ]
 
     '''

@@ -1214,3 +1214,9 @@ class OpCreator:
 
     def execute_check_numerics(self):
         return [tf.debugging.check_numerics(tensor=self.vars[0], message=self.op["message"])]
+
+    def execute_strings_split(self):
+        print("strings.split input: ", self.vars[0])
+        out = tf.strings.split(self.vars[0], sep=self.op["split"])
+        print("strings.split output: ", out)
+        return [out]
