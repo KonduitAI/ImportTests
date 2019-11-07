@@ -175,9 +175,9 @@ def test_mathtransform():
         # {"opName": "accumulate_n", "outName": "accumulate_n/rank1", "varShapes":[[3], [3], [3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"]},
         # {"opName": "accumulate_n", "outName": "accumulate_n/rank2", "varShapes":[[2,3], [2,3], [2,3]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"]},
         # {"opName": "accumulate_n", "outName": "accumulate_n/rank3", "varShapes":[[2,3,4], [2,3,4], [2,3,4]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform", "uniform"]},
-        # {"opName": "angle", "outName": "angle_scalar", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName": "angle", "outName": "angle_rank1", "varShapes":[[5]], "varTypes":["float32"], "varInit":["uniform"]},
-        # {"opName": "angle", "outName": "angle_rank2", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "angle", "outName": "angle_scalar", "varShapes":[[]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "angle", "outName": "angle_rank1", "varShapes":[[5]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "angle", "outName": "angle_rank2", "varShapes":[[3,4]], "varTypes":["float32"], "varInit":["uniform"]},
         #TODO how to create ApproximateEqual class??
         # {"opName": "approximate_equal", "outName": "approximate_equal_scalar", "varShapes":[[],[]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "tolerance":0.1},
         # {"opName": "matmul", "outName": "matmul/rank2", "varShapes":[[3,4],[4,5]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"], "transpose_a":False, "transpose_b":False},
@@ -485,6 +485,7 @@ def test_mathtransform():
         # {"opName":"layers_conv2d_transpose", "outName":"conv2d_transpose/channels_last_b1_k2_s1_SAME_crelu", "varShapes":[[1, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2], "strides":[1,1], "padding":"SAME", "data_format":"channels_last", "activation":tf.nn.crelu},
         # {"opName":"layers_conv2d_transpose", "outName":"conv2d_transpose/channels_last_b2_k2_s1_SAME_regularizers", "varShapes":[[2, 5, 5, 2]], "varTypes":["float32","float32"], "filters":3, "kernel_size":[2,2], "strides":[1,1], "padding":"SAME", "data_format":"channels_last",
         #  "kernel_regularizer":tf.contrib.layers.l2_regularizer(scale=0.1), "bias_regularizer":tf.contrib.layers.l1_regularizer(scale=0.2), "activity_regularizer":tf.contrib.layers.l1_l2_regularizer(scale_l1=0.1,scale_l2=0.2)},
+        # {"opName":"Conv2DTranspose", "outName":"Conv2DTranspose", "varShapes":[[1, 5, 5, 2]], "varTypes":["float32","float32"], "kernel_size":[2,2], "filters":2},
 
         # Data format: ch_last: NDHWC, ch_first: NCDHW
         # "CPU implementation of Conv3D currently only supports the NHWC tensor format."
@@ -634,12 +635,12 @@ def test_mathtransform():
         # {"opName":"meshgrid", "outName":"meshgrid/n4_xy", "varShapes":[[3],[3],[3],[3]], "varTypes":["float32","float32","float32","float32"], "varInit":["uniform","uniform","uniform","uniform"],"indexing":"xy"},
         # {"opName":"meshgrid", "outName":"meshgrid/n4_ij", "varShapes":[[3],[3],[3],[3]], "varTypes":["float32","float32","float32","float32"], "varInit":["uniform","uniform","uniform","uniform"],"indexing":"ij"}
 
-        # {"opName":"eye", "outName":"eye/e22", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":2, "num_columns":2},
-        # {"opName":"eye", "outName":"eye/e23", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":2, "num_columns":3},
-        # {"opName":"eye", "outName":"eye/e32", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":3, "num_columns":2},
-        # {"opName":"eye", "outName":"eye/e22_b1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "num_rows":2, "num_columns":2},
-        # {"opName":"eye", "outName":"eye/e23_b2", "varShapes":[[1]], "varTypes":["int32"], "varInit":["two"], "num_rows":2, "num_columns":3},
-        # {"opName":"eye", "outName":"eye/e32_b22", "varShapes":[[2]], "varTypes":["int32"], "varInit":["two"], "num_rows":3, "num_columns":2},
+        #{"opName":"eye", "outName":"eye/e22", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":2, "num_columns":2},
+        #{"opName":"eye", "outName":"eye/e23", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":2, "num_columns":3},
+        #{"opName":"eye", "outName":"eye/e32", "varShapes":[], "varTypes":[], "varInit":[], "num_rows":3, "num_columns":2},
+        #{"opName":"eye", "outName":"eye/e22_b1", "varShapes":[[1]], "varTypes":["int32"], "varInit":["one"], "num_rows":2, "num_columns":2},
+        #{"opName":"eye", "outName":"eye/e23_b2", "varShapes":[[1]], "varTypes":["int32"], "varInit":["two"], "num_rows":2, "num_columns":3},
+        #{"opName":"eye", "outName":"eye/e32_b22", "varShapes":[[2]], "varTypes":["int32"], "varInit":["two"], "num_rows":3, "num_columns":2},
 
 
         #log determinant op: requires SYMMETRIC matrix. slogdet uses log determinant internally - so same thing...
@@ -1239,27 +1240,35 @@ def test_mathtransform():
         # {"opName": "reverse", "outName": "reverse/rank3_axis0-2", "varShapes":[[2,3,4]], "varTypes":["float32"], "varInit":["uniform"], "axis":[0,2]},
 
 
-        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_8bit", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":8, "narrow_range":False},
-        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_8bit_narrow", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":8, "narrow_range":True},
-        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_4bit", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":4, "narrow_range":False},
-        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank2_0_2_8bit", "varShapes":[[4,5],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "two"], "num_bits":8, "narrow_range":False},
-        # {"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_1_5_4bit_narrow", "varShapes":[[5,5],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform10", "one", "five"], "num_bits":4, "narrow_range":True},
+        #{"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_8bit", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":8, "narrow_range":False},
+        #{"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_8bit_narrow", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":8, "narrow_range":True},
+        #{"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_0_1_4bit", "varShapes":[[10],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "one"], "num_bits":4, "narrow_range":False},
+        #{"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank2_0_2_8bit", "varShapes":[[4,5],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "zero", "two"], "num_bits":8, "narrow_range":False},
+        #{"opName": "fake_quant_with_min_max_vars", "outName": "fake_quant/min_max_vars/rank1_1_5_4bit_narrow", "varShapes":[[5,5],[],[]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform10", "one", "five"], "num_bits":4, "narrow_range":True},
         #
-        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_8bit", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":1.0},
-        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_8bit_narrow", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":True, "min":0.0, "max":1.0},
-        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_4bit", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":4, "narrow_range":False, "min":0.0, "max":1.0},
-        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank2_0_2_8bit", "varShapes":[[4,5]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":2.0},
-        # {"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_1_5_4bit_narrow", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform10"], "num_bits":4, "narrow_range":True, "min":1.0, "max":5.0},
+        #{"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_8bit", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":1.0},
+        #{"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_8bit_narrow", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":True, "min":0.0, "max":1.0},
+        #{"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_0_1_4bit", "varShapes":[[10]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":4, "narrow_range":False, "min":0.0, "max":1.0},
+        #{"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank2_0_2_8bit", "varShapes":[[4,5]], "varTypes":["float32"], "varInit":["uniform"], "num_bits":8, "narrow_range":False, "min":0.0, "max":2.0},
+        #{"opName": "fake_quant_with_min_max_args", "outName": "fake_quant/min_max_args/rank1_1_5_4bit_narrow", "varShapes":[[5,5]], "varTypes":["float32"], "varInit":["uniform10"], "num_bits":4, "narrow_range":True, "min":1.0, "max":5.0},
 
         # {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank1_8bit", "varShapes":[[5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":False},
         # {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank2_8bit_narrow", "varShapes":[[3, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":8, "narrow_range":True},
         # {"opName": "fake_quant_with_min_max_vars_per_channel", "outName": "fake_quant/min_max_args_per_channel/rank4_6bit", "varShapes":[[3, 2, 2, 5], [5], [5]], "varTypes":["float32", "float32", "float32"], "varInit":["uniform", "uniform_m1_0", "uniform"], "num_bits":6, "narrow_range":False},
 
+        #{"opName": "adjust_contrast", "outName": "adjust_contrast", "varShapes": [[256,256,3], ()],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        #{"opName": "adjust_contrast_v2", "outName": "adjust_contrast_v2", "varShapes": [[256,256,3], ()],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+
+        # {"opName": "crop_and_resize", "outName": "crop_and_resize", "varShapes": [[256,256,3,1], [2,4], [2], [2]],"varTypes": ["float32", "float32","int32","int32"], "varInit": ["uniform", "uniform","uniform_int10","uniform_int10"]},
+
+        # {"opName": "draw_bounding_boxes", "outName": "draw_bounding_boxes", "varShapes": [[2,256,256,1], [2,2,4]],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
 
         # {"opName": "check_numerics", "outName": "check_numerics/rank1_float16", "varShapes":[[5]], "varTypes":["float16", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
         # {"opName": "check_numerics", "outName": "check_numerics/rank1_float32", "varShapes":[[5]], "varTypes":["float32", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
         # {"opName": "check_numerics", "outName": "check_numerics/rank2_float64", "varShapes":[[5]], "varTypes":["float64", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
         # {"opName": "check_numerics", "outName": "check_numerics/rank4_bfloat16", "varShapes":[[5]], "varTypes":["bfloat16", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."}
+
+        # {"opName": "dropout", "outName": "dropout", "varShapes":[[1,100]], "varTypes":["float32"], "varInit":["uniform"]}
 
 
 
@@ -1734,7 +1743,12 @@ def test_mathtransform():
         # {"opName": "reduce_mean", "outName": "ragged/reduce_mean/2d_a1", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"], "axis":1, "keepdims":False},
         # {"opName": "sqrt", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["float32"], "varInit":["ragged2d"]},
 
-        {"opName": "strings_split", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["string"], "varInit":["string2"], "split":" "},
+        # {"opName": "strings_split", "outName": "ragged/sqrt/2d", "varShapes":[[]], "varTypes":["string"], "varInit":["string2"], "split":" "},
+        # {"opName": "bitcast", "outName": "bitcast", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform", "uniform"], "dtype":tf.float32},
+        # {"opName": "bitwise_or", "outName": "bitwise_or", "varShapes":[[1,10], [1,10]], "varTypes":["int64", "int64"], "varInit":["uniform_int10", "uniform_int10"]},
+        # {"opName": "bitwise_xor", "outName": "bitwise_xor", "varShapes":[[1,10], [1,10]], "varTypes":["int64", "int64"], "varInit":["uniform_int10", "uniform_int10"]},
+        # {"opName": "is_non_decreasing", "outName": "is_non_decreasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
+        #  {"opName": "is_strictly_increasing", "outName": "is_strictly_increasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
 
            ]
 

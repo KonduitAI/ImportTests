@@ -1227,8 +1227,42 @@ class OpCreator:
     def execute_check_numerics(self):
         return [tf.debugging.check_numerics(tensor=self.vars[0], message=self.op["message"])]
 
+    def execute_adjust_contrast(self):
+        return [tf.compat.v1.image.adjust_contrast(self.vars[0],self.vars[1])]
+
+    def execute_adjust_contrast_v2(self):
+        return [tf.compat.v2.image.adjust_contrast(self.vars[0],self.vars[1])]
+
     def execute_strings_split(self):
         print("strings.split input: ", self.vars[0])
         out = tf.strings.split(self.vars[0], sep=self.op["split"])
         print("strings.split output: ", out)
         return [out]
+
+    def execute_bitcast(self):
+        return [tf.bitcast(self.vars[0], tf.int32)]
+
+    def execute_bitwise_or(self):
+        return [tf.bitwise.bitwise_or(self.vars[0], self.vars[1])]
+
+    def execute_bitwise_xor(self):
+        return [tf.bitwise.bitwise_xor(self.vars[0], self.vars[1])]
+
+    def execute_crop_and_resize(self):
+        return [tf.image.crop_and_resize(image = self.vars[0], boxes = self.vars[1], crop_size = self.vars[2], box_ind = self.vars[3])]
+
+    def execute_draw_bounding_boxes(self):
+        return [tf.image.draw_bounding_boxes(images = self.vars[0], boxes = self.vars[1])]
+
+    def execute_dropout(self):
+        return [tf.nn.dropout(x = self.vars[0], rate = 0.25)]
+
+    def execute_is_strictly_increasing(self):
+        return [tf.math.is_strictly_increasing(x = self.vars[0])]
+
+    def execute_leaky_relu(self):
+        return tf.nn.leaky_relu(features = self.vars[0], alpha=self.op["alpha"])
+
+    def execute_Conv2DTranspose(self):
+        return [tf.keras.layers.Conv2DTranspose(kernel_size=self.op["kernel_size"], filters=[self.op["filters"]])]
+
