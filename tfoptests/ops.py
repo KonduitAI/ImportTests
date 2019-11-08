@@ -1077,6 +1077,9 @@ class OpCreator:
     def execute_div(self):
         return [tf.math.divide(self.vars[0], self.vars[1])]
 
+    def execute_div_no_nan(self):
+        return [tf.math.divide_no_nan(self.vars[0], self.vars[1])]
+
     def execute_add_n(self):
         return [tf.math.add_n(self.vars)]
 
@@ -1263,6 +1266,8 @@ class OpCreator:
     def execute_leaky_relu(self):
         return tf.nn.leaky_relu(features = self.vars[0], alpha=self.op["alpha"])
 
+    def execute_log_softmax(self):
+        return tf.nn.log_softmax(self.vars[0])
+
     def execute_Conv2DTranspose(self):
         return [tf.keras.layers.Conv2DTranspose(kernel_size=self.op["kernel_size"], filters=[self.op["filters"]])]
-

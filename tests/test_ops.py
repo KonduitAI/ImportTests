@@ -582,10 +582,10 @@ def test_mathtransform():
         # {"opName":"batchnorm", "outName":"batchnorm/rank4_nhwc_batch4_sz5_noFused_m50e01", "varShapes":[[4, 5, 5, 1]], "varTypes":["float32"], "axis":3, "fused":False, "momentum":0.5, "epsilon":0.1},
 
         #Leaky RELU
-        # {"opName":"leaky_relu", "outName":"leaky_relu/rank2_a0", "varShapes":[[4, 5]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.0},
-        # {"opName":"leaky_relu", "outName":"leaky_relu/rank4_a05", "varShapes":[[4, 5]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.5},
-        # {"opName":"leaky_relu", "outName":"leaky_relu/rank4_a0", "varShapes":[[4, 5, 5, 1]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.0},
-        # {"opName":"leaky_relu", "outName":"leaky_relu/rank4_a02", "varShapes":[[4, 5, 5, 1]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.2},
+        #{"opName":"leaky_relu", "outName":"leaky_relu/rank2_a0", "varShapes":[[4, 5]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.0},
+        #{"opName":"leaky_relu", "outName":"leaky_relu/rank4_a05", "varShapes":[[4, 5]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.5},
+        #{"opName":"leaky_relu", "outName":"leaky_relu/rank4_a0", "varShapes":[[4, 5, 5, 1]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.0},
+        #{"opName":"leaky_relu", "outName":"leaky_relu/rank4_a02", "varShapes":[[4, 5, 5, 1]], "varTypes":["float32"], "varInit":["stdnormal"], "alpha":0.2},
 
         #Embedding lookup
         # {"opName":"embedding_lookup", "outName":"embedding_lookup/rank2_single_div_nomaxnorm", "varShapes":[[10, 5],[4]], "varTypes":["float32","int32"], "varInit":["uniform","uniform_int10"], "partition_strategy":"div", "max_norm":None},
@@ -1432,6 +1432,10 @@ def test_mathtransform():
         # TODO: Div just gives "TypeError: unsupported operand type(s) for /: 'list' and 'list'" event through other ops work :/
         # {"opName": "div", "outName": "emptyArrayTests/div/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty","empty"], "dtype":tf.float32},
         # {"opName": "div", "outName": "emptyArrayTests/div/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
+        #  {"opName": "div", "outName": "div", "varShapes":[[1,10], [1,10]], "varTypes":["float64", "float64"], "varInit":["uniform", "uniform"], "dtype":tf.float64},
+
+        #{"opName": "div_no_nan", "outName": "div_no_nan", "varShapes":[[1,10], [1,10]], "varTypes":["float32", "float32"], "varInit":["uniform","uniform"], "dtype":tf.float32},
+        #{"opName": "div_no_nan", "outName": "div_no_nan", "varShapes": [[1, 10], [1, 10]],"varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"], "dtype": tf.float64},
 
         # {"opName": "add_n", "outName": "emptyArrayTests/add_n/rank1", "varShapes":[[0], [0]], "varTypes":["int64", "int64"], "varInit":["empty","empty"], "dtype":tf.int64},
         # {"opName": "add_n", "outName": "emptyArrayTests/add_n/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"], "dtype":tf.float64},
@@ -1753,10 +1757,13 @@ def test_mathtransform():
         # {"opName": "bitcast", "outName": "bitcast", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform", "uniform"], "dtype":tf.float32},
         # {"opName": "bitwise_or", "outName": "bitwise_or", "varShapes":[[1,10], [1,10]], "varTypes":["int64", "int64"], "varInit":["uniform_int10", "uniform_int10"]},
         # {"opName": "bitwise_xor", "outName": "bitwise_xor", "varShapes":[[1,10], [1,10]], "varTypes":["int64", "int64"], "varInit":["uniform_int10", "uniform_int10"]},
-        # {"opName": "is_non_decreasing", "outName": "is_non_decreasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
-        #  {"opName": "is_strictly_increasing", "outName": "is_strictly_increasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "is_non_decreasing", "outName": "is_non_decreasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
 
-           ]
+        {"opName": "log_softmax", "outName": "log_softmax", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "log_softmax", "outName": "log_softmax", "varShapes": [[1, 10]], "varTypes": ["float64"], "varInit": ["uniform"]},
+        #{"opName": "log_softmax", "outName": "log_softmax", "varShapes": [[1, 10]], "varTypes": ["half"], "varInit": ["uniform"]},
+     ]
 
     '''
     Ops requiring tests: (note that some of these might not support 0 shapes)
