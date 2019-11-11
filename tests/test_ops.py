@@ -1264,6 +1264,10 @@ def test_mathtransform():
 
         # {"opName": "draw_bounding_boxes", "outName": "draw_bounding_boxes", "varShapes": [[2,256,256,1], [2,2,4]],"varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
 
+        #  {"opName": "resize_bilinear", "outName": "resize_bilinear", "varShapes": [[2,256,256,1], [2]],"varTypes": ["float32", "int32"], "varInit": ["uniform", "uniform_int10"]},
+
+        #   {"opName": "resize_nearest_neighbor", "outName": "resize_nearest_neighbor", "varShapes": [[2,256,256,1], [2]],"varTypes": ["float32", "int32"], "varInit": ["uniform", "uniform_int10"]},
+
         # {"opName": "check_numerics", "outName": "check_numerics/rank1_float16", "varShapes":[[5]], "varTypes":["float16", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
         # {"opName": "check_numerics", "outName": "check_numerics/rank1_float32", "varShapes":[[5]], "varTypes":["float32", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
         # {"opName": "check_numerics", "outName": "check_numerics/rank2_float64", "varShapes":[[5]], "varTypes":["float64", "string"], "varInit":["uniform", "string_scalar"], "message":"This is a test string."},
@@ -1405,6 +1409,11 @@ def test_mathtransform():
         # {"opName": "zeros", "outName": "emptyArrayTests/zeros/ones_rank3", "varShapes":[[3]], "varTypes":["int32"], "varInit":["fixed_0_0_3"], "dtype":tf.int64},
         # {"opName": "zeros_like", "outName": "emptyArrayTests/zeros_like/rank1", "varShapes":[[0]], "varTypes":["float32"], "varInit":["empty"]},
         # {"opName": "zeros_like", "outName": "emptyArrayTests/zeros_like/rank2", "varShapes":[[2,0]], "varTypes":["float64"], "varInit":["empty"]},
+        #{"opName": "zeros_like", "outName": "zeros_like/rank2", "varShapes": [[3, 12]],"varTypes": ["float16"], "varInit": ["uniform"]},
+        #{"opName": "zeros_like", "outName": "zeros_like/rank2", "varShapes": [[3, 12]], "varTypes": ["float32"], "varInit": ["uniform"]},
+        #{"opName": "zeros_like", "outName": "zeros_like/rank2", "varShapes": [[3, 12]], "varTypes": ["float64"], "varInit": ["uniform"]},
+        #{"opName": "zeros_like", "outName": "zeros_like/rank2", "varShapes": [[3, 10]], "varTypes": ["int32"], "varInit": ["uniform_int10"]},
+        #{"opName": "zeros_like", "outName": "zeros_like/rank2", "varShapes": [[3, 10]], "varTypes": ["int64"], "varInit": ["uniform_int10"]},
 
         # {"opName": "cast", "outName": "emptyArrayTests/cast/rank2_shape2-0", "varShapes":[[2,0]], "varTypes":["float32"], "varInit":["empty", "empty"], "dtype":tf.int32},
         # {"opName": "cast", "outName": "emptyArrayTests/cast/rank1_shape0", "varShapes":[[0]], "varTypes":["int32"], "varInit":["empty", "empty"], "dtype":tf.int64},
@@ -1548,6 +1557,17 @@ def test_mathtransform():
         # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
         # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank2bc", "varShapes":[[1,1], [0,2]], "varTypes":["float64", "float64"], "varInit":["uniform", "empty"]},
         # {"opName": "minimum", "outName": "emptyArrayTests/minimum/rank2bc2", "varShapes":[[0,1], [0,2]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
+        # {"opName": "max", "outName": "max", "varShapes":[[2,123], [2,123]], "varTypes":["float32", "float32"], "varInit":["uniform", "uniform"]},
+        # {"opName": "min", "outName": "min", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "mod", "outName": "mod", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float32", "float32"],  "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "min", "outName": "min", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "mod", "outName": "mod", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max", "varShapes": [[2, 123], [2, 123]], "varTypes": ["int32", "int32"], "varInit": ["uniform_int10", "uniform_in10"]},
+        # {"opName": "min", "outName": "min", "varShapes": [[2, 123], [2, 123]], "varTypes": ["int32", "int32"], "varInit": ["uniform_int10", "uniform_int10"]},
+        # {"opName": "mod", "outName": "mod", "varShapes": [[2, 123], [2, 123]], "varTypes": ["int64", "int64"], "varInit": ["uniform_in10", "uniform_int10"]},
+        # {"opName": "mod", "outName": "mod", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "mod", "outName": "mod", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
 
         # {"opName": "pow", "outName": "emptyArrayTests/pow/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
         # {"opName": "pow", "outName": "emptyArrayTests/pow/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
@@ -1760,9 +1780,14 @@ def test_mathtransform():
         #{"opName": "is_non_decreasing", "outName": "is_non_decreasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
         #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
 
-        {"opName": "log_softmax", "outName": "log_softmax", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
+        #{"opName": "log_softmax", "outName": "log_softmax", "varShapes":[[1,10]], "varTypes":["float32"], "varInit":["uniform"]},
         #{"opName": "log_softmax", "outName": "log_softmax", "varShapes": [[1, 10]], "varTypes": ["float64"], "varInit": ["uniform"]},
         #{"opName": "log_softmax", "outName": "log_softmax", "varShapes": [[1, 10]], "varTypes": ["half"], "varInit": ["uniform"]},
+
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression", "varShapes": [[3, 10],[3],[10]], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","uniform_int10"]},
+        #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2", "varShapes": [[3, 10], [3], [0]], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","uniform_int10"]},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression", "varShapes": [[3, 10], [3], [10]],"varTypes": ["float64", "float64", "int64"], "varInit": ["uniform", "uniform", "uniform_int10"]},
+        #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2", "varShapes": [[3, 10], [3], [10]],"varTypes": ["float64", "float64", "int64"], "varInit": ["uniform", "uniform", "uniform_int10"]},
      ]
 
     '''

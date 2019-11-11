@@ -1257,6 +1257,18 @@ class OpCreator:
     def execute_draw_bounding_boxes(self):
         return [tf.image.draw_bounding_boxes(images = self.vars[0], boxes = self.vars[1])]
 
+    def execute_resize_bilinear(self):
+        return tf.image.resize_bilinear(images = self.vars[0], size = self.vars[1])
+
+    def execute_resize_nearest_neighbor(self):
+        return tf.image.resize_nearest_neighbor(images = self.vars[0], size = self.vars[1])
+
+    def execute_non_max_suppression(self):
+        return [tf.compat.v1.image.non_max_suppression(self.vars[0], self.vars[1], self.vars[2])]
+
+    def execute_non_max_suppression_v2(self):
+        return [tf.compat.v2.image.non_max_suppression(self.vars[0], self.vars[1], self.vars[2])]
+
     def execute_dropout(self):
         return [tf.nn.dropout(x = self.vars[0], rate = 0.25)]
 
@@ -1264,10 +1276,23 @@ class OpCreator:
         return [tf.math.is_strictly_increasing(x = self.vars[0])]
 
     def execute_leaky_relu(self):
-        return tf.nn.leaky_relu(features = self.vars[0], alpha=self.op["alpha"])
+        return [tf.nn.leaky_relu(features = self.vars[0], alpha=self.op["alpha"])]
 
     def execute_log_softmax(self):
-        return tf.nn.log_softmax(self.vars[0])
+        return [tf.nn.log_softmax(self.vars[0])]
+
+    def execute_max(self):
+        return [tf.math.maximum(self.vars[0], self.vars[1])]
+
+    def execute_min(self):
+        return [tf.math.minimum(self.vars[0], self.vars[1])]
+
+    def execute_mod(self):
+        return [tf.math.mod(self.vars[0], self.vars[1])]
+
+    def execute_mul(self):
+        return [tf.math.mul(self.vars[0], self.vars[1])]
+
 
     def execute_Conv2DTranspose(self):
         return [tf.keras.layers.Conv2DTranspose(kernel_size=self.op["kernel_size"], filters=[self.op["filters"]])]
