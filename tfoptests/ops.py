@@ -1273,6 +1273,9 @@ class OpCreator:
     def execute_dropout(self):
         return [tf.nn.dropout(x = self.vars[0], rate = 0.25)]
 
+    def execute_is_non_decreasing(self):
+        return [tf.math.is_non_decreasing(x = self.vars[0])]
+
     def execute_is_strictly_increasing(self):
         return [tf.math.is_strictly_increasing(x = self.vars[0])]
 
