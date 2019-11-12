@@ -1570,11 +1570,15 @@ def test_mathtransform():
         # {"opName": "mod", "outName": "mod/rank2_int64", "varShapes": [[2, 12], [2, 12]], "varTypes": ["int64", "int64"], "varInit": ["uniform_in10", "uniform_int10"]},
         # {"opName": "mod", "outName": "mod/rank2_float32", "varShapes": [[2, 12], [2, 12]], "varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
         # {"opName": "mod", "outName": "mod/rank2_float64", "varShapes": [[2, 12], [2, 12]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
-
-        # {"opName": "max", "outName": "max", "varShapes":[[2,10], [2,10]], "varTypes":["int32", "int32"], "varInit":["uniform_int10", "uniform_int10"]},
-        #{"opName": "max", "outName": "max", "varShapes": [[2, 10], [2, 10]], "varTypes": ["uint32", "uint32"], "varInit": ["uniform_int10", "uniform_int10"], "dtype":tf.uint32},
-        # {"opName": "min", "outName": "min", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
-        # {"opName": "mod", "outName": "mod", "varShapes": [[2, 123], [2, 123]], "varTypes": ["float32", "float32"],  "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_int32", "varShapes":[[2,3,10], [2,3,10]], "varTypes":["int32", "int32"], "varInit":["uniform_int10", "uniform_int10"]},
+        # {"opName": "max", "outName": "max/rank3_float32", "varShapes": [[2, 3, 12], [2, 3, 12]], "varTypes": ["float32", "float32"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_float32", "varShapes": [[2, 3, 12], [2, 3, 12]], "varTypes": ["float32", "float32"],  "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_float64", "varShapes": [[2, 3, 10], [2, 3, 10]],  "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_float64", "varShapes": [[2, 3, 12], [2, 3, 12]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_float64", "varShapes": [[2, 3, 12], [2, 3, 12]], "varTypes": ["float64", "float64"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_half", "varShapes": [[2, 3, 10], [2, 3, 10]],  "varTypes": ["half", "half"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_half", "varShapes": [[2, 3, 12], [2, 3, 12]], "varTypes": ["half", "half"], "varInit": ["uniform", "uniform"]},
+        # {"opName": "max", "outName": "max/rank3_half", "varShapes": [[2, 3, 12], [2, 3, 12]], "varTypes": ["half", "half"], "varInit": ["uniform", "uniform"]},
 
         # {"opName": "pow", "outName": "emptyArrayTests/pow/rank1", "varShapes":[[0], [0]], "varTypes":["float32", "float32"], "varInit":["empty", "empty"]},
         # {"opName": "pow", "outName": "emptyArrayTests/pow/rank2", "varShapes":[[0,2], [0,2]], "varTypes":["float64", "float64"], "varInit":["empty", "empty"]},
@@ -1791,10 +1795,12 @@ def test_mathtransform():
         #{"opName": "log_softmax", "outName": "log_softmax", "varShapes": [[1, 10]], "varTypes": ["float64"], "varInit": ["uniform"]},
         #{"opName": "log_softmax", "outName": "log_softmax", "varShapes": [[1, 10]], "varTypes": ["half"], "varInit": ["uniform"]},
 
-        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float32", "varShapes": [[3, 10],[3],[]], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","uniform_int1"]},
-        #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2/float32", "varShapes": [[3, 10], [3], []], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","uniform_int10"]},
-        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float64", "varShapes": [[3, 10], [3], []],"varTypes": ["float64", "float64", "int64"], "varInit": ["uniform", "uniform", "uniform_int10"]},
-        #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2/float64", "varShapes": [[3, 10], [], [10]],"varTypes": ["float64", "float64", "int64"], "varInit": ["uniform", "uniform", "uniform_int10"]},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float32", "varShapes": [[3, 4],[3],[]], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","zero"]},
+        #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2/float32", "varShapes": [[3, 4], [3], []], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","uniform_int10"]},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float16", "varShapes": [[3, 4], [3], []],"varTypes": ["float16", "float16", "int32"], "varInit": ["uniform", "uniform", "uniform_int10"]},
+        #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2/float16", "varShapes": [[3, 4], [3], []],"varTypes": ["float16", "float16", "int32"], "varInit": ["uniform", "uniform", "uniform_int10"]},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float32_with_thresholds", "varShapes": [[3, 4], [3], [], [], []], "varTypes": ["float32", "float32", "int32", "float32", "float32"], "varInit": ["uniform", "uniform", "zero", "zero", "zero"]},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float16_with_thresholds", "varShapes": [[3, 4], [3], [], [], []], "varTypes": ["float16", "float16", "int32", "float16", "float16"], "varInit": ["uniform", "uniform", "zero", "zero", "zero"]},
      ]
 
     '''

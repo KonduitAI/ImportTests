@@ -1264,7 +1264,8 @@ class OpCreator:
         return [tf.image.resize_nearest_neighbor(images = self.vars[0], size = self.vars[1])]
 
     def execute_non_max_suppression(self):
-        return [tf.compat.v1.image.non_max_suppression(self.vars[0], self.vars[1], self.vars[2])]
+        return [tf.compat.v1.image.non_max_suppression(boxes = self.vars[0], scores = self.vars[1], max_output_size = self.vars[2],
+                                                       iou_threshold=0.5, score_threshold=float('-inf'))]
 
     def execute_non_max_suppression_v2(self):
         return [tf.compat.v2.image.non_max_suppression(self.vars[0], self.vars[1], self.vars[2])]
