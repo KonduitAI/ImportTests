@@ -1258,10 +1258,10 @@ class OpCreator:
         return [tf.image.draw_bounding_boxes(images = self.vars[0], boxes = self.vars[1])]
 
     def execute_resize_bilinear(self):
-        return tf.image.resize_bilinear(images = self.vars[0], size = self.vars[1])
+        return [tf.image.resize_bilinear(images = self.vars[0], size = self.vars[1])]
 
     def execute_resize_nearest_neighbor(self):
-        return tf.image.resize_nearest_neighbor(images = self.vars[0], size = self.vars[1])
+        return [tf.image.resize_nearest_neighbor(images = self.vars[0], size = self.vars[1])]
 
     def execute_non_max_suppression(self):
         return [tf.compat.v1.image.non_max_suppression(self.vars[0], self.vars[1], self.vars[2])]
