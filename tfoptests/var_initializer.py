@@ -200,6 +200,7 @@ class VarInitializer:
         # fill = tf.fill(shape, value=0)
         # var = tf.Variable(tf.cast(fill, dtype=dtype))
         var = tf.constant([], shape=shape, dtype=dtype)
+        dummy = tf.Variable([1], dtype=tf.float32)  #workaround to TF restriction where only graphs with 1 or more variables can be exported
         return [var]
 
     def var_string_scalar(self, shape,  dtype, n):
