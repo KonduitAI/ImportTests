@@ -1283,7 +1283,7 @@ class OpCreator:
         return [tf.nn.leaky_relu(features = self.vars[0], alpha=self.op["alpha"])]
 
     def execute_log_softmax(self):
-        return [tf.nn.log_softmax(self.vars[0])]
+        return [tf.nn.log_softmax(logits = self.vars[0], axis = self.op["axis"])]
 
     def execute_max(self):
         return [tf.math.maximum(self.vars[0], self.vars[1])]
