@@ -1028,7 +1028,7 @@ class OpCreator:
         return [tf.zeros(shape=self.vars[0], dtype=self.op["dtype"])]
 
     def execute_zeros_like(self):
-        return [tf.zeros_like(tensor=self.vars[0])]
+        return [tf.zeros_like(tensor=self.vars[0], dtype=self.op["dtype"])]
 
     def execute_range(self):
         return [tf.range(start=self.vars[0], limit=self.vars[1], delta=self.vars[2])]
@@ -1231,7 +1231,7 @@ class OpCreator:
         return [tf.debugging.check_numerics(tensor=self.vars[0], message=self.op["message"])]
 
     def execute_adjust_contrast(self):
-        return [tf.image.adjust_contrast(self.vars[0],self.vars[1])]
+        return [tf.image.adjust_contrast(self.vars[0],self.op["contrast_factor"])]
 
     def execute_adjust_contrast_v2(self):
         return [tf.compat.v2.image.adjust_contrast(self.vars[0],self.vars[1])]
@@ -1252,13 +1252,15 @@ class OpCreator:
         return [tf.bitwise.bitwise_xor(self.vars[0], self.vars[1])]
 
     def execute_crop_and_resize(self):
-        return [tf.image.crop_and_resize(image = self.vars[0], boxes = self.vars[1], crop_size = self.vars[2], box_ind = self.vars[3])]
+        return [tf.image.crop_and_resize(image = self.vars[0], boxes = self.vars[1], crop_size = self.vars[2], box_ind = self.vars[3],\
+                                         method = self.op["method"], extrapolation_value = self.op["ext_value"])]
 
     def execute_draw_bounding_boxes(self):
-        return [tf.image.draw_bounding_boxes(images = self.vars[0], boxes = self.vars[1])]
+        return [tf.image.draw_bounding_boxes(images = self.vars[0], boxes = self.vars[1], colors = self.vars[2])]
 
     def execute_resize_bilinear(self):
-        return [tf.image.resize_bilinear(images = self.vars[0], size = self.vars[1])]
+        return [tf.image.resize_bilinear(images = self.vars[0], size = self.vars[1], \
+                align_corners = self.op["align_corners"], half_pixel_centers = self.op["half_pixel_centers"])]
 
     def execute_resize_nearest_neighbor(self):
         return [tf.image.resize_nearest_neighbor(images = self.vars[0], size = self.vars[1])]
