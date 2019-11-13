@@ -1798,7 +1798,7 @@ def test_mathtransform():
         #{"opName": "bitcast", "outName": "bitcast/from_float64_to_int8", "varShapes": [[2]], "varTypes": ["float64"], "varInit": ["uniform"], "output":tf.int8},
         #{"opName": "bitcast", "outName": "bitcast/from_int32_to_int8", "varShapes": [[1]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output":tf.int8},
         #{"opName": "bitcast", "outName": "bitcast/from_int64_to_int8", "varShapes": [[1]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output":tf.int8},
-        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int8", "varShapes": [[1]], "varTypes": ["uint32"], "varInit": ["zero"], "output":tf.int},
+        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int8", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output":tf.int8},
 
         # {"opName": "bitcast", "outName": "bitcast/from_float32_to_int16", "varShapes":[[1]], "varTypes":["float32"], "varInit":["uniform"], "output":tf.int16},
         #  {"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_int16", "varShapes": [[2]], "varTypes": ["bfloat16"], "varInit": ["uniform"], "output":tf.int16},
@@ -1806,7 +1806,7 @@ def test_mathtransform():
         #  {"opName": "bitcast", "outName": "bitcast/from_float64_to_int16", "varShapes": [[2]], "varTypes": ["float64"], "varInit": ["uniform"], "output":tf.int16},
         # {"opName": "bitcast", "outName": "bitcast/from_int32_to_int16", "varShapes": [[1]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output":tf.int16},
         # {"opName": "bitcast", "outName": "bitcast/from_int64_to_int16", "varShapes": [[1]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output":tf.int16},
-        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int16", "varShapes": [[1]], "varTypes": ["uint32"], "varInit": ["zero"], "output":tf.int16},
+        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int16", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output":tf.int16},
 
         # {"opName": "bitcast", "outName": "bitcast/from_float32_to_int32", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform"], "output":tf.int32},
         # {"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_int32", "varShapes": [[2]], "varTypes": ["bfloat16"], "varInit": ["uniform"], "output":tf.int32},
@@ -1814,7 +1814,7 @@ def test_mathtransform():
         # {"opName": "bitcast", "outName": "bitcast/from_float64_to_int32", "varShapes": [[2]], "varTypes": ["float64"], "varInit": ["uniform"], "output":tf.int32},
         # {"opName": "bitcast", "outName": "bitcast/from_int32_to_int32", "varShapes": [[2]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output":tf.int32},
         # {"opName": "bitcast", "outName": "bitcast/from_int64_to_int32", "varShapes": [[2]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output":tf.int32},
-        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int32", "varShapes": [[1]], "varTypes": ["uint32"], "varInit": ["zero"], "output":tf.int32},
+        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int32", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output":tf.int32},
 
 
         #{"opName": "bitcast", "outName": "bitcast/from_float32_to_int32", "varShapes":[[2]], "varTypes":["float32"], "varInit":["uniform"], "output":tf.int32},
@@ -1823,7 +1823,7 @@ def test_mathtransform():
         #{"opName": "bitcast", "outName": "bitcast/from_float64_to_int32", "varShapes": [[2]], "varTypes": ["float64"], "varInit": ["uniform"], "output":tf.int32},
         #{"opName": "bitcast", "outName": "bitcast/from_int32_to_int32", "varShapes": [[2]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output":tf.int32},
         #{"opName": "bitcast", "outName": "bitcast/from_int64_to_int32", "varShapes": [[2]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output":tf.int32},
-        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int32", "varShapes": [[1]], "varTypes": ["uint32"], "varInit": ["zero"], "output":tf.int32},
+        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int32", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output":tf.int32},
 
          #{"opName": "bitcast", "outName": "bitcast/from_float32_to_int64", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.int64},
          #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_int64", "varShapes": [[4]], "varTypes": ["bfloat16"], "varInit": ["uniform"], "output":tf.int64},
@@ -1831,7 +1831,7 @@ def test_mathtransform():
          #{"opName": "bitcast", "outName": "bitcast/from_float64_to_int64", "varShapes": [[1]], "varTypes": ["float64"], "varInit": ["uniform"], "output":tf.int64},
          #{"opName": "bitcast", "outName": "bitcast/from_int32_to_int64", "varShapes": [[2]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output":tf.int64},
          #{"opName": "bitcast", "outName": "bitcast/from_int64_to_int64", "varShapes": [[1]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output":tf.int64},
-         #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int64", "varShapes": [[2]], "varTypes": ["uint32"], "varInit": ["zero"], "output":tf.int64},
+         #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_int64", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output":tf.int64},
 
          #{"opName": "bitcast", "outName": "bitcast/from_float32_to_uint8", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.uint8},
          #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_uint8", "varShapes": [[4]], "varTypes": ["bfloat16"], "varInit": ["uniform"], "output":tf.uint8},
@@ -1839,7 +1839,7 @@ def test_mathtransform():
          #{"opName": "bitcast", "outName": "bitcast/from_float64_to_uint8", "varShapes": [[1]], "varTypes": ["float64"], "varInit": ["uniform"], "output":tf.uint8},
          #{"opName": "bitcast", "outName": "bitcast/from_int32_to_uint8", "varShapes": [[2]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output":tf.uint8},
          #{"opName": "bitcast", "outName": "bitcast/from_int64_to_uint8", "varShapes": [[1]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output":tf.uint8},
-         #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint8", "varShapes": [[2]], "varTypes": ["uint32"], "varInit": ["zero"], "output":tf.uint8},
+         #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint8", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output":tf.uint8},
 
         #{"opName": "bitcast", "outName": "bitcast/from_float32_to_uint32", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.uint32},
         #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_uint32", "varShapes": [[2]], "varTypes": ["bfloat16"],"varInit": ["uniform"], "output": tf.uint32},
@@ -1847,7 +1847,7 @@ def test_mathtransform():
         #{"opName": "bitcast", "outName": "bitcast/from_float64_to_uint32", "varShapes": [[1]], "varTypes": ["float64"],"varInit": ["uniform"], "output": tf.uint32},
         #{"opName": "bitcast", "outName": "bitcast/from_int32_to_uint32", "varShapes": [[1]], "varTypes": ["int32"],"varInit": ["uniform_int2"], "output": tf.uint32},
         #{"opName": "bitcast", "outName": "bitcast/from_int64_to_uint32", "varShapes": [[1]], "varTypes": ["int64"],"varInit": ["uniform_int2"], "output": tf.uint32},
-        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint16", "varShapes": [[2]],"varTypes": ["uint32"], "varInit": ["zero"], "output": tf.uint32},
+        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint16", "varShapes": [[0]],"varTypes": ["uint32"], "varInit": ["empty"], "output": tf.uint32},
 
          #{"opName": "bitcast", "outName": "bitcast/from_float32_to_uint64", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.uint64},
          #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_uint64", "varShapes": [[4]], "varTypes": ["bfloat16"],"varInit": ["uniform"], "output": tf.uint64},
@@ -1855,7 +1855,7 @@ def test_mathtransform():
          #{"opName": "bitcast", "outName": "bitcast/from_float64_to_uint64", "varShapes": [[1]], "varTypes": ["float64"],"varInit": ["uniform"], "output": tf.uint64},
          #{"opName": "bitcast", "outName": "bitcast/from_int32_to_uint64", "varShapes": [[2]], "varTypes": ["int32"],"varInit": ["uniform_int2"], "output": tf.uint64},
          #{"opName": "bitcast", "outName": "bitcast/from_int64_to_uint64", "varShapes": [[1]], "varTypes": ["int64"],"varInit": ["uniform_int2"], "output": tf.uint64},
-        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint16", "varShapes": [[2]],"varTypes": ["uint32"], "varInit": ["zero"], "output": tf.uint32},
+        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint16", "varShapes": [[0]],"varTypes": ["uint32"], "varInit": ["empty"], "output": tf.uint32},
 
         # {"opName": "bitcast", "outName": "bitcast/from_float32_to_uint16", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.uint16},
         # {"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_uint16", "varShapes": [[4]], "varTypes": ["bfloat16"],"varInit": ["uniform"], "output": tf.uint16},
@@ -1863,7 +1863,7 @@ def test_mathtransform():
         # {"opName": "bitcast", "outName": "bitcast/from_float64_to_uint16", "varShapes": [[1]], "varTypes": ["float64"],"varInit": ["uniform"], "output": tf.uint16},
         # {"opName": "bitcast", "outName": "bitcast/from_int32_to_uint16", "varShapes": [[2]], "varTypes": ["int32"],"varInit": ["uniform_int2"], "output": tf.uint16},
         # {"opName": "bitcast", "outName": "bitcast/from_int64_to_uint16", "varShapes": [[1]], "varTypes": ["int64"],"varInit": ["uniform_int2"], "output": tf.uint16},
-        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint16", "varShapes": [[2]],"varTypes": ["uint32"], "varInit": ["zero"], "output": tf.uint16},
+        # {"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_uint16", "varShapes": [[0]],"varTypes": ["uint32"], "varInit": ["empty"], "output": tf.uint16},
 
         #{"opName": "bitcast", "outName": "bitcast/from_float32_to_bfloat16", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.bfloat16},
         #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_bfloat16", "varShapes": [[2]], "varTypes": ["bfloat16"],"varInit": ["uniform"], "output": tf.bfloat16},
@@ -1871,7 +1871,7 @@ def test_mathtransform():
         #{"opName": "bitcast", "outName": "bitcast/from_float64_to_bfloat16", "varShapes": [[2]], "varTypes": ["float64"],"varInit": ["uniform"], "output": tf.bfloat16},
         #{"opName": "bitcast", "outName": "bitcast/from_int32_to_bfloat16", "varShapes": [[2]], "varTypes": ["int32"],"varInit": ["uniform_int2"], "output": tf.bfloat16},
         #{"opName": "bitcast", "outName": "bitcast/from_int64_to_bfloat16", "varShapes": [[2]], "varTypes": ["int64"],"varInit": ["uniform_int2"], "output": tf.bfloat16},
-        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_bfloat16", "varShapes": [[1]],"varTypes": ["uint32"], "varInit": ["zero"], "output": tf.bfloat16},
+        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_bfloat16", "varShapes": [[0]],"varTypes": ["uint32"], "varInit": ["empty"], "output": tf.bfloat16},
 
          #{"opName": "bitcast", "outName": "bitcast/from_float32_to_half", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.half},
          #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_half", "varShapes": [[2]], "varTypes": ["bfloat16"],"varInit": ["uniform"], "output": tf.half},
@@ -1879,7 +1879,7 @@ def test_mathtransform():
          #{"opName": "bitcast", "outName": "bitcast/from_float64_to_half", "varShapes": [[2]], "varTypes": ["float64"],"varInit": ["uniform"], "output": tf.half},
          #{"opName": "bitcast", "outName": "bitcast/from_int32_to_half", "varShapes": [[2]], "varTypes": ["int32"],"varInit": ["uniform_int2"], "output": tf.half},
          #{"opName": "bitcast", "outName": "bitcast/from_int64_to_half", "varShapes": [[2]], "varTypes": ["int64"],"varInit": ["uniform_int2"], "output": tf.half},
-         #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_half", "varShapes": [[1]],"varTypes": ["uint32"], "varInit": ["zero"], "output": tf.half},
+         #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_half", "varShapes": [[0]],"varTypes": ["uint32"], "varInit": ["empty"], "output": tf.half},
 
         #{"opName": "bitcast", "outName": "bitcast/from_float32_to_float32", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.float32},
         #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_float32", "varShapes": [[2]], "varTypes": ["bfloat16"], "varInit": ["uniform"], "output": tf.float32},
@@ -1887,7 +1887,7 @@ def test_mathtransform():
         #{"opName": "bitcast", "outName": "bitcast/from_float64_to_float32", "varShapes": [[2]], "varTypes": ["float64"], "varInit": ["uniform"], "output": tf.float32},
         #{"opName": "bitcast", "outName": "bitcast/from_int32_to_float32", "varShapes": [[2]], "varTypes": ["int32"],"varInit": ["uniform_int2"], "output": tf.float32},
         #{"opName": "bitcast", "outName": "bitcast/from_int64_to_float32", "varShapes": [[2]], "varTypes": ["int64"],"varInit": ["uniform_int2"], "output": tf.float32},
-        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_float32", "varShapes": [[1]],"varTypes": ["uint32"], "varInit": ["zero"], "output": tf.float32},
+        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_float32", "varShapes": [[0]],"varTypes": ["uint32"], "varInit": ["empty"], "output": tf.float32},
 
         #{"opName": "bitcast", "outName": "bitcast/from_float32_to_float64", "varShapes": [[2]], "varTypes": ["float32"], "varInit": ["uniform"], "output": tf.float64},
         #{"opName": "bitcast", "outName": "bitcast/from_bfloat16_to_float64", "varShapes": [[4]], "varTypes": ["bfloat16"],"varInit": ["uniform"], "output": tf.float64},
@@ -1895,7 +1895,7 @@ def test_mathtransform():
         #{"opName": "bitcast", "outName": "bitcast/from_float64_to_float64", "varShapes": [[1]], "varTypes": ["float64"], "varInit": ["uniform"], "output": tf.float64},
         #{"opName": "bitcast", "outName": "bitcast/from_int32_to_float64", "varShapes": [[2]], "varTypes": ["int32"], "varInit": ["uniform_int2"], "output": tf.float64},
         #{"opName": "bitcast", "outName": "bitcast/from_int64_to_float64", "varShapes": [[2]], "varTypes": ["int64"], "varInit": ["uniform_int2"], "output": tf.float64},
-        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_float64", "varShapes": [[2]], "varTypes": ["uint32"], "varInit": ["zero"], "output": tf.float64},
+        #{"opName": "bitcast", "outName": "bitcast/emptyArrayTest/from_uint32_to_float64", "varShapes": [[0]], "varTypes": ["uint32"], "varInit": ["empty"], "output": tf.float64},
 
         # {"opName": "bitwise_or", "outName": "bitwise_or/rank2_int32", "varShapes":[[1,10], [1,10]], "varTypes":["int32", "int32"], "varInit":["uniform_int10", "uniform_int10"]},
         # {"opName": "bitwise_or", "outName": "bitwise_or/rank2_int64", "varShapes": [[1, 10], [1, 10]],"varTypes": ["int64", "int64"], "varInit": ["uniform_int10", "uniform_int10"]},
