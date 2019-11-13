@@ -1987,8 +1987,12 @@ def test_mathtransform():
 
         #{"opName": "is_non_decreasing", "outName": "is_non_decreasing/rank2_float32", "varShapes":[[1,2]], "varTypes":["float32"], "varInit":["uniform"]},
         #{"opName": "is_non_decreasing", "outName": "is_non_decreasing/rank3_float32", "varShapes": [[1, 1, 2]], "varTypes": ["float32"], "varInit": ["uniform"]},
+        #{"opName": "is_non_decreasing", "outName": "is_non_decreasing/rank2_float32", "varShapes":[[1,2]], "varTypes":["float32"], "varInit":["stdnormal"]},
+        #{"opName": "is_non_decreasing", "outName": "is_non_decreasing/rank3_float32", "varShapes": [[1, 1, 2]], "varTypes": ["float32"], "varInit": ["stdnormal"]},
         #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/rank2_float32", "varShapes":[[1,1]], "varTypes":["float32"], "varInit":["uniform"]},
         #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/rank3_float32", "varShapes": [[1, 1, 2]],"varTypes": ["float32"], "varInit": ["uniform"]},
+        #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/rank2_float32", "varShapes":[[1,1]], "varTypes":["float32"], "varInit":["stdnormal"]},
+        #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/rank3_float32", "varShapes": [[1, 1, 2]],"varTypes": ["float32"], "varInit": ["stdnormal"]},
         #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/emptyArrayTest/rank1_float32", "varShapes": [[0]], "varTypes": ["float32"], "varInit": ["uniform"]},
         #{"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/emptyArrayTest/rank2_float32", "varShapes": [[0, 0]], "varTypes": ["float32"], "varInit": ["uniform"]},
         # {"opName": "is_strictly_increasing", "outName": "is_strictly_increasing/emptyArrayTest/rank3_float32", "varShapes": [[0, 0, 0]],"varTypes": ["float32"], "varInit": ["uniform"]},

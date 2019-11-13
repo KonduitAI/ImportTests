@@ -1297,6 +1297,3 @@ class OpCreator:
     def execute_mul(self):
         return [tf.math.mul(self.vars[0], self.vars[1])]
 
-
-    def execute_Conv2DTranspose(self):
-        return [tf.keras.layers.Conv2DTranspose(kernel_size=self.op["kernel_size"], filters=[self.op["filters"]])]
