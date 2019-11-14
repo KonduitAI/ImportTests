@@ -2041,10 +2041,10 @@ def test_mathtransform():
         #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2/float32", "varShapes": [[3, 4], [3], []], "varTypes": ["float32","float32","int32"], "varInit": ["uniform","uniform","uniform_int10"]},
         #{"opName": "non_max_suppression", "outName": "non_max_suppression/float16", "varShapes": [[3, 4], [3], []],"varTypes": ["float16", "float16", "int32"], "varInit": ["uniform", "uniform", "uniform_int10"]},
         #{"opName": "non_max_suppression_v2", "outName": "non_max_suppression_v2/float16", "varShapes": [[3, 4], [3], []],"varTypes": ["float16", "float16", "int32"], "varInit": ["uniform", "uniform", "uniform_int10"]},
-        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float32_with_thresholds", "varShapes": [[3, 4], [3], [], [], []], "varTypes": ["float32", "float32", "int32", "float32", "float32"], "varInit": ["uniform", "uniform", "zero", "zero", "zero"]},
-        #{"opName": "non_max_suppression", "outName": "non_max_suppression/emptyArrayTest/float32_with_thresholds", "varShapes": [[0, 4], [0], [], [], []], "varTypes": ["float32", "float32", "int32", "float32", "float32"], "varInit": ["uniform", "uniform", "zero", "zero", "zero"]},
-        #{"opName": "non_max_suppression", "outName": "non_max_suppression/emptyArrayTest/float16_with_thresholds", "varShapes": [[0, 4], [0], [], [], []], "varTypes": ["float16", "float16", "int32", "float16", "float16"], "varInit": ["uniform", "uniform", "zero", "zero", "zero"]},
-        #{"opName": "non_max_suppression", "outName": "non_max_suppression/emptyArrayTest/float32_with_thresholds",  "varShapes": [[0, 4], [0], [], [], []], "varTypes": ["float16", "float16", "int32", "float16", "float16"], "varInit": ["uniform", "uniform", "one", "one", "one"]},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/float32_with_thresholds", "varShapes": [[3, 4], [3], []], "varTypes": ["float32", "float32", "int32"], "varInit": ["uniform", "uniform", "zero"], "iou_threshold": 0.0, "score_threshold": 0.0},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/emptyArrayTest/float32_with_thresholds", "varShapes": [[0, 4], [0], []], "varTypes": ["float32", "float32", "int32"], "varInit": ["uniform", "uniform", "zero"], "iou_threshold": 0.2, "score_threshold": 0.5},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/emptyArrayTest/float16_with_thresholds", "varShapes": [[0, 4], [0], []], "varTypes": ["float16", "float16", "int32"], "varInit": ["uniform", "uniform", "zero"], "iou_threshold": 0.5, "score_threshold": 0.5},
+        #{"opName": "non_max_suppression", "outName": "non_max_suppression/emptyArrayTest/float32_with_thresholds",  "varShapes": [[0, 4], [0], []], "varTypes": ["float16", "float16", "int32"], "varInit": ["uniform", "uniform", "one"], "iou_threshold": 0.4, "score_threshold": 0.4},
      ]
 
     '''

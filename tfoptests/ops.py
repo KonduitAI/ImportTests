@@ -1266,8 +1266,15 @@ class OpCreator:
         return [tf.image.resize_nearest_neighbor(images = self.vars[0], size = self.vars[1])]
 
     def execute_non_max_suppression(self):
+        iou_threshold = 0.5
+        score_threshold = 0.5
+        if("iou_threshold" in self.op):
+            iou_threshold = self.op["iou_threshold"]
+        if("score_threshold" in self.op):
+            score_threshold = self.op["score_threshold"]
+
         return [tf.image.non_max_suppression(boxes = self.vars[0], scores = self.vars[1], max_output_size = self.vars[2],
-                                             iou_threshold=0.5, score_threshold=float('-inf'))]
+                                             iou_threshold=iou_threshold, score_threshold=score_threshold)]
 
     def execute_non_max_suppression_v2(self):
         return [tf.image.non_max_suppression(self.vars[0], self.vars[1], self.vars[2])]
