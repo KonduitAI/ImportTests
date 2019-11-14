@@ -1,3 +1,5 @@
+# THIS REPO HAS BEEN ARCHIVED - USE IMPORT-TESTS IN https://github.com/KonduitAI/dl4j-dev-tools
+
 # TFOpTests - Generate, persist and load tensorflow graphs for tests [![Build Status](https://travis-ci.org/deeplearning4j/TFOpTests.svg?branch=master)]
 
 ## Setup
